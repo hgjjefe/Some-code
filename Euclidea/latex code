@@ -1,0 +1,4410 @@
+\documentclass[a4paper]{article}
+\title{Euclidea Solutions Explained}
+\author{Jes Modian}
+
+\usepackage{amsmath, amsfonts, amssymb, amstext, amscd, amsthm, booktabs, makeidx, graphicx, hyperref, url}
+
+\usepackage[a4paper, total={6in, 10in}]{geometry}
+\usepackage{fontspec}
+\usepackage[utf8]{inputenc}
+\usepackage{diagbox}
+\usepackage{tcolorbox}
+\usepackage{colortbl}
+\usepackage{hhline}
+\usepackage{subfiles}
+\usepackage{ytableau}
+
+\usepackage{multirow}
+\usepackage{mathtools}
+\usepackage{enumitem}
+
+\usepackage{tikz,pgfplots}
+\pgfplotsset{compat=1.13}
+\usepackage{tkz-euclide}
+
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{angles}
+\usetikzlibrary{calc} 
+\usetikzlibrary{patterns}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{through} 
+\usetikzlibrary{arrows.meta}
+\usepackage{circuitikz}
+
+
+\tikzset{%
+  ->-/.style={decoration={markings, mark=at position 0.5 with {\arrow{>}}},
+              postaction={decorate}},
+  ->>-/.style={decoration={markings, mark=at position 0.5 with {\arrow{>>}}},
+               postaction={decorate}},
+}
+
+\makeatletter
+\DeclareFontFamily{U}{tipa}{}
+\DeclareFontShape{U}{tipa}{m}{n}{<->tipa10}{}
+\newcommand{\arc@char}{{\usefont{U}{tipa}{m}{n}\symbol{62}}}%
+
+
+\DeclareMathOperator{\pb}{perpbi}
+\newcommand{\tp}{\vdash}
+\DeclareMathOperator{\angbi}{angbi}
+
+
+\renewcommand{\arc}[1]{\mathpalette\arc@arc{#1}}
+
+\newcommand{\arc@arc}[2]{%
+  \sbox0{$\m@th#1#2$}%
+  \vbox{
+    \hbox{\resizebox{\wd0}{\height}{\arc@char}}
+    \nointerlineskip
+    \box0
+  }%
+}
+\makeatother
+
+\graphicspath{{images/}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+% shorthand for boxed fractions
+\newcommand{\frox}[2]{\fbox{$\frac{#1}{#2}$}}
+\newcommand{\cfrox}[2]{\fbox{$\cfrac{#1}{#2}$}}
+
+%Shorthand of poker suits
+\newcommand{\hearts}{{\fontspec{Symbola}\symbol{"2661}}}
+\newcommand{\tiles}{{\fontspec{Symbola}\symbol{"2662}}}
+\newcommand{\spades}{{\fontspec{Symbola}\symbol{"2664}}}
+\newcommand{\clubs}{{\fontspec{Symbola}\symbol{"2667}}}
+\newcommand{\rtri}{{\fontspec{Symbola}\symbol{"25FA}}}
+\newcommand{\circum}{{\fontspec{Symbola}\symbol{"2A00}}}
+
+% custom notations
+\newcommand{\fto}{\text{\fontspec{Symbola}\symbol{"29E6}}}
+\newcommand{\fac}{\:\,\text{\fontspec{Symbola}\symbol{"2561}}}
+\newcommand{\caf}{\text{\fontspec{Symbola}\symbol{"255E}}\:\,}
+\newcommand{\per}{\text{\fontspec{Symbola}\;\symbol{"2052}\;}}
+
+% number sets
+\newcommand{\zn}{\mathbb{Z}_n}
+\newcommand{\zm}{\mathbb{Z}_m}
+\newcommand{\zmn}{\mathbb{Z}_{mn}}
+\newcommand{\nset}{\mathbb{N}}
+\newcommand{\zset}{\mathbb{Z}}
+\newcommand{\zplus}{\mathbb{Z^+}}
+\newcommand{\ztm}{\zm\times\zn}
+\newcommand{\zan}{\mathbb{Z}^*_n}
+\newcommand{\zam}{\mathbb{Z}^*_m}
+\newcommand{\zamn}{\mathbb{Z}^*_{mn}}
+\newcommand{\ztam}{\zam\times\zan}
+
+% problem index counter
+\newcounter{problem}
+\newcommand{\f}{\theproblem} % Create a shorthand for referring to the value of counter
+\newcommand{\stepf}{
+    \stepcounter{problem}\f}
+
+% shorthand for problem & solution items 
+
+\newcommand{\bdes}{\begin{description}}
+\newcommand{\edes}{\end{description}}
+\newcommand{\solution}{\item[Solution \f.]}
+\newcommand{\pro}{\item[Problem\stepf.]}
+\newcommand{\dif}[1]{(Difficulty level: #1)}
+\newcommand{\dis}{\item[Discussion \f.]}
+
+% boxed & numbered theroem
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{tasks}[theorem]{Task}
+\newtheorem{sol}{Solution}[section]
+
+\tcbset{colback=white, colframe=black, boxrule=0.4pt, arc=0mm}
+
+
+% theorem with custom numbering
+\newtheorem{innercustomthm}{Theorem}
+\newenvironment{customthm}[1]
+  {\begin{tcolorbox}\renewcommand\theinnercustomthm{#1}\innercustomthm}
+  {\endinnercustomthm\end{tcolorbox}}
+
+
+
+%shorthand for theorem environment
+\newenvironment{thm}
+    {\begin{tcolorbox}
+    \begin{theorem}}
+    {\end{theorem} 
+    \end{tcolorbox}
+    }
+
+\newenvironment{task}
+    {\begin{tcolorbox}
+    \begin{tasks}}
+    {\end{tasks} 
+    \end{tcolorbox}
+    }
+
+
+    
+\newenvironment{thm*}
+    {\begin{tcolorbox}
+    \begin{theorem*}}
+    {\end{theorem*} 
+    \end{tcolorbox}
+    }
+
+
+% imaginary unit i bolded
+\renewcommand{\i}{\textbf{i}}
+\newcommand{\nun}[1]{\noindent \underline{#1}}
+\newcommand{\non}{\nonumber}
+\newcommand{\lcm}{\text{lcm}}
+\renewcommand{\gcd}{\text{gcd}}
+\newcommand{\lead}{\Rightarrow}
+\newcommand{\slead}{$\;\Rightarrow\;$}
+\newcommand{\tend}{\rightarrow}
+\newcommand{\lr}{\Leftrightarrow}
+\newcommand{\tand}{\text{\; and \;}}
+\newcommand{\tor}{\text{\; or \;}}
+\renewcommand{\mod}{\text{mod }}
+\newcommand{\mn}{\text{\; $(\mod n)$ }}
+\newcommand{\mm}{\text{\; $(\mod m)$ }}
+\newcommand{\eq}{\equiv}
+\newcommand{\znou}{\zset^{\backslash0}}
+
+\newcommand{\lt}{\left}
+\newcommand{\rt}{\right}
+
+\newcommand{\pic}[2]{\includegraphics[width=#1\textwidth]{#2}}
+
+
+
+% ceiling & floor notation
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+
+\newenvironment{tik}
+    {\begin{center}
+    \begin{tikzpicture}}
+    {\end{tikzpicture} 
+    \end{center}
+    }
+
+\renewcommand{\deg}{^\circ}
+%\newcommand{\square}[1][2]{\draw (#1,#2)--({#1+.5},#2)--({#1+.5},{#2+.5})--(#1,{#2+.5})--cycle;}
+
+% preposition
+\newtheorem{pre}{Preposition}
+
+% definition
+\newtheorem{definition}{Definition}
+\newenvironment{defin}
+    {\begin{tcolorbox}
+    \begin{definition}}
+    {\end{definition} 
+    \end{tcolorbox}
+    }
+
+\newcommand{\rea}[1]{\qquad \text{#1}}
+
+\newcommand{\ang}{\angle}
+\newcommand{\tri}{\triangle}
+\newcommand{\ther}{\therefore\;}
+\newcommand{\aof}{\text{area of }}
+\newcommand{\pow}{\text{pow}}
+
+\newcommand{\angpt}{($\angle$s at a pt.)}
+\newcommand{\adjline}{(adj. $\angle$s on st. line)}
+\newcommand{\vertang}{(vert. opp. $\angle$s)}
+\newcommand{\angtri}{($\angle$ sum of $\triangle$)}
+\newcommand{\exttri}{(ext. $\angle$ of $\triangle$)}
+\newcommand{\basetri}{(base $\ang$s, isos. $\tri$)}
+\newcommand{\propinc}{(property of hypotenuse inclination)}
+\newcommand{\sideang}{(sides opp. equal $\ang$s)}
+\newcommand{\corrangcong}{(corr. $\ang$s, $\cong \tri$s)}
+\newcommand{\corrsidecong}{(corr. sides, $\cong \tri$s)}
+\newcommand{\simangcong}{(corr. $\ang$s, $\sim \tri$s)}
+\newcommand{\simsidecong}{(corr. sides, $\sim \tri$s)}
+\newcommand{\trin}{(triangle inequality)}
+\newcommand{\angquad}{($\angle$ sum of quad.)}
+\newcommand{\angpol}{($\ang$ sum of polygon)}
+\newcommand{\angseg}{($\ang$ in alt. segment)}
+\newcommand{\angcir}{($\ang$ at centre twice $\ang$ at \circum$^{ce}$)}
+\newcommand{\conangcir}{(converse of $\ang$ at centre twice $\ang$ at \circum$^{ce}$)}
+\newcommand{\arccen}{(arcs prop. to $\ang$s at centre)}
+\newcommand{\arccir}{(arcs prop. to $\ang$s at \circum$^{ce}$)}
+\newcommand{\angsame}{($\ang$s in the same segment)}
+\newcommand{\conangsame}{(converse of $\ang$s in the same segment)}
+
+\maketitle
+\begin{abstract}
+    Euclidea is a puzzle game in which the player has to construct geometrical figures using compass and straight edge only. It is probably the most difficult puzzle game I've played. The complexity of Euclidean Geometry gives rise to so many possible constructions, and it is difficult to brute force solving (at least I don't know how). On top of that, the player has to use the minimum number of moves possible to pass the level in order to get 3 stars and unlock the next level pack. There is just no way I can come up with the solutions myself, so I've cheated by looking up the solutions online. Nonetheless, it is an interesting math-related game that is one of a kind.
+\end{abstract}
+
+\tableofcontents
+
+\newpage
+
+\setcounter{section}{0}
+\section{Alpha}
+
+\bigskip
+
+
+
+\setcounter{subsection}{0}
+\subsection{Angle of 60 deg}
+
+\begin{task}
+    Construct an angle of $60\deg$ with the given side.
+
+    (3L, 3E, 2V)
+
+    \begin{tik}
+        \tkzDefPoint(0,0){O} \tkzDefPoint(3,0){B}
+        \tkzDrawPoint(O)
+        \draw[->] (O)--(B);
+        \tkzDefPoint(60:2){E}
+        \tkzDrawSegment[thick,blue](O,E)
+        \tkzMarkAngle[size=.4](B,O,E)
+        \tkzLabelAngle[pos=.8](B,O,E){$60\deg$}
+    \end{tik}
+\end{task}
+(Arrowhead means the line is infinitely long.)
+
+\begin{sol} (3L, 5E)
+
+    \medskip
+
+    \noindent\textbf{1.} Let $O$ be the endpoint of the given ray. Label an arbitrary point $A$ on the given ray. Draw circle centered $O$ through $A$.
+
+    \begin{tik}
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \tkzDrawPoints(O,A)
+        \tkzLabelPoints[below](O,A)
+        \tkzDrawSegment[->](O,(5,0))
+        \tkzDrawCircle(O,A)
+    \end{tik}
+
+\noindent\textbf{2.} Draw circle centered $A$ through $O$.
+\begin{tik}
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \tkzDrawPoints(O,A)
+        \tkzLabelPoints[below](O,A)
+        \tkzDrawSegment[->](O,(5,0))
+        \tkzDrawCircle(O,A)
+        \tkzDrawCircle(A,O)
+    \end{tik}
+\textbf{3.} Let $E$ be one of the intersections of the two circles. Draw line $OE$. We get the desired $60\deg$ angle.
+\begin{tik}
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \tkzDrawPoints(O,A)
+        \tkzLabelPoints[below](O,A)
+        \tkzDrawSegment[->](O,(5,0))
+        \tkzDrawCircle(O,A)
+        \tkzDrawCircle(A,O)
+        \tkzInterCC(O,A)(A,O) \tkzGetFirstPoint{E}
+        \tkzDrawPoint(E)
+        \tkzLabelPoint[above](E){$E$}
+        \tkzDrawLine[thick,orange, add=0 and .5](O,E)
+    \end{tik}
+
+\noindent (2V: Extra solutions) Let $F$ be another intersections of the two circles. Draw line $OF$. We get another $60\deg$ angle.
+    \begin{tik}
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \tkzDrawPoints(O,A)
+        \tkzLabelPoints[below](O,A)
+        \tkzDrawSegment[->](O,(5,0))
+        \tkzDrawCircle(O,A)
+        \tkzDrawCircle(A,O)
+        \tkzInterCC(O,A)(A,O) \tkzGetPoints{E}{F}
+        \tkzDrawPoints(E,F)
+        \tkzLabelPoint[above](E){$E$}
+        \tkzLabelPoint[below](F){$F$}
+        \tkzDrawLines[thick,orange, add=0 and .5](O,E O,F)
+    \end{tik}
+\end{sol}
+ \begin{proof} To see why $\ang AOE$ and $\ang AOF$ are   $60\deg$ angles, first note that the two circles have the same radii since they share the same segment $OA$. Thus   $OA,OE,AE,OF,AF$ all have lengths equal to the radii of the circles, so $\tri OAE$ and $\tri OAF$ are equilateral triangles.
+    \begin{tik}
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \tkzDrawPoints(O,A)
+        \tkzLabelPoints[below](O,A)
+        \tkzDrawSegment[->](O,(5,0))
+        \tkzDrawCircle(O,A)
+        \tkzDrawCircle(A,O)
+        \tkzInterCC(O,A)(A,O) \tkzGetPoints{E}{F}
+        \tkzDrawPoints(E,F)
+        \tkzLabelPoint[above](E){$E$}
+        \tkzLabelPoint[below](F){$F$}
+        \tkzDrawLines[thick,orange, add=0 and .5](O,E O,F)
+        \tkzDrawSegments(A,E A,F)
+        \tkzMarkSegments(O,A O,E A,E O,F A,F)
+        \tkzMarkAngles[size=.4](A,O,E F,O,A)
+        \tkzLabelAngles[pos=.8](A,O,E F,O,A){$60\deg$}
+    \end{tik}
+    By ``prop. of equil. $\tri$'', all the interior angles of equilateral triangle is $60\deg$, meaning $\ang AOE=\ang AOF=60\deg$.
+ \end{proof}
+
+
+\subsection{Perpendicular bisector}
+
+\begin{task}
+    Construct the perpendicular bisector of the segment.
+
+    (3L, 3E)
+    \begin{tik}
+        \tkzDefPoints{0/0/A, 4/0/B, 2/0/M, 2/1/C, 2/-1/D}
+        \tkzDrawPoints(A,B)
+        \tkzDrawSegment(A,B)
+        \tkzDrawSegments[thick,blue](C,D)
+        \tkzMarkRightAngle[size=.3](B,M,C)
+        \tkzMarkSegments(A,M B,M)
+    \end{tik}
+\end{task}
+
+\begin{sol}
+
+    \textbf{1, 2.} Let $A$ and $B$ be the endpoints of the given segment. Draw circle centered $A$ through $B$. Draw another circle centered $B$ through $A$.
+    \begin{tik}
+        \tkzDefPoints{0/0/A, 2/0/B, 1/0/M, 1/1/C, 1/-1/D}
+        \tkzDrawPoints(A,B)
+        \tkzLabelPoint[left](A){$A$}
+        \tkzLabelPoint[right](B){$B$}
+        \tkzDrawSegment(A,B)
+        \tkzDrawCircles(A,B B,A)
+    \end{tik}
+    \textbf{3.} Let $E,F$ be intersection of the two circles. Draw line $EF$. We get the desired perpendicular bisector.
+    \begin{tik}
+        \tkzDefPoints{0/0/A, 2/0/B, 1/0/M, 1/1/C, 1/-1/D}
+        \tkzDrawPoints(A,B)
+        \tkzLabelPoint[left](A){$A$}
+        \tkzLabelPoint[right](B){$B$}
+        \tkzDrawSegment(A,B)
+        \tkzDrawCircles(A,B B,A)
+        \tkzInterCC(A,B)(B,A) \tkzGetPoints{E}{F}
+        \tkzLabelPoint[above](E){$E$}
+        \tkzLabelPoint[below](F){$F$}
+        \tkzDrawPoints(E,F)
+        \tkzDrawLine[thick, orange](E,F)
+    \end{tik}
+\end{sol}
+
+\begin{proof}
+    Let $AB$ and $EF$ intersect at $M$. Since $AE=BE=AF=BF$, $AEBF$ is a rhombus. By property of rhombus, the diagonals $AB$ and $EF$ are perpendicular to each other.
+    \begin{tik}
+        \tkzDefPoints{0/0/A, 2/0/B, 1/0/M, 1/1/C, 1/-1/D}
+        \tkzDrawPoints(A,B)
+        \tkzLabelPoint[left](A){$A$}
+        \tkzLabelPoint[right](B){$B$}
+        \tkzLabelPoint[below](M){$M$}
+        \tkzDrawSegment(A,B)
+        \tkzDrawCircles(A,B B,A)
+        \tkzInterCC(A,B)(B,A) \tkzGetPoints{E}{F}
+        \tkzLabelPoint[above](E){$E$}
+        \tkzLabelPoint[below](F){$F$}
+        \tkzDrawPoints(E,F)
+        \tkzDrawLine[thick, orange](E,F)
+        \tkzDrawSegments(A,E E,B B,F F,A)
+        \tkzMarkSegments(A,E E,B B,F F,A)
+        \tkzMarkRightAngle[size=.3](B,M,E)
+    \end{tik}
+    Moreover, since $AEBF$ is a rhombus, $AEBF$ is a parallelogram. By ``diags. of //gram'', the diagonals $AB$ and $EF$ bisector each other, giving $AM=MB$. Thus, $EF$ is the perpendicular bisector of $AB$.
+\end{proof}
+
+\subsection{Midpoint}
+
+\begin{task}
+    Construct the midpoint of the segment defined by two points.
+
+    (2L, 4E)
+
+    \begin{tik}
+        \tkzDefPoints{0/0/A, 3/1/B}
+        \tkzDrawPoints(A,B)
+        \tkzDrawSegment[dashed](A,B)
+        \tkzDefMidPoint(A,B) \tkzGetPoint{M}
+        \tkzDrawPoint[blue, size=3](M)
+        \tkzMarkSegments(A,M B,M)
+    \end{tik}
+\end{task}
+\begin{sol}
+    \textbf{1.} Let $A,B$ be the endpoints of the given segment. Draw the perpendicular bisector of $AB$.
+
+    \begin{center}
+        \begin{tikzpicture}[rotate=15]
+        \tkzDefPoints{0/0/A, 4/0/B}
+        \tkzDrawPoints(A,B)
+        \tkzDrawSegment[dashed](A,B)
+        \tkzLabelPoint[below](A){$A$}
+        \tkzLabelPoint[below](B){$B$}
+        \tkzDefMidPoint(A,B) \tkzGetPoint{M}
+        \tkzMarkSegments(A,M B,M)
+        \tkzDefShiftPoint[M](90:1.5){C}
+        \tkzDefShiftPoint[M](-90:1.5){D}
+        \tkzDrawSegment(C,D)
+        \end{tikzpicture}
+    \end{center}
+\textbf{2.} Draw line $AB$. The intersection of $AB$ and the perpendicular bisector is the desired midpoint.
+\begin{center}
+        \begin{tikzpicture}[rotate=15]
+        \tkzDefPoints{0/0/A, 4/0/B}
+        \tkzDrawPoints(A,B)
+        \tkzDrawSegment(A,B)
+        \tkzLabelPoint[below](A){$A$}
+        \tkzLabelPoint[below](B){$B$}
+        \tkzDefMidPoint(A,B) \tkzGetPoint{M}
+        \tkzMarkSegments(A,M B,M)
+        \tkzDefShiftPoint[M](90:1.5){C}
+        \tkzDefShiftPoint[M](-90:1.5){D}
+        \tkzDrawSegment(C,D)
+        \tkzDrawPoint[orange, size=3](M)
+        \end{tikzpicture}
+    \end{center}
+\end{sol}
+\begin{proof}
+    By definition, perpendicular bisector bisects $AB$. So the intersection of $AB$ and the perpendicular bisector is the midpoint of $AB$.
+\end{proof}
+
+\subsection{Circle in square}
+
+\begin{task}
+    Inscribe a circle in the square.
+
+    (3L, 5E)
+    \begin{tik}
+        \draw (0,0) rectangle (3,3);
+        \draw[thick, blue] (1.5,1.5) circle (1.5);
+    \end{tik}
+\end{task}
+\begin{sol} \textbf{(3L)}
+
+    \textbf{1, 2.} Draw perpendicular bisectors of two adjacent sides of the square. Let $M,N$ be midpoints of these two sides. 
+    \begin{tik}
+        \tkzDefPoints{0/0/A, 3/0/B, 3/3/C, 0/3/D, 1.5/1.5/E}
+        \tkzDefMidPoint(A,B)\tkzGetPoint{M}
+        \tkzDefMidPoint(B,C)\tkzGetPoint{N}
+        \tkzLabelPoint[below left](M){$M$}
+        \tkzLabelPoint[below right](N){$N$}
+        \tkzDrawPolygon(A,B,C,D)
+        \tkzDrawLine(M,(1.5,3))
+        \tkzDrawLine(N,(0,1.5))
+        \tkzMarkSegments(A,M M,B)
+        \tkzMarkSegments[mark=||](B,N N,C)
+        \tkzMarkRightAngle[size=.3](B,M,E)
+        \tkzMarkRightAngle[size=.3](C,N,E)
+    \end{tik}
+\textbf{3.} Let $E$ be the intersection of perpendicular bisectors. Draw circle centered $E$ through $M$ (or $N$). We get the desired circle.
+\begin{tik}
+        \tkzDefPoints{0/0/A, 3/0/B, 3/3/C, 0/3/D, 1.5/1.5/E}
+        \tkzDefMidPoint(A,B)\tkzGetPoint{M}
+        \tkzDefMidPoint(B,C)\tkzGetPoint{N}
+        \tkzLabelPoint[below left](M){$M$}
+        \tkzLabelPoint[below right](N){$N$}
+        \tkzLabelPoint[below left](E){$E$}
+        \tkzDrawPoint(E)
+        \tkzDrawPoint(M)
+        \tkzDrawPolygon(A,B,C,D)
+        \tkzDrawLine(M,(1.5,3))
+        \tkzDrawLine(N,(0,1.5))
+        \tkzMarkSegments(A,M M,B)
+        \tkzMarkSegments[mark=||](B,N N,C)
+        \tkzDrawCircle[thick, orange](E,M)
+        \tkzMarkRightAngle[size=.3](B,M,E)
+        \tkzMarkRightAngle[size=.3](C,N,E)
+        
+\end{tik}
+\begin{proof}
+    Note that the perpendicular bisectors divide the big square into four smaller squares of the same side length, so the circle with radius $EM$ passes through all the midpoints of the sides of big square. By `converse of tangent $\perp$ radius", the circle is tangent to the four sides of the big square, which means it is inscribed in the square.
+    
+\end{proof}
+
+    \textbf{(5E)} 
+
+    \medskip
+
+    \textbf{1, 2.} Let vertices of square $A,B,C,D$. Draw circle centered $D$ through $C$, and draw circle centered $C$ through $D$.
+
+    \begin{tik}
+        \tkzDefPoints{0/0/A, 2/0/B, 2/2/C, 0/2/D, 1/1/E}
+        \tkzLabelPoint[below](A){$A$}
+        \tkzLabelPoint[below](B){$B$}
+        \tkzLabelPoint[above](C){$C$}
+        \tkzLabelPoint[above](D){$D$}
+        \tkzDrawCircles(D,C C,D)
+        \tkzDrawPolygon(A,B,C,D)
+    \end{tik}
+    \textbf{3, 4.} Draw line $BD$. Let the intersections of the circles be $E,F$. Draw line $EF$.
+    \begin{tik}
+        \tkzDefPoints{0/0/A, 2/0/B, 2/2/C, 0/2/D, 1/1/E}
+        \tkzLabelPoint[below](A){$A$}
+        \tkzLabelPoint[below](B){$B$}
+        \tkzLabelPoint[above](C){$C$}
+        \tkzLabelPoint[above](D){$D$}
+        \tkzDrawCircles(D,C C,D)
+        \tkzDrawPolygon(A,B,C,D)
+        \tkzInterCC(D,C)(C,D) \tkzGetPoints{E}{F}
+        \tkzDrawSegments(E,F D,B)
+        \tkzDrawPoints(E,F)
+        \tkzLabelPoint[above](E){$E$}
+        \tkzLabelPoint[below](F){$F$}
+    \end{tik}
+    \textbf{5.} Let $G$ be the intersection of $BD$ and $EF$, and let $M$ be the intersection of $CD$ and $EF$. Draw circle centered $G$ through $M$. We get the desired circle.
+    \begin{tik}[scale=1.5]
+        \tkzDefPoints{0/0/A, 2/0/B, 2/2/C, 0/2/D, 1/1/G, 1/2/M}
+        \tkzLabelPoint[below](A){$A$}
+        \tkzLabelPoint[below](B){$B$}
+        \tkzLabelPoint[above](C){$C$}
+        \tkzLabelPoint[above](D){$D$}
+        \tkzLabelPoint[right](G){$G$}
+        \tkzLabelPoint[above](M){$M$}
+        \tkzDrawCircles(D,C C,D)
+        \tkzDrawPolygon(A,B,C,D)
+        \tkzInterCC(D,C)(C,D) \tkzGetPoints{E}{F}
+        \tkzDrawSegments(E,F D,B)
+        \tkzDrawPoints(E,F,G,M)
+        \tkzLabelPoint[above](E){$E$}
+        \tkzLabelPoint[below](F){$F$}
+        \tkzDrawCircle[orange,thick](G,M)
+    \end{tik}
+\begin{proof}
+    Note that $EF$ is the perpendicular bisector of $CD$ (by Task 1.2), so $DM=MC$.  Extend $MF$ to meet $AB$ at $N$. We also have $DM=NB$ since $MN$ divides square $ABCD$ into two congruent rectangles. Also note that $\ang GDM=\ang GBN$ \;(alt. $\ang$s, $DC//AB$).
+    \begin{tik}[scale=1.5]
+        \tkzDefPoints{0/0/A, 2/0/B, 2/2/C, 0/2/D, 1/1/G, 1/2/M, 1/0/N}
+        \tkzLabelPoint[below](A){$A$}
+        \tkzLabelPoint[below](B){$B$}
+        \tkzLabelPoint[above](C){$C$}
+        \tkzLabelPoint[above](D){$D$}
+        \tkzLabelPoint[right](G){$G$}
+        \tkzLabelPoint[below](M){$M$}
+        \tkzLabelPoint[below](N){$N$}
+        \tkzDrawCircles(D,C C,D)
+        \tkzDrawPolygon(A,B,C,D)
+        \tkzInterCC(D,C)(C,D) \tkzGetPoints{E}{F}
+        \tkzDrawSegments(E,F D,B F,N)
+        \tkzDrawPoints(E,F,G,M,N)
+        \tkzLabelPoint[above](E){$E$}
+        \tkzLabelPoint[left](F){$F$}
+        \tkzDrawCircle[orange,thick](G,M)
+        \tkzMarkSegments[](D,M M,C N,B)
+        \tkzMarkRightAngle[size=.2](C,M,E)
+    \end{tik}
+    Thus $\tri DMG\cong \tri BNG$ (AAS), so $G$ is the midpoint of $MN$ \;\corrsidecong. This means $G$ is the center of the square (same point as ``$E$" in previous 3L solution), so the circle centered $G$ through $M$ is the inscribed circle of the square.
+\end{proof}
+
+\end{sol}
+
+\subsection{Rhombus in rectangle}
+
+\begin{task}
+    Inscribe a rhombus in the rectangle so that they share a diagonal.
+
+    (3L, 5E, 2V)
+    \begin{tik}
+        \tkzDefPoints{0/0/A,5/3/C}
+        \tkzDefRectangle(A,C) \tkzGetPoints{B}{D}
+        \tkzDrawPolygon(A,...,D)
+        \tkzDefPointOnLine[pos=.67](A,B) \tkzGetPoint{E}
+        \tkzDefPointOnLine[pos=.67](C,D) \tkzGetPoint{F}
+        \tkzDrawPoints(A,E,F,C)
+        \tkzDrawPolygon[blue,thick](A,E,C,F)
+        \tkzMarkSegments(A,E E,C C,F F,A)
+    \end{tik}
+\end{task}
+\begin{sol}
+    \textbf{(3L, 5E)} 
+
+    \medskip
+
+    \textbf{1.} Let the given rectangle be $ABCD$. Draw perpendicular bisector of $AC$, and let it intersect $AB$ and $CD$ at $E$ and $F$ respectively.
+    \begin{tik}
+        \tkzDefPoints{0/0/A,5/3/C}
+        \tkzDefRectangle(A,C) \tkzGetPoints{B}{D}
+        \tkzDrawPolygon(A,...,D)
+        \tkzLabelPoint[below](A){$A$}
+        \tkzLabelPoint[below](B){$B$}
+        \tkzLabelPoint[above](C){$C$}
+        \tkzLabelPoint[above](D){$D$}
+        \tkzLabelPoint[above](F){$F$}
+        \tkzLabelPoint[below](E){$E$}
+        \tkzDefPointOnLine[pos=.67](A,B) \tkzGetPoint{E}
+        \tkzDefPointOnLine[pos=.67](C,D) \tkzGetPoint{F}
+        \tkzDrawPoints(A,C,E,F)
+        \tkzDrawSegment[dashed](A,C)
+        \tkzDefMidPoint(A,C) \tkzGetPoint{M}
+        \tkzDrawLine(E,F)
+        \tkzMarkSegments(A,M M,C)
+        \tkzMarkRightAngle[size=.3](C,M,F)
+    \end{tik}
+    \textbf{2, 3.} Draw $AF$ and $EC$. We get the desired rhombus $AECF$.
+
+    \begin{tik}
+        \tkzDefPoints{0/0/A,5/3/C}
+        \tkzDefRectangle(A,C) \tkzGetPoints{B}{D}
+        \tkzDrawPolygon(A,...,D)
+        \tkzLabelPoint[below](A){$A$}
+        \tkzLabelPoint[below](B){$B$}
+        \tkzLabelPoint[above](C){$C$}
+        \tkzLabelPoint[above](D){$D$}
+        \tkzLabelPoint[above](F){$F$}
+        \tkzLabelPoint[below](E){$E$}
+        \tkzLabelPoint[below](M){$M$}
+        \tkzDefPointOnLine[pos=.67](A,B) \tkzGetPoint{E}
+        \tkzDefPointOnLine[pos=.67](C,D) \tkzGetPoint{F}
+        \tkzDrawPoints(A,E,F,C)
+        \tkzDrawSegment[dashed](A,C)
+        \tkzDefMidPoint(A,C) \tkzGetPoint{M}
+        \tkzDrawLine(E,F)
+        \tkzDrawPolygon[thick,orange](A,E,C,F)
+        \tkzMarkSegments(A,M M,C)
+        \tkzMarkRightAngle[size=.3](C,M,F)
+    \end{tik}
+    \begin{proof}
+        Let $M$ be the midpoint of $AC$. Note that $AM=CM$. Also, $\ang MFC=\ang MEA$ \;(alt. $\ang$s, $FC//AE$). Thus $\tri MFC\sim \tri MEA$ (AAS), and $CF=AE$ \;\corrsidecong 
+
+        \medskip
+        
+        Note that $AF=CF$ and $AE=CE$ by property of perpendicular bisector. Combined with $CF=AE$, we have $AE=CE=AF=CF$, which means $AECF$ is a rhombus.
+    \end{proof}
+
+    \medskip
+    
+    \textbf{(2V).} Similarly argument but flipped horizontally.
+    \begin{tik}
+        \tkzDefPoints{0/0/A,5/3/C}
+        \tkzDefRectangle(A,C) \tkzGetPoints{B}{D}
+        \tkzDrawPolygon(A,...,D)
+        \tkzLabelPoint[below](A){$A$}
+        \tkzLabelPoint[below](B){$B$}
+        \tkzLabelPoint[above](C){$C$}
+        \tkzLabelPoint[above](D){$D$}
+        \tkzLabelPoint[above](F){$F$}
+        \tkzLabelPoint[below](E){$E$}
+        \tkzLabelPoint[left](M){$M$}
+        \tkzDefPointOnLine[pos=.67](A,B) \tkzGetPoint{E}
+        \tkzDefPointOnLine[pos=.67](C,D) \tkzGetPoint{F}
+        \tkzDefPointOnLine[pos=.67](B,A) \tkzGetPoint{G}
+        \tkzDefPointOnLine[pos=.67](D,C) \tkzGetPoint{H}
+        \tkzDrawPoints(A,E,F,C,G,H)
+        \tkzDrawSegments[dashed](A,C B,D)
+        \tkzDefMidPoint(A,C) \tkzGetPoint{M}
+        \tkzDrawLines(E,F G,H)
+        \tkzDrawPolygon[thick,orange](A,E,C,F)
+        \tkzDrawPolygon[thick,red](B,G,D,H)
+        \tkzMarkSegments[pos=.6](A,M D,M)
+        \tkzMarkSegments[pos=.4](M,C M,B)
+        \tkzMarkRightAngle[size=.3](C,M,F)
+        \tkzMarkRightAngle[size=.3](B,M,G)
+        \tkzLabelPoint[below](G){$G$}
+        \tkzLabelPoint[above](H){$H$}
+    \end{tik}
+    
+\end{sol}
+
+\subsection{Circle center}
+
+\begin{task}
+    Construct the center of the circle.
+
+    (2L, 5E)
+    \begin{tik}
+        \tkzDefPoint(0,0){O}
+        \tkzDrawPoints[blue,size=3](O)
+        \tkzDefCircle[R](O,1.5)\tkzGetPoint{A}
+        \draw (O) circle (1.5);
+    \end{tik}
+\end{task}
+\begin{sol}
+    \textbf{(2L)} 
+
+    \textbf{1, 2.} Label two pairs of arbitrary points on the circle, and draw the perpendicular bisector of each pair of point. The intersection of the perpendicular bisectors is the desired center of circle.
+    \begin{tik}
+        \tkzDefPoint(0,0){O}
+        \tkzDefCircle[R](O,1.5)\tkzGetPoint{A}
+        \tkzDrawCircle(O,A)
+        \tkzDefShiftPoint[O](180:1.5){A}
+        \tkzDefShiftPoint[O](240:1.5){B}
+        \tkzDefShiftPoint[O](280:1.5){C}
+        \tkzDefShiftPoint[O](350:1.5){D}
+        \tkzLabelPoint[left](A){$A$}
+        \tkzLabelPoint[right](D){$D$}
+        \tkzLabelPoints(B,C)
+        \tkzDrawPoints(A,B,C,D)
+        \tkzDrawSegments[dashed](A,B C,D)
+        \tkzDefMidPoint(A,B)\tkzGetPoint{M}
+        \tkzDefMidPoint(C,D)\tkzGetPoint{N}
+        \tkzDrawLines[add=.5 and 1.5](M,O N,O)
+        \tkzDrawPoints[orange,size=3](O)
+        \tkzMarkRightAngles[size=.2](B,M,O D,N,O)
+        \tkzMarkSegments(A,M M,B)
+        \tkzMarkSegments[mark=||](C,N N,D)
+    \end{tik}
+    \begin{proof}
+        Perpendicular bisector of any chord passes through the center of a circle (``$\perp$ bisector of chord passes through center"). This means the center of circle lies on both perpendicular bisectors of $AB$ and $CD$, so it must be their point of intersection.
+    \end{proof}
+
+    \textbf{(5E)}
+
+    \medskip
+
+    \textbf{1, 2.} Label two arbitrary points $A$ and $B$. Draw circle centered $A$ through $B$, and draw circle centered $B$ through $A$.
+     \begin{tik}
+        \tkzDefPoint(0,0){O}
+        \tkzDefCircle[R](O,1.5)\tkzGetPoint{A}
+        \tkzDrawCircle(O,A)
+        \tkzDefShiftPoint[O](240:1.5){A}
+        \tkzDefShiftPoint[O](280:1.5){B}
+        \tkzLabelPoint[left](A){$A$}
+        \tkzLabelPoints(B)
+        \tkzDrawPoints(A,B)
+        \tkzDrawCircle(B,A)
+        \tkzDrawCircle(A,B)
+    \end{tik}
+    \textbf{3.} (Let $(B,A)$ denote the circle centered $B$ through $A$.) Let circle $(B,A)$ intersect the given circle at another point $C$. Draw circle centered $C$ through $B$.
+    \begin{tik}
+        \tkzDefPoint(0,0){O}
+        \tkzDefCircle[R](O,1.5)\tkzGetPoint{A}
+        \tkzDrawCircle(O,A)
+        \tkzDefShiftPoint[O](240:1.5){A}
+        \tkzDefShiftPoint[O](280:1.5){B}
+        \tkzLabelPoint[left](A){$A$}
+        \tkzDrawPoints(A,B,C)
+        \tkzDrawCircle(B,A)
+        \tkzDrawCircle(A,B)
+        \tkzInterCC(O,A)(B,A)\tkzGetFirstPoint{C}
+        \tkzDrawPoint(C)
+        \tkzDrawCircle(C,B)
+        \tkzLabelPoints(B,C)
+        
+    \end{tik}
+    \textbf{4, 5.} Draw line through the intersections of circles $(A,B)$ and $(B,A)$, and draw line through the intersections of circles $(B,C)$ and $(C,B)$. The intersection of these two lines is the desired center.
+    \begin{tik}
+        \tkzDefPoint(0,0){O}
+        \tkzDefCircle[R](O,1.5)\tkzGetPoint{A}
+        \tkzDrawCircle(O,A)
+        \tkzDefShiftPoint[O](240:1.5){A}
+        \tkzDefShiftPoint[O](280:1.5){B}
+        \tkzLabelPoint[left](A){$A$}
+        \tkzDrawPoints(A,B,C)
+        \tkzDrawCircles(B,A A,B)
+        \tkzInterCC(O,A)(B,A)\tkzGetFirstPoint{C}
+        \tkzDrawPoint(C)
+        \tkzDrawCircle(C,B)
+        \tkzLabelPoints(B,C)
+        \tkzInterCC(A,B)(B,A)\tkzGetPoints{E}{F}
+        \tkzInterCC(B,C)(C,B)\tkzGetPoints{G}{H}
+        \tkzDrawLines[add=1.5 and .2](E,F G,H)
+        \tkzDrawPoints(E,F,G,H)
+        \tkzDrawPoints[orange,size=3](O)
+    \end{tik}
+    \begin{proof}
+        Note that $EF$ and $GH$ are perpendicular bisectors of chords $AB$ and $BC$ respectively. So they intersect at the center of the circle.
+        \begin{tik}[scale=1.3]
+        \tkzDefPoint(0,0){O}
+        \tkzDefCircle[R](O,1.5)\tkzGetPoint{A}
+        \tkzDrawCircle(O,A)
+        \tkzDefShiftPoint[O](240:1.5){A}
+        \tkzDefShiftPoint[O](280:1.5){B}
+        \tkzLabelPoint[left](A){$A$}
+        \tkzDrawPoints(A,B)
+        \tkzDrawCircle(B,A)
+        \tkzDrawCircle(A,B)
+        \tkzInterCC(O,A)(B,A)\tkzGetFirstPoint{C}
+        \tkzDrawPoint(C)
+        \tkzDrawCircle(C,B)
+        \tkzLabelPoints(B,C)
+        \tkzDrawSegments[dashed](A,B C,B)
+        \tkzDefMidPoint(A,B)\tkzGetPoint{M}
+        \tkzDefMidPoint(B,C)\tkzGetPoint{N}
+        \tkzMarkRightAngles[size=.2](B,M,O C,N,O)
+        \tkzMarkSegments(A,M M,B)
+        \tkzMarkSegments[mark=||](B,N N,C)
+        \tkzInterCC(A,B)(B,A)\tkzGetPoints{E}{F}
+        \tkzInterCC(B,C)(C,B)\tkzGetPoints{G}{H}
+        \tkzDrawLines[add=1.5 and .2](E,F G,H)
+        \tkzDrawPoints(E,F,G,H)
+        \tkzLabelPoint[left](E){$E$}
+        \tkzLabelPoint[left](F){$F$}
+        \tkzLabelPoint[right](G){$G$}
+        \tkzLabelPoint[right](H){$H$}
+        \tkzDrawPoints[orange,size=3](O)
+    \end{tik}
+    \end{proof}
+\end{sol}
+
+\subsection{Inscribed square}
+
+\begin{task}
+    Inscribe a square in the circle. One vertex of the square is given. (The circle center is also given.)
+
+    (6L, 7E)
+    \begin{tik}
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(0,1.5){A}
+        \tkzDefPoint(1.5,0){B}
+        \tkzDefPoint(0,-1.5){C}
+        \tkzDefPoint(-1.5,0){D}
+        \tkzDrawPoints(O,A)
+        \draw (O) circle (1.5);
+        \tkzDrawPolygon[thick,blue](A,B,C,D)
+    \end{tik}
+\end{task}
+\begin{sol}
+    \textbf{(6L)}
+
+    \medskip
+
+    \textbf{1.} Let $O$ be center of circle and $A$ be the given vertex. Draw line $AO$. Let $AO$ intersect the circle at $C$.
+    \begin{tik}
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(0,1.5){A}
+        \tkzDefPoint(0,-1.5){C}
+        \tkzDrawPoints(O,A)
+        \tkzDrawCircle(O,A)
+        \tkzDrawLine[gray](A,C)
+        \tkzDrawSegment(A,O)
+        \tkzLabelPoint[above right](A){$A$}
+        \tkzLabelPoint[right](O){$O$}
+        \tkzLabelPoint[below right](C){$C$}
+    \end{tik}
+    \textbf{2.} Draw the perpendicular bisector of $AC$. Let it intersect the circle at $B$ and $D$.
+    \begin{tik}
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(0,1.5){A}
+        \tkzDefPoint(0,-1.5){C}
+        \tkzDefPoint(1.5,0){B}
+        \tkzDefPoint(-1.5,0){D}
+        \tkzDrawPoints(O,A,C)
+        \tkzDrawCircle(O,A)
+        \tkzDrawLine(A,C)
+        \tkzDrawLine(B,D)
+        \tkzLabelPoint[above right](A){$A$}
+        \tkzLabelPoint[right](O){$O$}
+        \tkzLabelPoint[below right](B){$B$}
+        \tkzLabelPoint[below left](D){$D$}
+        \tkzLabelPoint[below right](C){$C$}
+        \tkzMarkRightAngle(A,O,D)
+        \tkzMarkSegments(A,O O,C)
+    \end{tik}
+    \textbf{3, 4, 5, 6.} Draw lines $AB,BC,CD,DA$. We get the desired square.
+    \begin{tik}
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(0,1.5){A}
+        \tkzDefPoint(0,-1.5){C}
+        \tkzDefPoint(1.5,0){B}
+        \tkzDefPoint(-1.5,0){D}
+        \tkzDrawPoints(O,A,C,B,D)
+        \tkzDrawCircle(O,A)
+        \tkzDrawLine(A,C)
+        \tkzDrawLine(B,D)
+        \tkzLabelPoint[above right](A){$A$}
+        \tkzLabelPoint[right](O){$O$}
+        \tkzLabelPoint[below right](B){$B$}
+        \tkzLabelPoint[below left](D){$D$}
+        \tkzLabelPoint[below right](C){$C$}
+        \tkzMarkRightAngle(A,O,D)
+        \tkzMarkSegments(A,O O,C)
+        \tkzDrawSegments[thick, orange](A,B B,C C,D D,A)
+    \end{tik}
+    \begin{proof}
+        Note that the perpendicular bisector of $AC$ passes through circle center $O$. So we have $OA=OB=OC=OD$. Since the diagonals of $ABCD$ are perpendicular and bisect each other, $ABCD$ is a square (con. of square).
+    \end{proof}
+
+    \textbf{(7E)} 
+
+    \medskip
+
+    \textbf{1.} Draw circle centered $A$ through $O$. Let the intersections of two circles be $E$ and $F$.
+    \begin{tik}
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(0,1.5){A}
+        \tkzDefPoint(0,-1.5){C}
+        \draw (O) circle (1.5);
+        \tkzDrawCircle(A,O)    
+        \tkzInterCC(A,O)(O,A)\tkzGetPoints{F}{E}
+        \tkzDrawPoints(O,A)
+        \tkzLabelPoint[above right](A){$A$}
+        \tkzLabelPoint[below](O){$O$}
+        \tkzLabelPoint[left](E){$E$}
+        \tkzLabelPoint[right](F){$F$}
+    \end{tik}
+    \textbf{2.} Draw circle centered $E$ through $F$.
+    \begin{tik}
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(0,1.5){A}
+        \tkzDefPoint(0,-1.5){C}
+        \tkzInterCC(A,O)(O,A)\tkzGetPoints{F}{E}
+        \draw (O) circle (1.5);
+        \tkzDrawCircle(A,O)    
+        \tkzDrawCircle(E,F)
+        \tkzDrawPoints(O,A,E,F)
+        \tkzLabelPoint[above right](A){$A$}
+        \tkzLabelPoint[below](O){$O$}
+        \tkzLabelPoint[left](E){$E$}
+        \tkzLabelPoint[right](F){$F$}
+    \end{tik}
+    \textbf{3.} Draw line $EO$. Let $EO$ intersect circle $(E,F)$ at $G$ and $H$, where $G$ lies inside the given circle and $H$ lies outside.
+    \begin{tik}
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(0,1.5){A}
+        \tkzDefPoint(0,-1.5){C}
+        \tkzInterCC(A,O)(O,A)\tkzGetPoints{F}{E}
+        \tkzInterLC(E,O)(E,F)\tkzGetPoints{H}{G}
+        \draw (O) circle (1.5);
+        \tkzDrawCircle(A,O)    
+        \tkzDrawCircle(E,F)
+        \tkzDrawPoints(O,A,E,F)
+        \tkzDrawLine[add=2 and 1.3](E,O)
+        \tkzLabelPoint[above right](A){$A$}
+        \tkzLabelPoint[below](O){$O$}
+        \tkzLabelPoint[left](E){$E$}
+        \tkzLabelPoint[right](F){$F$}
+        \tkzLabelPoint[left](G){$G$}
+        \tkzLabelPoint[below](H){$H$}
+    \end{tik}
+
+    \textbf{4.} Let $C$ be another intersection of $(E,F)$ and the given circle. Draw line $CG$.
+    \begin{tik}
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(0,1.5){A}
+        \tkzDefPoint(0,-1.5){C}
+        \tkzInterCC(A,O)(O,A)\tkzGetPoints{F}{E}
+        \tkzInterLC(E,O)(E,F)\tkzGetPoints{H}{G}
+        \draw (O) circle (1.5);
+        \tkzDrawCircle(A,O)    
+        \tkzDrawCircle(E,F)
+        \tkzDrawPoints(O,A,E,F,C,G)
+        \tkzDrawLine[add=2 and 1.3](E,O)
+        \tkzDrawLine[add=0 and 1.2](C,G)
+        \tkzLabelPoint[above right](A){$A$}
+        \tkzLabelPoint[below](O){$O$}
+        \tkzLabelPoint[left](E){$E$}
+        \tkzLabelPoint[right](F){$F$}
+        \tkzLabelPoint[left](G){$G$}
+        \tkzLabelPoint[below](H){$H$}
+        \tkzLabelPoint[below](C){$C$}
+    \end{tik}
+    \textbf{5.} Let $CG$ intersect given circle at another point $B$. Draw line $AB$.
+    \begin{tik}
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(0,1.5){A}
+        \tkzDefPoint(1.5,0){B}
+        \tkzDefPoint(0,-1.5){C}
+        \tkzInterCC(A,O)(O,A)\tkzGetPoints{F}{E}
+        \tkzInterLC(E,O)(E,F)\tkzGetPoints{H}{G}
+        \draw (O) circle (1.5);
+        \tkzDrawCircle(A,O)    
+        \tkzDrawCircle(E,F)
+        \tkzDrawPoints(O,A,E,F,C,G,B)
+        \tkzDrawLine[add=2 and 1.3](E,O)
+        \tkzDrawLine[add=0 and 1.2](C,G)
+        \tkzDrawSegment(A,B)
+        \tkzLabelPoint[above right](A){$A$}
+        \tkzLabelPoint[below](O){$O$}
+        \tkzLabelPoint[left](E){$E$}
+        \tkzLabelPoint[right](F){$F$}
+        \tkzLabelPoint[left](G){$G$}
+        \tkzLabelPoint[below](H){$H$}
+        \tkzLabelPoint[below](C){$C$}
+        \tkzLabelPoint[right](B){$B$}
+    \end{tik}
+    \textbf{6.} Draw line $CH$. Let $CH$ intersect given circle at $D$.
+    \begin{tik}
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(0,1.5){A}
+        \tkzDefPoint(1.5,0){B}
+        \tkzDefPoint(0,-1.5){C}
+        \tkzDefPoint(-1.5,0){D}
+        \tkzInterCC(A,O)(O,A)\tkzGetPoints{F}{E}
+        \tkzInterLC(E,O)(E,F)\tkzGetPoints{H}{G}
+        \draw (O) circle (1.5);
+        \tkzDrawCircle(A,O)    
+        \tkzDrawCircle(E,F)
+        \tkzDrawPoints(O,A,E,F,C,G,B,H)
+        \tkzDrawLine[add=2 and 1.3](E,O)
+        \tkzDrawLine[add=0 and 1.2](C,G)
+        \tkzDrawLine[add=0 and .1](C,H)
+        \tkzDrawSegments(A,B)
+        \tkzLabelPoint[above right](A){$A$}
+        \tkzLabelPoint[below](O){$O$}
+        \tkzLabelPoint[left](E){$E$}
+        \tkzLabelPoint[right](F){$F$}
+        \tkzLabelPoint[left](G){$G$}
+        \tkzLabelPoint[below](H){$H$}
+        \tkzLabelPoint[below](C){$C$}
+        \tkzLabelPoint[right](B){$B$}
+        \tkzLabelPoint[left](D){$D$}
+    \end{tik}
+    \textbf{7.} Draw line $AD$. $ABCD$ is the desired square.
+    \begin{tik}
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(0,1.5){A}
+        \tkzDefPoint(1.5,0){B}
+        \tkzDefPoint(0,-1.5){C}
+        \tkzDefPoint(-1.5,0){D}
+        \tkzInterCC(A,O)(O,A)\tkzGetPoints{F}{E}
+        \tkzInterLC(E,O)(E,F)\tkzGetPoints{H}{G}
+        \draw (O) circle (1.5);
+        \tkzDrawCircle(A,O)    
+        \tkzDrawCircle(E,F)
+        \tkzDrawPoints(O,A,E,F,C,G,B,H,D)
+        \tkzDrawLine[add=2 and 1.3](E,O)
+        \tkzDrawLine[add=0 and 1.2](C,G)
+        \tkzDrawLine[add=0 and .1](C,H)
+        \tkzDrawSegments[thick,orange](A,B B,C C,D D,A)
+        \tkzLabelPoint[above right](A){$A$}
+        \tkzLabelPoint[below](O){$O$}
+        \tkzLabelPoint[left](E){$E$}
+        \tkzLabelPoint[right](F){$F$}
+        \tkzLabelPoint[left](G){$G$}
+        \tkzLabelPoint[below](H){$H$}
+        \tkzLabelPoint[below](C){$C$}
+        \tkzLabelPoint[right](B){$B$}
+        \tkzLabelPoint[left](D){$D$}
+    \end{tik}
+\begin{proof}
+    \textbf{1-3.} Note that $EF$ bisects $\ang OEA$ since $EF$ is the diagonal of rhombus $AEOF$ which is made up of two equilateral triangles $\tri OAE$ and $\tri OAF$. Thus  $\ang AEF=\ang OEF = 60\deg/2 = 30\deg$ .
+    
+\medskip
+    
+    Also, note that $\ang OEC=\ang OEF=30\deg$ since $\tri OEC\sim\tri OEF$ (SSS). Thus $\ang AEC=30\deg+30\deg+30\deg=90\deg$. By ``converse of $\ang$ in semi-circle", $AC$ is the diameter of given circle, which means $A,O,C$ are collinear.
+    \begin{tik}
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(0,1.5){A}
+        \tkzDefPoint(1.5,0){B}
+        \tkzDefPoint(0,-1.5){C}
+        \tkzDefPoint(-1.5,0){D}
+        \tkzInterCC(A,O)(O,A)\tkzGetPoints{F}{E}
+        \tkzInterLC(E,O)(E,F)\tkzGetPoints{H}{G}
+        \draw (O) circle (1.5);
+        \tkzDrawCircle(A,O)    
+        \tkzDrawCircle(E,F)
+        \tkzDrawPoints(O,A,E,F,C,G,H)
+        \tkzDrawLine[add=2 and 1.3](E,O)
+        %\tkzDrawLine[add=0 and 1.2](C,G)
+        %\tkzDrawLine[add=0 and .1](C,H)
+        %\tkzDrawSegments[thick,orange](A,B B,C C,D D,A)
+        \tkzDrawSegments(E,F E,A E,C)
+        \tkzMarkAngle[size=.5](F,E,A)
+        \tkzLabelAngle[pos=.8](F,E,A){\small $30\deg$}
+        \tkzMarkAngle[size=.5](O,E,F)
+        \tkzLabelAngle[pos=.8](O,E,F){\small $30\deg$}
+        \tkzMarkAngle[size=.5](C,E,O)
+        \tkzLabelAngle[pos=.8](C,E,O){\small $30\deg$}
+        \tkzLabelPoint[above right](A){$A$}
+        \tkzLabelPoint[below](O){$O$}
+        \tkzLabelPoint[left](E){$E$}
+        \tkzLabelPoint[right](F){$F$}
+        \tkzLabelPoint[left](G){$G$}
+        \tkzLabelPoint[below](H){$H$}
+        \tkzLabelPoint[below](C){$C$}
+    \end{tik}
+    \textbf{4-7.} Note that $GH$ is a diameter of circle $(E,G)$, so $\ang HCG=90\deg$ \;($\ang$ in semi-circle).
+    
+    \medskip
+
+    Note that $EH=EC$ (radii), so  $\ang ECH=\ang EHC=30\deg/2 = 15\deg$ \;\basetri \& \exttri. Also, $\ang OCE=\ang OEC=30\deg$ \;\basetri.
+
+    \begin{tik}
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(0,1.5){A}
+        \tkzDefPoint(1.5,0){B}
+        \tkzDefPoint(0,-1.5){C}
+        \tkzDefPoint(-1.5,0){D}
+        \tkzInterCC(A,O)(O,A)\tkzGetPoints{F}{E}
+        \tkzInterLC(E,O)(E,F)\tkzGetPoints{H}{G}
+        \draw (O) circle (1.5);
+        \tkzDrawCircle(A,O)    
+        \tkzDrawCircle(E,F)
+        \tkzDrawPoints(O,A,E,F,C,G,B,H)
+        \tkzDrawLine[add=2 and 1.3](E,O)
+        %\tkzDrawLine[add=0 and 1.2](C,G)
+        %\tkzDrawLine[add=0 and .1](C,H)
+        %\tkzDrawSegments[thick,orange](A,B B,C C,D D,A)
+        \tkzDrawSegments(E,F E,A E,C H,C C,B A,C)
+        \tkzMarkAngle[size=.5](F,E,A)
+        \tkzLabelAngle[pos=.8](F,E,A){\small $30\deg$}
+        \tkzMarkAngle[size=.5](O,E,F)
+        \tkzLabelAngle[pos=.8](O,E,F){\small $30\deg$}
+        \tkzMarkAngle[size=.5](C,E,O)
+        \tkzLabelAngle[pos=.8](C,E,O){\small $30\deg$}
+        \tkzMarkAngle[size=1.1](E,C,H)
+        \tkzLabelAngle[pos=1.5](E,C,H){\small $15\deg$}
+        \tkzMarkAngle[size=1.1](C,H,E)
+        \tkzLabelAngle[pos=1.5](C,H,E){\small $15\deg$}
+        \tkzMarkAngle[size=.7](O,C,E)
+        \tkzLabelAngle[pos=1](O,C,E){\small $30\deg$}
+        \tkzMarkRightAngle[size=.3](G,C,H)
+        \tkzLabelPoint[above right](A){$A$}
+        \tkzLabelPoint[right](O){$O$}
+        \tkzLabelPoint[left](E){$E$}
+        \tkzLabelPoint[right](F){$F$}
+        \tkzLabelPoint[left](G){$G$}
+        \tkzLabelPoint[below](H){$H$}
+        \tkzLabelPoint[below](C){$C$}
+        \tkzLabelPoint[right](B){$B$}
+        \tkzLabelPoint[left](D){$D$}
+    \end{tik}
+      Thus, $\ang OCD=30\deg+15\deg=45\deg$, and $\ang OCB=\ang OCG=90\deg - 45\deg = 45\deg$. 
+
+    \begin{tik}
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(0,1.5){A}
+        \tkzDefPoint(1.5,0){B}
+        \tkzDefPoint(0,-1.5){C}
+        \tkzDefPoint(-1.5,0){D}
+        \tkzInterCC(A,O)(O,A)\tkzGetPoints{F}{E}
+        \tkzInterLC(E,O)(E,F)\tkzGetPoints{H}{G}
+        \draw (O) circle (1.5);
+        \tkzDrawCircle(A,O)    
+        \tkzDrawCircle(E,F)
+        \tkzDrawPoints(O,A,C,D,B)
+        %\tkzDrawLine[add=0 and 1.2](C,G)
+        %\tkzDrawLine[add=0 and .1](C,H)
+        %\tkzDrawSegments[thick,orange](A,B B,C C,D D,A)
+        \tkzDrawSegments(C,B A,C C,D A,D A,B)
+        \tkzMarkAngle[size=.5](O,C,D)
+        \tkzLabelAngle[pos=.8](O,C,D){\small $45\deg$}
+        \tkzMarkAngle[size=.5](B,C,O)
+        \tkzLabelAngle[pos=.8](B,C,O){\small $45\deg$}
+        \tkzMarkRightAngles[size=.3](C,D,A A,B,C)
+        \tkzLabelPoint[above right](A){$A$}
+        \tkzLabelPoint[right](O){$O$}
+        \tkzLabelPoint[below](C){$C$}
+        \tkzLabelPoint[right](B){$B$}
+        \tkzLabelPoint[left](D){$D$}
+    \end{tik}
+      Let's focus on points $A,B,C,D$. Note that $\ang ADC=\ang ABC=90\deg$ \;($\ang$ in semi-circle), $\ang ACD=\ang ACB=45\deg$, and $AC=AC$. Thus $\tri ADC\cong\tri ABC$ (AAS) and $BC=CD$ \;\corrsidecong. Since $ABCD$ has four right angles and adjacent sides are equal, $ABCD$ is a square \;(con. of square), as desired.
+\end{proof}
+\end{sol}
+
+
+\section{Beta}
+
+\subsection{Angle bisector}
+
+\begin{task}
+    Construct the line that bisects the given angle.
+
+    (2L, 4E)
+    \begin{tik}
+        \tkzDefPoints{0/0/O, 3/0/A}
+        \tkzDefPoint(50:3){B}\tkzDefPoint(25:3){C}
+        \draw (O)--(A);
+        \draw[blue,thick] (O)--(C);
+        \draw (O)--(B);
+        \tkzMarkAngle[size=.7,mark=|](A,O,C)
+        \tkzMarkAngle[size=.7,mark=|](C,O,B)
+    \end{tik}
+\end{task}
+\begin{sol}
+    \textbf{1.} Let $O$ be the vertex of the given angle. Label an arbitrary point $A$ on one of the given rays. Draw circle $(O,A)$.
+    \begin{tik}
+        \tkzDefPoints{0/0/O, 3/0/A}
+        \tkzDefPoint(50:3){B}\tkzDefPoint(25:3){C}
+        \tkzDrawSegments(O,A O,B)
+        \tkzDefPoint(2,0){A}
+        \tkzDrawCircle(O,A)
+        \tkzLabelPoints[below](O,A)
+        \tkzDrawPoints(O,A)
+    \end{tik}
+    \textbf{2.} Let $B$ be the intersection of the circle and the other ray. Draw $\pb AB$ (perpendicular bisector of $A,B$), which is the desired angle bisector.
+    \begin{tik}
+        \tkzDefPoints{0/0/O, 3/0/A}
+        \tkzDefPoint(50:3){B}\tkzDefPoint(25:3){C}
+        \tkzDrawSegments(O,A O,B)
+        \tkzDrawSegment[orange, thick](O,C)
+        \tkzMarkAngle[size=.7,mark=|](A,O,C)
+        \tkzMarkAngle[size=.7,mark=|](C,O,B)
+        \tkzDefPoint(2,0){A}
+        \tkzDefPoint(50:2){B}
+        \tkzDrawCircle(O,A)
+        \tkzLabelPoints[below](O,A)
+        \tkzDrawPoints(O,A,B)
+        \tkzDrawSegment[dashed](A,B)
+        \tkzDefMidPoint(A,B)\tkzGetPoint{M}
+        \tkzMarkSegments[mark=||](A,M M,B)
+        \tkzMarkRightAngle(B,M,O)
+        \tkzLabelPoint[above](B){$B$}
+        \tkzLabelPoint[right](M){$M$}
+    \end{tik}
+\begin{proof}
+    Note that $\tri OAB$ is an isosceles triangle since $OA=OB$ (radii). Let $M$ be the midpoint of $AB$. Since $OM\perp AB$, by ``prop. of isos. $\tri$'', we have $\ang AOM=\ang BOM$.
+\end{proof}
+\end{sol}
+
+\subsection{Intersection of angle bisectors}
+
+\begin{task}
+    Construct the point where the angle bisectors of the triangle are intersected.
+
+    (2L, 6E)
+    \begin{tik}
+        \tkzDefPoints{0/0/B, 1/2.5/A, 4/0/C}
+        \draw (A)--(B)--(C)--cycle;
+        \tkzDefTriangleCenter[in](A,B,C)\tkzGetPoint{I}
+        \tkzDrawPoint[blue,size=3](I)
+        \tkzDrawSegments[gray](A,I B,I C,I)
+        \tkzMarkAngles[mark=|||,size=.7, gray](C,B,I I,B,A)
+        \tkzMarkAngles[mark=||,size=.7, gray](B,A,I I,A,C)
+        \tkzMarkAngles[mark=|,size=.7, gray](A,C,I I,C,B)
+    \end{tik}
+\end{task}
+\begin{sol}
+    \textbf{(2L)}
+
+    \medskip
+
+    \textbf{1, 2.}  Draw angle bisectors of two of the vertices of the triangle. Their intersection is the desired point.
+    \begin{tik}
+        \tkzDefPoints{0/0/B, 1/2.5/A, 4/0/C}
+        \draw (A)--(B)--(C)--cycle;
+        \tkzDefTriangleCenter[in](A,B,C)\tkzGetPoint{I}
+        \tkzMarkAngles[mark=|||,size=.7, gray](C,B,I I,B,A)
+        \tkzMarkAngles[mark=|,size=.7, gray](A,C,I I,C,B)
+        \tkzDrawLine[add=0 and .9](B,I)
+        \tkzDrawLine[add=0 and .5](C,I)
+        \tkzDrawPoint[orange,size=3](I)
+    \end{tik}
+\begin{proof}
+    Note that the three angle bisectors of a triangle are concurrent (prop. of $\ang$ bisector). So we only need to find the intersection of two of them.
+\end{proof}
+
+\textbf{(6E)}
+
+\medskip
+
+\textbf{1, 2.} Let the vertices of triangle be $A,B,C$. Draw circle $(A,B)$ and circle $(B,A)$.
+\begin{tik}[scale=.7]
+        \tkzDefPoints{0/0/B, 1/2.5/A, 4/0/C}
+        \draw (A)--(B)--(C)--cycle;
+        \tkzDefTriangleCenter[in](A,B,C)\tkzGetPoint{I}
+        \tkzDrawCircles(A,B B,A)
+        \tkzLabelPoint[above](A){$A$}
+        \tkzLabelPoint[below](B){$B$}
+        \tkzLabelPoint[below](C){$C$}
+    \end{tik}
+\textbf{3.} Let  circle $(B,A)$ intersect side $BC$ at $D$. Draw circle $(D,B)$.
+\begin{tik}[scale=.7]
+        \tkzDefPoints{0/0/B, 1/2.5/A, 4/0/C}
+        \draw (A)--(B)--(C)--cycle;
+        \tkzDefTriangleCenter[in](A,B,C)\tkzGetPoint{I}
+        \tkzDrawCircles(A,B B,A)
+        \tkzLabelPoint[above](A){$A$}
+        \tkzLabelPoint[below](B){$B$}
+        \tkzLabelPoint[below](C){$C$}
+ 
+        \tkzInterLC(B,C)(B,A)\tkzGetSecondPoint{D}
+        \tkzDrawPoint(D)
+        \tkzDrawCircle(D,B)
+        \tkzLabelPoint[below](D){$D$}
+    \end{tik}
+    \textbf{4.} Let $(D,B)$ and $(A,B)$ intersect at another point $E$. Draw line $BE$.
+    \begin{tik}[scale=.7]
+        \tkzDefPoints{0/0/B, 1/2.5/A, 4/0/C}
+        \draw (A)--(B)--(C)--cycle;
+        \tkzDefTriangleCenter[in](A,B,C)\tkzGetPoint{I}
+        \tkzDrawCircles(A,B B,A)
+        \tkzLabelPoint[above](A){$A$}
+        \tkzLabelPoint[below](B){$B$}
+        \tkzLabelPoint[below](C){$C$}
+ 
+        \tkzInterLC(B,C)(B,A)\tkzGetSecondPoint{D}
+        \tkzDrawPoint(D)
+        \tkzDrawCircle(D,B)
+        \tkzLabelPoint[below](D){$D$}
+        \tkzInterCC(A,B)(D,B)\tkzGetFirstPoint{E}
+        \tkzDrawSegments(B,E)
+        \tkzDrawPoint(E)\tkzLabelPoint[above](E){$E$}
+    \end{tik}
+    \textbf{5.} Let $(A,B)$ intersect side $AC$ at $F$. Draw circle $(F,A)$.
+    \begin{tik}[scale=.7]
+        \tkzDefPoints{0/0/B, 1/2.5/A, 4/0/C}
+        \draw (A)--(B)--(C)--cycle;
+        \tkzDefTriangleCenter[in](A,B,C)\tkzGetPoint{I}
+        \tkzDrawCircles(A,B B,A)
+        \tkzLabelPoint[above](A){$A$}
+        \tkzLabelPoint[below](B){$B$}
+        \tkzLabelPoint[below](C){$C$}
+ 
+        \tkzInterLC(B,C)(B,A)\tkzGetSecondPoint{D}
+        \tkzDrawPoint(D)
+        \tkzDrawCircle(D,B)
+        \tkzLabelPoint[below](D){$D$}
+        \tkzInterCC(A,B)(D,B)\tkzGetFirstPoint{E}
+        \tkzDrawSegments(B,E)
+        \tkzDrawPoint(E)\tkzLabelPoint[above](E){$E$}
+        \tkzInterLC(A,C)(A,B)\tkzGetSecondPoint{F}
+        \tkzDrawPoint(F)\tkzLabelPoint[right](F){$F$}
+        \tkzDrawCircle(F,A)
+    \end{tik}
+    \textbf{6.} Let $(F,A)$ and $(B,A)$ intersect at another point $G$. Draw line $AG$. The intersection of $BE$ and $AG$ is the desired point.
+    \begin{tik}[scale=.7]
+        \tkzDefPoints{0/0/B, 1/2.5/A, 4/0/C}
+        \draw (A)--(B)--(C)--cycle;
+        \tkzDefTriangleCenter[in](A,B,C)\tkzGetPoint{I}
+        \tkzDrawCircles(A,B B,A)
+        \tkzLabelPoint[above](A){$A$}
+        \tkzLabelPoint[below](B){$B$}
+        \tkzLabelPoint[below](C){$C$}
+ 
+        \tkzInterLC(B,C)(B,A)\tkzGetSecondPoint{D}
+        \tkzDrawPoint(D)
+        \tkzDrawCircle(D,B)
+        \tkzLabelPoint[below](D){$D$}
+        \tkzInterCC(A,B)(D,B)\tkzGetFirstPoint{E}
+        \tkzDrawSegments(B,E)
+        \tkzLabelPoint[above](E){$E$}
+        \tkzInterLC(A,C)(A,B)\tkzGetSecondPoint{F}
+        \tkzDrawPoints(E,F)\tkzLabelPoint[right](F){$F$}
+        \tkzDrawCircle(F,A)
+        \tkzInterCC(F,A)(B,A)\tkzGetFirstPoint{G}
+        \tkzDrawSegment(A,G)
+        \tkzDrawPoint(G)\tkzLabelPoint[below](G){$G$}
+        \tkzDrawPoint[orange,size=3](I)
+    \end{tik}
+\begin{proof}
+    \textbf{1-4.} Let $r$ be the length of $AB$. Note that $AE=AB=BD=DE$ since they are all radii of circles with radius $r$. So $ABDE$ is a rhombus. Since $BE$ is a diagonal of the rhombus, $BE$ bisects $\ang B$ \;(prop. of rhombus).
+
+    \medskip
+
+    \textbf{5-6.} Similarly, since $AB=BG=FG=FA$, $ABGF$ is a rhombus of side length $r$. Since $AG$ is a diagonal of rhombus $ABGF$, $AG$ bisects $\ang A$.
+    \begin{tik}[scale=.7]
+        \tkzDefPoints{0/0/B, 1/2.5/A, 4/0/C}
+        \draw (A)--(B)--(C)--cycle;
+        \tkzDefTriangleCenter[in](A,B,C)\tkzGetPoint{I}
+        \tkzDrawCircles(A,B B,A)
+        \tkzLabelPoint[above](A){$A$}
+        \tkzLabelPoint[below](B){$B$}
+        \tkzLabelPoint[below](C){$C$}
+ 
+        \tkzInterLC(B,C)(B,A)\tkzGetSecondPoint{D}
+        \tkzDrawPoint(D)
+        \tkzDrawCircle(D,B)
+        \tkzLabelPoint[below](D){$D$}
+        \tkzInterCC(A,B)(D,B)\tkzGetFirstPoint{E}
+        \tkzDrawSegments(B,E)
+        \tkzLabelPoint[above](E){$E$}
+        \tkzInterLC(A,C)(A,B)\tkzGetSecondPoint{F}
+        \tkzDrawPoints(E,F)\tkzLabelPoint[right](F){$F$}
+        \tkzDrawCircle(F,A)
+        \tkzInterCC(F,A)(B,A)\tkzGetFirstPoint{G}
+        \tkzDrawSegment(A,G)
+        \tkzDrawPoint(G)\tkzLabelPoint[below](G){$G$}
+        \tkzDrawPoint[orange,size=3](I)
+        \tkzDrawPolygon[magenta,thick](A,B,D,E)
+        %  \tkzDrawPolygon[magenta,thick](A,B,D,E)
+        % shift 
+        \tkzDefPoints{9/0/B, 1+9/2.5/A, 4+9/0/C}
+        \draw (A)--(B)--(C)--cycle;
+        \tkzDefTriangleCenter[in](A,B,C)\tkzGetPoint{I}
+        \tkzDrawCircles(A,B B,A)
+        \tkzLabelPoint[above](A){$A$}
+        \tkzLabelPoint[below](B){$B$}
+        \tkzLabelPoint[below](C){$C$}
+ 
+        \tkzInterLC(B,C)(B,A)\tkzGetSecondPoint{D}
+        \tkzDrawPoint(D)
+        \tkzDrawCircle(D,B)
+        \tkzLabelPoint[below](D){$D$}
+        \tkzInterCC(A,B)(D,B)\tkzGetFirstPoint{E}
+        \tkzDrawSegments(B,E)
+        \tkzLabelPoint[above](E){$E$}
+        \tkzInterLC(A,C)(A,B)\tkzGetSecondPoint{F}
+        \tkzDrawPoints(E,F)\tkzLabelPoint[right](F){$F$}
+        \tkzDrawCircle(F,A)
+        \tkzInterCC(F,A)(B,A)\tkzGetFirstPoint{G}
+        \tkzDrawSegment(A,G)
+        \tkzDrawPoint(G)\tkzLabelPoint[below](G){$G$}
+        \tkzDrawPoint[orange,size=3](I)
+        \tkzDrawPolygon[red,thick](A,B,G,F)
+    \end{tik}
+\end{proof}
+\end{sol}
+
+
+\subsection{Angle of 30 deg}
+
+\begin{task}
+    Construct an angle of $30\deg$ with the given side.
+
+    (3L, 3E, 2V)
+    \begin{tik}
+        \tkzDefPoint(0,0){O} \tkzDefPoint(3,0){B}
+        \tkzDrawPoint(O)
+        \draw[->] (O)--(B);
+        \tkzDefPoint(30:2){E}
+        \tkzDrawSegment[thick,blue](O,E)
+        \tkzMarkAngle[size=.7](B,O,E)
+        \tkzLabelAngle[pos=1](B,O,E){$30\deg$}
+    \end{tik}
+\end{task}
+\begin{sol} \textbf{(3L, 3E)
+}
+    \textbf{1.} Let $O$ be the endpoint of the given ray, and $A$ be an arbitrary point on the given ray. Draw circle $(A,O)$, intersecting given ray at $B$.
+    \begin{tik}[scale=.8]
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \tkzDefPoint(4,0){B}
+        \tkzDrawPoints(A,O,B)
+        \tkzLabelPoints[below](A,B)
+        \tkzLabelPoint[below left](O){$O$}
+        \tkzDrawSegment[->](O,(5,0))
+        \tkzDrawCircle(A,O)
+    \end{tik}
+    \textbf{2.} Draw circle $(B,A)$.
+    \begin{tik}[scale=.8]
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \tkzDefPoint(4,0){B}
+        \tkzDrawPoints(A,O,B)
+        \tkzLabelPoints[below](A,B)
+        \tkzLabelPoint[below left](O){$O$}
+        \tkzDrawSegment[->](O,(7,0))
+        \tkzDrawCircles(A,O B,A)
+    \end{tik}
+    \textbf{3.} Let $E$ be one intersection of the two circles. Draw line $OE$, which is the desired line.
+    \begin{tik}[scale=.8]
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \tkzDefPoint(4,0){B}
+        \tkzInterCC(A,B)(B,A)\tkzGetPoints{E}{F}
+        \tkzDrawPoints(A,O,B,E)
+        \tkzLabelPoints[below](A,B,E)
+        \tkzLabelPoint[below left](O){$O$}
+        \tkzDrawSegment[->](O,(7,0))
+        \tkzDrawCircles(A,O B,A)
+        \tkzDrawLine[add=0 and .5, orange,thick](O,E)
+    \end{tik}
+    \textbf{(2V)} \textbf{4.} Let $F$ be another intersection of the two circles. Draw line $OF$.
+    \begin{tik}[scale=.8]
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \tkzDefPoint(4,0){B}
+        \tkzInterCC(A,B)(B,A)\tkzGetPoints{E}{F}
+        \tkzDrawPoints(A,O,B,E,F)
+        \tkzLabelPoints[below](A,B,E)
+        \tkzLabelPoint[below left](O){$O$}
+        \tkzDrawSegment[->](O,(7,0))
+        \tkzDrawCircles(A,O B,A)
+        \tkzDrawLine[add=0 and .5, orange,thick](O,E)
+        \tkzDrawLine[add=0 and .5, red,thick](O,F)
+        \tkzLabelPoint[above](F){$F$}
+    \end{tik}
+\begin{proof}
+    Note that $\ang EAB=60\deg$ by construction. Also, $AO=AE$ (radii) so $\ang AOE=\ang AEO$ \;\basetri. So $\ang EOA=60\deg/2=30\deg$ \;\exttri. Similar argument for the other line.
+    \begin{tik}[scale=.8]
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \tkzDefPoint(4,0){B}
+        \tkzInterCC(A,B)(B,A)\tkzGetPoints{E}{F}
+        \tkzDrawPoints(A,O,B,E)
+        \tkzLabelPoints[below](A,B,E)
+        \tkzLabelPoint[below left](O){$O$}
+        \tkzDrawSegment[->](O,(7,0))
+        \tkzDrawCircles(A,O B,A)
+        \tkzDrawLine[add=0 and .5, orange,thick](O,E)
+        \tkzDrawSegment(A,E)
+        \tkzMarkAngle[size=.5](B,A,E)
+        \tkzLabelAngle[pos=.9](B,A,E){$60\deg$}
+        \tkzMarkAngle[size=.7](A,O,E)
+        \tkzLabelAngle[pos=1.1](A,O,E){$30\deg$}
+        \tkzMarkAngle[size=.7](O,E,A)
+        \tkzLabelAngle[pos=1.1](O,E,A){$30\deg$}
+    \end{tik}
+\end{proof}
+\end{sol}
+
+\subsection{Double angle}
+
+\begin{task}
+    Construct an angle equal to the given one so that they share one side.
+    \begin{tik}
+        \tkzDefPoints{0/0/O, 3/0/A}
+        \tkzDefPoint(50:3){C}\tkzDefPoint(25:3){B}
+        \draw (O)--(A);
+        \draw[blue,thick] (O)--(C);
+        \draw (O)--(B);
+        \tkzMarkAngle[size=.7,mark=|](A,O,B)
+        \tkzMarkAngle[size=.7,mark=|](B,O,C)
+    \end{tik}  
+\end{task}
+\begin{sol}
+    \textbf{1.} Let $O$ be the vertex of given angle, and $A$ be an arbitrary point on one ray. Draw circle $(O,A)$, intersecting the other ray at $B$.
+    \begin{tik}[scale=.8]
+        \tkzDefPoints{0/0/O, 3/0/A}
+        \tkzDefPoint(50:3){C}\tkzDefPoint(25:3){B}
+        \draw (O)--(A);
+        \draw (O)--(B);
+        \tkzDefPoint(25:2){B}\tkzDefPoint(0:2){A}
+        \tkzDrawCircle(O,A)
+        \tkzDrawPoints(A,B)
+        \tkzLabelPoint[below](A){$A$}
+         \tkzLabelPoint[below](B){$B$}
+        \tkzLabelPoint[below](O){$O$}
+    \end{tik}
+    \textbf{2.} Draw circle $(B,A)$, intersecting $(O,A)$ at another point $C$.
+    \begin{tik}[scale=.8]
+        \tkzDefPoints{0/0/O, 3/0/A}
+        \tkzDefPoint(50:3){C}\tkzDefPoint(25:3){B}
+        \draw (O)--(A);
+        \draw (O)--(B);
+        \tkzDefPoint(25:2){B}\tkzDefPoint(0:2){A}
+        \tkzInterCC(B,A)(O,B)\tkzGetPoints{D}{C}
+        \tkzDrawCircle(O,A)
+        \tkzDrawPoints(A,B)
+        \tkzDrawCircle(B,A)
+        \tkzLabelPoint[below](A){$A$}
+        \tkzLabelPoint[below](B){$B$}
+        \tkzLabelPoint[below](O){$O$}
+        \tkzLabelPoint[below](C){$C$}
+    \end{tik}
+    \textbf{3.} Draw line $OC$, which is the desired line.
+    \begin{tik}[scale=.8]
+        \tkzDefPoints{0/0/O, 3/0/A}
+        \tkzDefPoint(50:3){C}\tkzDefPoint(25:3){B}
+        \draw (O)--(A);
+        \draw (O)--(B);
+        \tkzDefPoint(25:2){B}\tkzDefPoint(0:2){A}
+        \tkzInterCC(B,A)(O,B)\tkzGetPoints{D}{C}
+        \tkzDrawCircle(O,A)
+        \tkzDrawPoints(A,B,C)
+        \tkzDrawCircle(B,A)
+        \tkzLabelPoint[below](A){$A$}
+        \tkzLabelPoint[below](B){$B$}
+        \tkzLabelPoint[below](O){$O$}
+        \tkzLabelPoint[below](C){$C$}
+        \tkzDrawLine[add=0 and 1, orange,thick](O,C)
+    \end{tik}
+    \textbf{(2V)} Draw circle $(A,B)$, intersecting $(O,A)$ at $D$. Draw line $OD$.
+    \begin{tik}[scale=.8]
+        \tkzDefPoints{0/0/O, 3/0/A}
+        \tkzDefPoint(50:3){C}\tkzDefPoint(25:3){B}
+        \draw (O)--(A);
+        \draw (O)--(B);
+        \tkzDefPoint(25:2){B}\tkzDefPoint(0:2){A}
+        \tkzInterCC(B,A)(O,B)\tkzGetPoints{D}{C}
+        \tkzInterCC(A,B)(O,A)\tkzGetPoints{E}{F}
+        \tkzDrawCircle(O,A)
+        \tkzDrawPoints(A,B,C,E)
+        \tkzDrawCircle(B,A)
+        \tkzDrawCircle(A,B)
+        \tkzLabelPoint[below](A){$A$}
+        \tkzLabelPoint[below](B){$B$}
+        \tkzLabelPoint[below](O){$O$}
+        \tkzLabelPoint[below](C){$C$}
+        \tkzLabelPoint[below](E){$E$}
+        \tkzDrawLine[add=0 and .8, orange,thick](O,C)
+        \tkzDrawLine[add=0 and .8, red,thick](O,E)
+    \end{tik}
+    \begin{proof}
+        Note that $BA=BC$ (radii), so $\ang BOC=\ang BOA$ \;(equal chord, equal $\ang$). Similar argument for line $OE$.
+    \end{proof}
+\end{sol}
+
+\subsection{Cut rectangle}
+
+\begin{task}
+    Construct a line through the given point that cuts the rectangle into two parts of equal area.
+
+    (3L, 3E)
+    \begin{tik}
+        \draw (0,0) rectangle (3,1.8);
+        \tkzDefPoint(3.5,3){A}\tkzDefPoint(1.5,.9){B}
+        \tkzDrawPoint(A)
+        \tkzDrawLine[add=0.2 and .7, blue,thick](A,B)
+    \end{tik}
+\end{task}
+\begin{sol}
+    Let the rectangle be $ABCD$. \textbf{1, 2.} Draw diagonals $AC$ and $BD$, intersecting at $E$. 
+    
+    \textbf{3.} Draw line through given point and $E$. 
+    \begin{tik}
+        \tkzDefPoints{0/0/A,3/0/B,3/1.8/C,0/1.8/D}
+        \draw (0,0) rectangle (3,1.8);
+        \tkzDrawSegments(A,C B,D)
+        \tkzDefPoint(3.5,3){P}\tkzDefPoint(1.5,.9){E}
+        \tkzDrawPoints(P,E)
+        \tkzDrawLine[add=0.2 and .7, orange,thick](P,E)
+        \tkzLabelPoint(E){$E$}
+        \tkzLabelPoint(A){$A$}
+        \tkzLabelPoint(B){$B$}
+        \tkzLabelPoint[above](C){$C$}
+        \tkzLabelPoint[above](D){$D$}
+    \end{tik}
+\begin{proof}
+    Let the orange line intersect the rectangle sides $CD$ and $AB$  at $G$ and $H$ respectively. Note that $\tri EAH\cong\tri ECG$. So we can move $\tri EAH$ to $\tri ECG$ and vice versa to create $\tri ADC$ and $\tri CBA$ which are equal in area (because they are half of rectangle).
+\end{proof}
+\end{sol}
+
+\subsection{Drop a perpendicular}
+\begin{task}
+    Drop a perpendicular from the point to the line.
+
+    (2L, 3E)
+    \begin{tik}
+    \tkzDefPoints{-2/0/A, 2/0/B,0/1.5/P, 0/0/M}
+    \tkzDrawSegment[<->](A,B)
+    \tkzDrawLine[add=.2 and .5, blue,thick](P,M)
+    \tkzDrawPoint[size=3](P)
+    \tkzMarkRightAngle(B,M,P)
+    \end{tik}
+\end{task}
+\begin{sol}
+    \textbf{(2L)} Let the given point be $P$, and $A$ be an arbitrary point on given line. 
+    
+    \textbf{1.} Draw circle $(P,A)$, intersecting the line on $B$. 
+    
+    \textbf{2.} Draw $\pb AB$. 
+\begin{tik}
+    \tkzDefPoints{-2/0/A, 2/0/B,0/1.5/P, 0/0/M}
+    \tkzDrawSegment[<->](A,B)
+    \tkzDrawLine[add=1.4 and .5, orange,thick](P,M)
+    \tkzDrawPoint[size=3](P)
+    \tkzMarkRightAngle(B,M,P)
+    \tkzDefPoints{-1/0/A, 1/0/B}
+    \tkzDrawCircle(P,A)
+    \tkzDrawPoints(A,B)
+    \tkzMarkSegments(A,M M,B)
+    \tkzLabelPoints[below](A,B)
+    \tkzLabelPoints[right](P)
+\end{tik}
+\begin{proof}
+    $AB$ is a chord of the circle, so the perpendicular bisector of $AB$ passes through center $P$. This means we have constructed a line through $P$ that is perpendicular to line $AB$.
+\end{proof}
+
+\textbf{(3E)} \textbf{1, 2.} Label two arbitrary points $A,B$. Draw circles $(A,P)$ and circle $(B,P)$.
+\begin{tik}[scale=.8]
+    \tkzDefPoints{-5/0/A, 3/0/B,0/1.5/P, 0/0/M}
+    \tkzDrawSegment[<->](A,B)
+    \tkzDrawPoint[size=3](P)
+    \tkzDefPoints{-2/0/A, .7/0/B}
+    \tkzDrawCircles(A,P B,P)
+    \tkzDrawPoints(A,B,P)
+    \tkzLabelPoints[below](A,B)
+    \tkzLabelPoints[right](P)
+\end{tik}
+
+\textbf{3.} Draw line through the intersection of the two circles, which is the desired line.
+\begin{tik}[scale=.8]
+    \tkzDefPoints{-5/0/A, 3/0/B,0/1.5/P, 0/0/M, 0/-1.5/Q}
+    \tkzDrawSegment[<->](A,B)
+ 
+    \tkzDrawPoint[size=3](P)
+    \tkzMarkRightAngle(B,M,P)
+    \tkzDefPoints{-2/0/A, .7/0/B}
+    \tkzDrawCircles(A,P B,P)
+    \tkzDrawPoints(A,B,P,Q)
+    \tkzLabelPoints[below](A,B)
+    \tkzLabelPoints[right](P)
+    \tkzLabelPoints[right](Q)
+    \tkzDrawLine[add=.8 and 1.4, orange,thick](P,M)
+\end{tik}
+\begin{proof}
+    Let $Q$ be the other intersection of the two circles. Note that $AP=AQ$ and $BP=BQ$ (radii), so $APBQ$ is either a kite or a dart. If $APBQ$ is a kite, then by ``prop. of kite'', the diagonals of the kite are perpendicular to each other, meaning $PQ\perp AB$.
+
+    \begin{tik}
+    \tkzDefPoints{-5/0/L, 3/0/S,0/1.5/P, 0/0/M, 0/-1.5/Q}
+    \tkzDrawSegment[<->](L,S)
+ 
+    \tkzDrawPoint[size=3](P)
+    \tkzDefPoints{-2/0/A, -.7/0/B, .7/0/C}
+    \tkzDrawCircles(A,P B,P)
+    \tkzDrawPoints(A,B,P,Q)
+    \tkzLabelPoints[below](A,B)
+    \tkzLabelPoints[right](P)
+    \tkzLabelPoints[right](Q)
+    \tkzDrawSegments(A,P A,Q B,Q B,P)
+    \tkzMarkSegments(A,P A,Q)
+    \tkzMarkSegments[mark=||](B,P B,Q)
+\end{tik}
+
+    If $APBQ$ is a dart with $B$ being the concave point, then reflect $B$ about line $PQ$ to get $B'$. Note that $PQ\perp BB'$ and $BPB'Q$ is a rhombus (by reflection). Since $APB'Q$ is a kite, we also have $PQ\perp AB'$. Thus $AB'$ and $BB'$ are parallel, but they share the same point $B'$, so $A,B,B'$ must lie on the same line.  This means $PQ\perp AB$, our desired result.
+\begin{tik}
+    \tkzDefPoints{-5/0/L, 3/0/S,0/1.5/P, 0/0/M, 0/-1.5/Q}
+ 
+    \tkzDrawPoint[size=3](P)
+    \tkzDefPoints{-2/0/A, -.7/0/B, .7/0/C}
+    \tkzDrawPoints(A,B,P,Q)
+    \tkzLabelPoints[below](A,B)
+    \tkzLabelPoints[right](P)
+    \tkzLabelPoints[right](Q)
+    \tkzLabelPoint[below](C){$B'$}
+    \tkzDrawSegments(A,P A,Q B,Q B,P P,Q C,P C,Q B,C)
+    \tkzMarkSegments(A,P A,Q)
+    \tkzMarkSegments[mark=||](B,P B,Q C,P C,Q)
+    \tkzMarkRightAngle(C,M,P)
+\end{tik}
+\end{proof}
+
+\end{sol}
+
+\subsection{Erect a perpendicular}
+
+\begin{task}
+    Erect a perpendicular from the point on the line.
+
+    (1L, 3E)
+    \begin{tik}
+    \tkzDefPoints{-2/0/A, 2/0/B,0/1/M, 0/0/P}
+    \tkzDrawSegment[<->](A,B)
+    \tkzDrawLine[add=.4 and .4, blue,thick](P,M)
+    \tkzDrawPoint[size=3](P)
+    \tkzMarkRightAngle(B,P,M)
+    \end{tik}
+\end{task}
+\begin{sol}
+    \textbf{(1L)} Let $P$ be the given point. Let $A$ be an arbitrary point to the left of $P$ and $B$ be an arbitrary point to the right of $P$. Draw the angle bisector of $\ang AOB$, which is the desired line.
+\begin{tik}
+    \tkzDefPoints{-2/0/A, 2/0/B,0/1/M, 0/0/P}
+    \draw[<->] (A)--(B);
+    \tkzDefPoints{-1.5/0/A, 1/0/B}
+    \tkzDrawLine[add=.4 and .4, orange,thick](P,M)
+    \tkzDrawPoint[size=3](P)
+    \tkzDrawPoints(A,B)
+    \tkzMarkAngles[mark=|,size=.4](B,P,M M,P,A)
+    \tkzLabelPoints(A,B)
+    \tkzLabelPoint[below left](P){$P$}
+\end{tik}
+\begin{proof}
+    Since $A,O,P$ are on a straight line, $\ang AOP=180\deg$, so the angle bisector makes two angles of $90\deg$, which means the angle bisector is perpendicular to line $AOB$.
+\end{proof}
+\textbf{(3E)} \textbf{1.} Label an arbitrary point $O$ not on the given line. Draw circle $(O,P)$, intersecting the given line at another point $A$.
+\begin{tik}
+    \tkzDefPoints{-3/0/A, 2/0/B,0/1/M, 0/0/P, -.8/1.2/O}
+    \draw[<->] (A)--(B);
+    \tkzDefPoints{-1.6/0/A, 1/0/B}
+    \tkzDrawPoint[size=3](P)
+    \tkzDrawPoints(A,O)
+    \tkzLabelPoints(A,O,P)
+    \tkzDrawCircle(O,P)
+\end{tik}
+\textbf{2.} Draw line $AO$. Let it intersect the circle at $B$.
+\begin{tik}
+    \tkzDefPoints{-3/0/A, 2/0/B,0/1/M, 0/0/P, -.8/1.2/O}
+    \draw[<->] (A)--(B);
+    \tkzDefPoints{-1.6/0/A, 0/2.4/B}
+    \tkzDrawPoint[size=3](P)
+    \tkzDrawPoints(A,B,O)
+    \tkzLabelPoints(A)
+    \tkzLabelPoints[below right](P)
+    \tkzLabelPoints[right](B)
+    \tkzLabelPoints[left](O)
+    \tkzDrawCircle(O,P)
+    \tkzDrawLine[add=.4 and 1.3](A,O)
+\end{tik}
+\textbf{3.} Draw line $BP$, which is the desired line.
+\begin{tik}
+    \tkzDefPoints{-3/0/A, 2/0/B,0/1/M, 0/0/P, -.8/1.2/O}
+    \draw[<->] (A)--(B);
+    \tkzDefPoints{-1.6/0/A, 0/2.4/B}
+    \tkzDrawLine[add=.4 and 1.7, orange,thick](P,M)
+    \tkzDrawPoint[size=3](P)
+    \tkzDrawPoints(A,B,O)
+    \tkzLabelPoints(A)
+    \tkzLabelPoints[below right](P)
+    \tkzLabelPoints[right](B)
+    \tkzLabelPoints[left](O)
+    \tkzDrawCircle(O,P)
+    \tkzDrawLine[add=.4 and 1.3](A,O)
+\end{tik}
+\begin{proof}
+    Note that $AB$ is the diameter of the circle, so $\ang APB=90\deg$ \;($\ang$ in semi-circle), which means $BP\perp AP$.
+\end{proof}
+\end{sol}
+
+\subsection{Tangent to circle at point}
+
+\begin{task}
+    Construct a tangent to the circle at the given point.
+
+    (2L, 3E)
+    \begin{tik}
+        \draw (0,0) circle (1.5);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(20:1.5){P}
+        \tkzDrawPoints[size=3](O,P)
+        \tkzDefPointBy[rotation=center P angle -90](O) \tkzGetPoint{C}
+        \tkzDrawLine[add=1.2 and 0,blue,blue,thick](P,C)
+    \end{tik}
+\end{task}
+\begin{sol}
+     Let $O$ be the center of circle and $P$ be the given point on the circle.
+     
+    \textbf{(2L)} \textbf{1.} Draw line $OP$.
+    \begin{tik}
+        \draw (0,0) circle (1.5);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(20:1.5){P}
+        \tkzDrawPoints[size=3](O,P)
+        \tkzDrawSegment(O,P)
+        \tkzLabelPoints[below](O)
+        \tkzLabelPoints[right](P)
+    \end{tik}
+    \textbf{2.} Draw the perpendicular line of $OP$ at $P$.
+    \begin{tik}
+        \draw (0,0) circle (1.5);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(20:1.5){P}
+        \tkzDrawPoints[size=3](O,P)
+        \tkzDrawSegment(O,P)
+        \tkzDefPointBy[rotation=center P angle -90](O) \tkzGetPoint{C}
+        \tkzDrawLine[add=1.2 and 0,orange,thick](P,C)
+        \tkzMarkRightAngle[size=.3](C,P,O)
+        \tkzLabelPoints[below](O)
+        \tkzLabelPoints[right](P)
+    \end{tik}
+    \begin{proof}
+        Since $OP$ is a radius of the circle and is  perpendicular to the orange line, by ``converse of tangent $\perp$ radius", the orange line is tangent to the circle at $P$.
+    \end{proof}
+
+    \textbf{(3E)} \textbf{1.} Let $A$ be an arbitrary point on the given circle. Draw circle $(A,P)$, intersecting the given circle at $B$. 
+    \begin{tik}[scale=.8]
+        \draw (0,0) circle (1.5);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(20:1.5){P}
+        \tkzDefPoint(300:1.5){A}
+        \tkzDrawPoints[size=3](O,P)
+        \tkzLabelPoints[below](O)
+        \tkzLabelPoints[right](P)
+        \tkzLabelPoints[below](A)
+        \tkzDrawCircle(A,P)
+        \tkzInterCC(A,P)(O,P)\tkzGetPoints{B}{F}
+        \tkzLabelPoints(B)
+        \tkzDrawPoints(A,B)
+    \end{tik}
+    \textbf{2.} Draw circle $(P,B)$.
+    \begin{tik}[scale=.8]
+        \draw (0,0) circle (1.5);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(20:1.5){P}
+        \tkzDefPoint(300:1.5){A}
+        \tkzDrawPoints[size=3](O,P)
+        \tkzLabelPoints[below](O)
+        \tkzLabelPoints[right](P)
+        \tkzLabelPoints[below](A)
+        \tkzDrawCircle(A,P)
+        \tkzInterCC(A,P)(O,P)\tkzGetPoints{B}{F}
+        \tkzLabelPoints(B)
+        \tkzDrawCircle(P,B)
+        \tkzDrawPoints(A,B)
+    \end{tik}
+    \textbf{3.} Let $(P,B)$ intersect $(A,P)$ at another point $C$. Draw line $PC$, the desired line.
+    \begin{tik}[scale=.8]
+        \draw (0,0) circle (1.5);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(20:1.5){P}
+        \tkzDefPoint(300:1.5){A}
+        \tkzDrawPoints[size=3](O,P)
+        \tkzLabelPoints[below](O)
+        \tkzLabelPoints[right](P)
+        \tkzLabelPoints[below](A)
+        \tkzDrawCircle(A,P)
+        \tkzInterCC(A,P)(O,P)\tkzGetPoints{B}{F}
+        \tkzLabelPoints(B)
+        \tkzDrawCircle(P,B)
+        \tkzDrawPoints(A,B)
+        \tkzInterCC(A,P)(P,B)\tkzGetPoints{D}{C}
+        \tkzLabelPoints(C)
+        \tkzDrawPoint(C)
+        \tkzDrawLine[add=.3 and 1.2,orange,thick](C,P)
+    \end{tik}
+\begin{proof}
+    Let $\ang OPA=\alpha$ and $\ang APC=\beta$. We want to show that $\alpha+\beta =90\deg$, which will prove that $PC$ is the tangent to the given circle at $P$.
+    \begin{tik}[scale=1]
+        \draw (0,0) circle (1.5);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(20:1.5){P}
+        \tkzDefPoint(300:1.5){A}
+        \tkzDrawPoints[size=3](O,P)
+        \tkzLabelPoints[below](O)
+        \tkzLabelPoints[right](P)
+        \tkzLabelPoints[below](A)
+        \tkzDrawCircle(A,P)
+        \tkzInterCC(A,P)(O,P)\tkzGetPoints{B}{F}
+        \tkzLabelPoints(B)
+        \tkzDrawPoints(A,B)
+        \tkzInterCC(A,P)(P,B)\tkzGetPoints{D}{C}
+        \tkzLabelPoints(C)
+        \tkzDrawPoint(C)
+        \tkzDrawSegments(O,B O,A O,P P,C A,C A,B P,A)
+        \tkzMarkAngle[size=.5](O,P,A)
+        \tkzLabelAngle[pos=.7](O,P,A){$\alpha$}
+        \tkzLabelAngle[pos=.5](P,A,O){$\alpha$}
+        \tkzLabelAngle[pos=.5](A,B,O){$\alpha$}
+        \tkzLabelAngle[pos=.5](O,A,B){$\alpha$}
+        \tkzMarkAngle[size=.5](A,P,C)
+        \tkzLabelAngle[pos=.7](A,P,C){$\beta$}
+        \tkzLabelAngle[pos=.7](P,C,A){$\beta$}
+        \tkzMarkSegments(O,A O,B O,P)
+        \tkzMarkSegments[mark=||](A,P A,C A,B)
+    \end{tik}
+    \begin{center}
+         $OA=OP$ \qquad (radii) 
+        
+        $\therefore\ang OAP=\ang OPA=\alpha$ \qquad\basetri
+
+        $\tri OBA\cong\tri OPA$ \qquad(SSS)
+
+        $\therefore\;\ang OBA=\ang OPA=\alpha$ \;and\; $\ang OAB=\ang OAB=\alpha$ \;\corrangcong.
+    \end{center}
+
+    \medskip
+
+    Now consider $\tri APC$ and $\tri APB$.
+    \begin{tik}[scale=1]
+        \draw (0,0) circle (1.5);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(20:1.5){P}
+        \tkzDefPoint(300:1.5){A}
+        \tkzDrawPoints[size=3](O,P)
+        \tkzLabelPoints[below](O)
+        \tkzLabelPoints[right](P)
+        \tkzLabelPoints[below](A)
+        \tkzDrawCircle(A,P)
+        \tkzInterCC(A,P)(O,P)\tkzGetPoints{B}{F}
+        \tkzLabelPoints(B)
+        \tkzDrawPoints(A,B)
+        \tkzInterCC(A,P)(P,B)\tkzGetPoints{D}{C}
+        \tkzLabelPoints(C)
+        \tkzDrawPoint(C)
+        \tkzDrawCircle(P,B)
+        \tkzDrawSegments(O,B O,P P,C A,C A,B P,A P,B)
+        \tkzLabelAngle[pos=.4](P,A,B){$2\alpha$}
+        \tkzMarkAngle[size=.5](A,P,C)
+        \tkzLabelAngle[pos=.7](A,P,C){$\beta$}
+        \tkzLabelAngle[pos=.7](P,C,A){$\beta$}
+        \tkzLabelAngle[pos=.4](C,A,P){$2\alpha$}
+        \tkzMarkSegments(O,B O,P)
+        \tkzMarkSegments[mark=||](A,P A,C A,B)
+        \tkzMarkSegments[mark=|||,pos=.4](P,C P,B)
+    \end{tik}
+    \begin{align*}
+        AC &= AP  \rea{(radii)} \\
+        \therefore\ang ACP=\ang APC&=\beta \rea{\basetri} \\
+        PB &= PC \rea{(radii of biggest circle)} \\
+        \ther\tri APC&\cong\tri APB \rea{(SSS)} \\
+        \ther \ang PAC=\ang PAB &=2\alpha \rea{\corrangcong}
+    \end{align*}
+    
+    In $\tri APC$, we have $2\alpha + \beta+\beta=180\deg$ \;\angtri, giving $\alpha+\beta=90\deg$, as desired.
+\end{proof}
+\end{sol}
+
+\subsection{Circle tangent to line}
+
+\begin{task}
+    Construct a circle with the given center that is tangent to the given line.
+
+    (2L, 4E)
+
+    \begin{tik}
+    \tkzDefPoints{-2/0/A, 2/0/B,0/1.5/P, 0/0/M}
+    \tkzDrawSegment[<->](A,B)
+    \tkzDrawPoint[size=3](P)
+    \tkzDrawCircle[thick,blue](P,M)
+    \end{tik}
+\end{task}
+\begin{sol}
+    \textbf{1.} Draw line perpendicular to the given line passing through given point $P$. 
+    
+    \textbf{2.} Draw circle centered $P$ through the intersection of the two lines $A$.
+    \begin{tik}
+    \tkzDefPoints{-2/0/A, 2/0/B,0/1.5/P, 0/0/M}
+    \tkzDrawSegment[<->](A,B)
+    \tkzDrawLine[add=1.2 and .3,orange,thick](P,M)
+    \tkzDrawPoint[size=3](P)
+    \tkzMarkRightAngle(B,M,P)
+    \tkzDrawCircle(P,M)
+    \tkzLabelPoints[right](P)
+    \tkzLabelPoint[below right](M){$A$}
+    \end{tik}
+    \begin{proof}
+        $PA$ is tangent to the given line by ``converse of tangent $\perp$ radius''.
+    \end{proof}
+\end{sol}
+
+\subsection{Circle in rhombus}
+
+\begin{task}
+    Inscribe a circle in the rhombus.
+
+    (4L, 6E)
+    \begin{tik}
+        \tkzDefPoints{0/0/O, -2/0/A, 0/-1.2/B, 2/0/C, 0/1.2/D}
+        \draw (A)--(B)--(C)--(D)--cycle;
+        \tkzDefPointBy[projection=onto A--B](O) \tkzGetPoint{M}
+        \tkzDrawCircle[thick,blue](O,M)
+        \tkzDrawPoint[blue](O)
+    \end{tik}
+\end{task}
+\begin{sol}
+    \textbf{1, 2.} Let the rhombus be $ABCD$. Draw diagonals $AC$ and $BD$. Let them intersect at $E$.
+    \begin{tik}
+        \tkzDefPoints{0/0/E, -2/0/A, 0/-1.2/B, 2/0/C, 0/1.2/D}
+        \draw (A)--(B)--(C)--(D)--cycle;
+        \tkzDefPointBy[projection=onto A--B](O) \tkzGetPoint{M}
+        \tkzDrawSegments(A,C B,D)
+        \tkzLabelPoints[left](A)
+        \tkzLabelPoints[right](C)
+        \tkzLabelPoints[below](B)
+        \tkzLabelPoints[above](D)
+        \tkzLabelPoints[below right](E)
+    \end{tik}
+    \textbf{3.} Draw $ME\perp AB$ (i.e. line perpendicular to $AB$ passing through $E$, intersecting $AB$ at $M$).
+
+    \smallskip
+
+    \noindent\textbf{4.} Draw circle $(E,M)$.
+    \begin{tik}
+        \tkzDefPoints{0/0/E, -2/0/A, 0/-1.2/B, 2/0/C, 0/1.2/D}
+        \draw (A)--(B)--(C)--(D)--cycle;
+        \tkzDefPointBy[projection=onto A--B](O) \tkzGetPoint{M}
+        \tkzDrawSegments(A,C B,D)
+        \tkzLabelPoints[left](A)
+        \tkzLabelPoints[right](C)
+        \tkzLabelPoints[below](B)
+        \tkzLabelPoints[above](D)
+        \tkzLabelPoints[below left](M)
+        \tkzDrawPoints(E,M)
+        \tkzLabelPoints[below right](E)
+        \tkzDrawLine[add=1.3 and .3](E,M)
+        \tkzDrawCircle[orange,thick](E,M)
+        \tkzMarkRightAngle(E,M,A)
+    \end{tik}
+\begin{proof}
+    Note that the diagonals divide the rhombus into four congruent triangles (prop. of rhombus), so they have the same height. This means sides $AB,BC,CD,DA$ have the same perpendicular distance from $E$. Thus, a circle tangent to one of the sides must be tangent to all of them.
+\end{proof}
+\end{sol}
+
+\section{Gamma}
+
+\subsection{Chord midpoint}
+
+\begin{task}
+    Construct a chord whose midpoint is given.
+
+    (2L, 4E)
+    \begin{tik}
+        \draw (0,0) circle (1.5);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(1.5,0){A}
+        \tkzDefPoint(135:1){P}
+        \tkzDrawPoints[size=3](O,P)
+        \tkzDefPointBy[rotation=center P angle -90](O)\tkzGetPoint{B}
+        \tkzInterLC(P,B)(O,A)\tkzGetPoints{E}{F}
+        \tkzDrawPoints(E,F)
+        \tkzDrawSegment[blue,thick](E,F)
+    \end{tik}
+    
+\end{task}
+\begin{sol}
+     Let $O$ be center of given circle and $P$ be given point. 
+
+    \textbf{1.} Draw line $OP$.
+
+    \medskip
+
+    \textbf{2.} Draw $OP\tp P$ \;(i.e. line perpendicular to $OP$ passing through $P$), intersecting the circle at $A$ and $B$. $AB$ is the desired chord.
+\begin{tik}
+        \draw (0,0) circle (1.5);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(1.5,0){A}
+        \tkzDefPoint(135:1){P}
+        \tkzDefPointBy[rotation=center P angle -90](O)\tkzGetPoint{B}
+        \tkzLabelPoints[below](P,O)
+        \tkzDrawLine(E,F)
+        \tkzDrawSegment[orange,thick](E,F)
+        
+        \tkzInterLC(P,B)(O,A)\tkzGetPoints{E}{F}
+        \tkzLabelPoint[below](E){$B$}
+        \tkzLabelPoint[right](F){$A$}
+        \tkzDrawSegment(O,P)
+        \tkzMarkRightAngle[size=.3](O,P,E)
+        \tkzDrawPoints(E,F)
+        \tkzDrawPoints[size=3](O,P)
+    \end{tik}
+\begin{proof}
+    Since $OP\perp AB$, we have $AP=PB$ by ``line from center $\perp$ chord bisects chord''.
+\end{proof}
+\end{sol}
+
+\subsection{Triangle by angle and orthocenter}
+
+\begin{task}
+    Construct a segment connecting the sides of the angle to get a triangle whose orthocenter is in the point $O$.
+
+    (3L, 6E)
+    \begin{tik}
+        \tkzDefPoints{0/0/P, 5/0/L, 3/1/O, 3/0/D}
+        \tkzDefPoint(40:5){S}
+        \tkzDefPointBy[projection=onto P--S](O)\tkzGetPoint{E}
+        \tkzInterLL(E,O)(P,L)\tkzGetPoint{A}
+        \tkzInterLL(D,O)(P,E)\tkzGetPoint{B}
+        \tkzInterLL(A,B)(P,O)\tkzGetPoint{F}
+        \draw (S)--(P)--(L);
+        \tkzDrawSegments[lightgray](P,F B,D A,E)
+        \tkzDrawSegment[thick,blue](A,B)
+        \tkzMarkRightAngles[size=.25,lightgray](A,D,O A,E,B B,F,O)
+        \tkzDrawPoint[size=3](O)
+        \tkzLabelPoints[below left](O)
+    \end{tik}
+\end{task}
+\begin{sol} Let $P$ be the vertex of given angle.
+
+\textbf{(3L)} \textbf{1, 2.} Draw lines perpendicular to the given rays passing through $O$. Let $D,E$ be the feet of the perpendicular lines, and let $EO$ and $DO$ meet the given rays at $A$ and $B$ respectively.
+    \begin{tik}
+        \tkzDefPoints{0/0/P, 5/0/L, 3/1/O, 3/0/D}
+        \tkzDefPoint(40:5){S}
+        \tkzDefPointBy[projection=onto P--S](O)\tkzGetPoint{E}
+        \tkzInterLL(E,O)(P,L)\tkzGetPoint{A}
+        \tkzInterLL(D,O)(P,E)\tkzGetPoint{B}
+        \tkzInterLL(A,B)(P,O)\tkzGetPoint{F}
+        \draw (S)--(P)--(L);
+        \tkzDrawSegments(B,D A,E)
+        \tkzMarkRightAngles[size=.3](A,D,O A,E,B)
+        \tkzLabelPoint[above](E){$E$}
+        \tkzLabelPoint[below](D){$D$}
+        \tkzLabelPoint[left](P){$P$}
+        \tkzLabelPoint[below](A){$A$}
+        \tkzLabelPoint[above](B){$B$}
+        \tkzDrawPoint[size=3](O)
+        \tkzLabelPoints[below left](O)
+    \end{tik}
+    \textbf{3.} Draw line $AB$, the desired line.
+    \begin{tik}
+        \tkzDefPoints{0/0/P, 5/0/L, 3/1/O, 3/0/D}
+        \tkzDefPoint(40:5){S}
+        \tkzDefPointBy[projection=onto P--S](O)\tkzGetPoint{E}
+        \tkzInterLL(E,O)(P,L)\tkzGetPoint{A}
+        \tkzInterLL(D,O)(P,E)\tkzGetPoint{B}
+        \tkzInterLL(A,B)(P,O)\tkzGetPoint{F}
+        \draw (S)--(P)--(L);
+        \tkzDrawSegments(B,D A,E)
+        \tkzMarkRightAngles[size=.3](A,D,O A,E,B)
+        \tkzLabelPoint[above](E){$E$}
+        \tkzLabelPoint[below](D){$D$}
+        \tkzLabelPoint[left](P){$P$}
+        \tkzLabelPoint[below](A){$A$}
+        \tkzLabelPoint[above](B){$B$}
+        \tkzDrawPoint[size=3](O)
+        \tkzLabelPoints[below left](O)
+        \tkzDrawSegment[orange,thick](A,B)
+    \end{tik}
+
+    \begin{proof}
+        Note that $O$ is the orthocenter of $\tri PAB$ since it is the intersection of two altitudes. And any two altitudes intersect at the orthocenter because the three altitudes of a triangle are concurrent.
+    \end{proof}
+    \textbf{(6E)} \textbf{1.} Draw circle $(P,O)$.
+    
+    \textbf{2, 3.} Let $G,H$ be two points (arbitrary or on intersection, doesn't matter) on each of the given ray. Draw circles $(G,O)$ and $(H,O)$.
+
+    \begin{tik}
+        \tkzDefPoints{0/0/P, 5/0/L, 3/1/O, 3/0/D}
+        \tkzDefPoint(40:5){S}
+        \tkzDefPoint(0:4.3){G}
+        \tkzDefPoint(40:3.4){H}
+        \tkzDefPointBy[projection=onto P--S](O)\tkzGetPoint{E}
+        \draw (S)--(P)--(L);
+        \tkzLabelPoint[left](P){$P$}
+        \tkzDrawPoint[size=3](O)
+        \tkzDrawPoints(G,H,P)
+        \tkzLabelPoints[below left](O)
+        \tkzLabelPoints[above](H)
+        \tkzLabelPoints[below](G)
+        \tkzDrawArc[rotate](P,O)(60)
+        \tkzDrawArc[rotate](P,O)(-40)
+        \tkzDrawCircles(G,O H,O)
+    \end{tik}
+    \textbf{4, 5.} Let $(P,O)$ intersect $(G,O)$ and $(H,O)$ at the other point $I$ and $J$ respectively. Draw line $IO$, meeting $PH$ at $B$. Draw line $JO$, meeting $PG$ at $A$.
+    \begin{tik}
+        \tkzDefPoints{0/0/P, 5/0/L, 3/1/O, 3/0/D, 3/-1/I}
+        \tkzDefPoint(40:5){S}
+        \tkzDefPoint(0:4.3){G}
+        \tkzDefPoint(40:3.4){H}
+        \tkzDefPointBy[projection=onto P--S](O)\tkzGetPoint{E}
+        \tkzDefPointBy[reflection = over P--H](O)\tkzGetPoint{J}
+        \tkzInterLL(J,O)(P,G)\tkzGetPoint{A}
+         \tkzInterLL(I,O)(P,H)\tkzGetPoint{B}
+        \draw (S)--(P)--(L);
+        \tkzLabelPoint[left](P){$P$}
+        \tkzDrawPoint[size=3](O)
+        \tkzDrawPoints(G,H,I,J,P)
+        \tkzLabelPoints[below left](O)
+        \tkzLabelPoints[above](H)
+        \tkzLabelPoints[below](G)
+        \tkzLabelPoints[below](I)
+        \tkzLabelPoints[above](J)
+        \tkzLabelPoints[below](I)
+        \tkzLabelPoints[below](A)
+        \tkzLabelPoints[above](B)
+        \tkzDrawArc[rotate](P,O)(60)
+        \tkzDrawArc[rotate](P,O)(-40)
+        \tkzDrawCircles(G,O H,O)
+        \tkzDrawSegments(I,B J,A)
+    \end{tik}
+\textbf{6.} Draw line $AB$, the desired line.
+\begin{tik}
+        \tkzDefPoints{0/0/P, 5/0/L, 3/1/O, 3/0/D, 3/-1/I}
+        \tkzDefPoint(40:5){S}
+        \tkzDefPoint(0:4.3){G}
+        \tkzDefPoint(40:3.4){H}
+        \tkzDefPointBy[projection=onto P--S](O)\tkzGetPoint{E}
+        \tkzDefPointBy[reflection = over P--H](O)\tkzGetPoint{J}
+        \tkzInterLL(J,O)(P,G)\tkzGetPoint{A}
+         \tkzInterLL(I,O)(P,H)\tkzGetPoint{B}
+        \draw (S)--(P)--(L);
+        \tkzLabelPoint[left](P){$P$}
+        \tkzDrawPoint[size=3](O)
+        \tkzDrawPoints(G,H,I,J,P,A,B)
+        \tkzLabelPoints[below left](O)
+        \tkzLabelPoints[above](H)
+        \tkzLabelPoints[below](G)
+        \tkzLabelPoints[below](I)
+        \tkzLabelPoints[above](J)
+        \tkzLabelPoints[below](I)
+        \tkzLabelPoints[below](A)
+        \tkzLabelPoints[above](B)
+        \tkzDrawArc[rotate](P,O)(60)
+        \tkzDrawArc[rotate](P,O)(-40)
+        \tkzDrawCircles(G,O H,O)
+        \tkzDrawSegments(I,B J,A)
+        \tkzDrawSegment[orange,thick](A,B)
+    \end{tik}
+    \begin{proof}
+        Note that $OI\perp PG$ since $POGI$ forms a kite. Similarly, $OJ\perp PH$ since $POHJ$ forms a kite. Thus line $OI$ and $OJ$ are altitudes of $\tri PAB$, so $O$ is the orthocenter of $\tri PAB$.
+    \end{proof}
+
+\end{sol}
+
+\subsection{Intersection of perpendicular bisectors}
+
+\begin{task}
+    Construct a segment connecting the sides of the angle to get a triangle whose perpendicular bisectors are intersected in the point $O$.
+
+    (2L, 2E)
+
+    \begin{tik}
+        \tkzDefPoints{0/0/P, 5/0/L, 2/.8/O, 3/0/D}
+        \tkzDefPoint(40:5){S}
+        \tkzInterLC(P,L)(O,P)\tkzGetSecondPoint{A}
+        \tkzInterLC(P,S)(O,P)\tkzGetFirstPoint{B}
+        \tkzDrawSegment[thick,blue](A,B)
+        \tkzDrawPoint[size=3](O)
+        \tkzLabelPoints[below left](O)
+        \tkzDefMidPoint(P,A)\tkzGetPoint{M}
+        \tkzDefMidPoint(P,B)\tkzGetPoint{N}
+        \tkzDefMidPoint(A,B)\tkzGetPoint{K}
+        \tkzDrawLine[add=.5 and 1.5, gray](M,O)
+        \tkzDrawLine[add=.5 and 2.3, gray](N,O)
+        \tkzDrawLine[add=.3 and 1.3, gray](K,O)
+        \tkzMarkSegments[mark=|, gray](P,M M,A)
+        \tkzMarkSegments[mark=||, gray](P,N N,B)
+        \tkzMarkSegments[mark=|||, gray](A,K K,B)
+        \tkzMarkRightAngles[size=.25, gray](A,M,O B,K,O P,N,O)
+        \draw (S)--(P)--(L);
+    \end{tik}
+    
+\end{task}
+\begin{sol}  Let $P$ be the vertex of the given angle. 
+
+\smallskip
+
+    \textbf{1.} Draw circle $(O,P)$, intersecting the given rays at $A$ and $B$ respectively.
+
+    \smallskip
+
+    \textbf{2.} Draw line $AB$.
+
+    \begin{tik}
+        \tkzDefPoints{0/0/P, 5/0/L, 2/.8/O, 3/0/D}
+        \tkzDefPoint(40:5){S}
+        \tkzInterLC(P,L)(O,P)\tkzGetSecondPoint{A}
+        \tkzInterLC(P,S)(O,P)\tkzGetFirstPoint{B}
+        \tkzDrawSegment[thick,blue](A,B)
+        \tkzDrawPoint[size=3](O)
+        \tkzLabelPoints[below left](O)
+        \draw (S)--(P)--(L);
+        \tkzLabelPoints[left](P)
+        \tkzDrawPoint(P)
+        \tkzDrawCircle(O,P)
+        \tkzDrawSegment[orange,thick](A,B)
+    \end{tik}
+\begin{proof}
+Note that $O$ is the circumcenter of $\tri PAB$. And the perpendicular bisectors of sides of $\tri PAB$ intersect at the circumcenter by ``prop. of circumcenter''.
+    \begin{tik}
+        \tkzDefPoints{0/0/P, 5/0/L, 2/.8/O, 3/0/D}
+        \tkzDefPoint(40:5){S}
+        \tkzInterLC(P,L)(O,P)\tkzGetSecondPoint{A}
+        \tkzInterLC(P,S)(O,P)\tkzGetFirstPoint{B}
+        \tkzDrawSegment[thick,blue](A,B)
+        \tkzDrawPoint[size=3](O)
+        \tkzLabelPoints[below left](O)
+        \tkzDefMidPoint(P,A)\tkzGetPoint{M}
+        \tkzDefMidPoint(P,B)\tkzGetPoint{N}
+        \tkzDefMidPoint(A,B)\tkzGetPoint{K}
+        \tkzDrawLine[add=.5 and 1.5, gray](M,O)
+        \tkzDrawLine[add=.5 and 2.3, gray](N,O)
+        \tkzDrawLine[add=.5 and 1.6, gray](K,O)
+        \tkzMarkSegments[mark=|, gray](P,M M,A)
+        \tkzMarkSegments[mark=||, gray](P,N N,B)
+        \tkzMarkSegments[mark=|||, gray](A,K K,B)
+        \tkzMarkRightAngles[size=.25, gray](A,M,O B,K,O P,N,O)
+        \draw (S)--(P)--(L);
+        \tkzLabelPoints[below left](P)
+        \tkzDrawPoint(P)
+        \tkzDrawCircle(O,P)
+        \tkzDrawSegment[orange,thick](A,B)
+    \end{tik}
+\end{proof}
+\end{sol}
+
+\subsection{Three equal segments - 1}
+
+\begin{task}
+    Given an angle $ABC$ and a point $M$ inside it, find points $D$ on $BA$ and $E$ on $BC$ and construct segments $DM$ and $ME$ such that $BD=DM=ME$.
+
+    (4L, 6E, 2V)
+
+    \begin{tik}
+        \tkzDefPoints{0/0/B, 5/0/C, 3/1.5/M, 3/0/D}
+        \tkzDefPoint(40:5){A}
+        \tkzDefLine[mediator](B,M)\tkzGetPoints{P}{Q}
+        \tkzInterLL(P,Q)(A,B)\tkzGetPoint{D}
+        \tkzInterLC(B,C)(M,D)\tkzGetPoints{F}{E}
+        \tkzDrawSegments[blue,thick](D,M M,E)
+        \tkzDrawSegments(M,E)
+        \tkzDrawPoint[size=3](M)
+        \tkzLabelPoints[below](M)
+        \tkzLabelPoints[left](A)
+        \tkzLabelPoints[left](B)
+        \tkzLabelPoints[right](C)
+        \tkzLabelPoints[left](D)
+        \tkzLabelPoints[below](E)
+        \tkzMarkSegments(B,D D,M M,E)
+        \draw (A)--(B)--(C);
+    \end{tik}
+\end{task}
+\begin{sol}
+    \textbf{(4L, 6E)} \textbf{1.} Draw $\pb BM$, intersecting $AB$ at $D$.
+
+    \textbf{2.} Draw line $MD$.
+    \begin{tik}
+        \tkzDefPoints{0/0/B, 5/0/C, 3/1.5/M, 3/0/D}
+        \tkzDefPoint(40:5){A}
+        \tkzDefLine[mediator](B,M)\tkzGetPoints{P}{Q}
+        \tkzDefMidPoint(B,M)\tkzGetPoint{N}
+        \tkzInterLL(P,Q)(A,B)\tkzGetPoint{D}
+        \tkzInterLL(P,Q)(B,C)\tkzGetPoint{G}
+        \tkzInterLC(B,C)(M,D)\tkzGetPoints{F}{E}
+        \tkzDrawLine[add=1 and .3](D,G)
+        \tkzDrawSegments(M,D)
+        \tkzDrawSegment[dashed](B,M)
+        \tkzMarkRightAngle[size=.25](M,N,D)
+        \tkzMarkSegments[mark=||](B,N N,M)
+        \tkzDrawPoint[size=3](M)
+        \tkzLabelPoints[below](M)
+        \tkzLabelPoints[above](A)
+        \tkzLabelPoints[left](B)
+        \tkzLabelPoints[right](C)
+        \tkzLabelPoints[left](D)
+        \draw (A)--(B)--(C);
+    \end{tik}
+    \textbf{3.} Draw circle $(M,D)$, intersecting line $BC$ at $E$ and $F$.
+
+    \smallskip
+
+    \noindent\textbf{4.} Draw line $ME$ (or $MF$).
+
+    \begin{tik}
+        \tkzDefPoints{0/0/B, 5/0/C, 3/1.5/M, 3/0/D}
+        \tkzDefPoint(40:5){A}
+        \tkzDefLine[mediator](B,M)\tkzGetPoints{P}{Q}
+        \tkzDefMidPoint(B,M)\tkzGetPoint{N}
+        \tkzInterLL(P,Q)(A,B)\tkzGetPoint{D}
+        \tkzInterLL(P,Q)(B,C)\tkzGetPoint{G}
+        \tkzInterLC(B,C)(M,D)\tkzGetPoints{F}{E}
+        \tkzDrawLine[add=1 and .3](D,G)
+        \tkzDrawCircle(M,D)
+        \tkzDrawSegments[thick,orange](M,D M,E)
+        \tkzDrawSegment[dashed](B,M)
+        \tkzMarkRightAngle[size=.25](M,N,D)
+        \tkzMarkSegments[mark=||](B,N N,M)
+        \tkzDrawPoint[size=3](M)
+        \tkzLabelPoints[below](M)
+        \tkzLabelPoints[above](A)
+        \tkzLabelPoints[left](B)
+        \tkzLabelPoints[right](C)
+        \tkzLabelPoints[left](D)
+        \tkzLabelPoints[below](E)
+        \tkzLabelPoints[below](F)
+        \draw (A)--(B)--(C);
+    \end{tik}
+    \textbf{(2V)} Draw line $MF$ (or $ME$).
+    \begin{tik}
+        \tkzDefPoints{0/0/B, 5/0/C, 3/1.5/M, 3/0/D}
+        \tkzDefPoint(40:5){A}
+        \tkzDefLine[mediator](B,M)\tkzGetPoints{P}{Q}
+        \tkzDefMidPoint(B,M)\tkzGetPoint{N}
+        \tkzInterLL(P,Q)(A,B)\tkzGetPoint{D}
+        \tkzInterLL(P,Q)(B,C)\tkzGetPoint{G}
+        \tkzInterLC(B,C)(M,D)\tkzGetPoints{F}{E}
+        \tkzDrawLine[add=1 and .3](D,G)
+        \tkzDrawCircle(M,D)
+        \tkzDrawSegments[thick,orange](M,D M,E)
+        \tkzDrawSegment[thick,red](M,F)
+        \tkzDrawSegment[dashed](B,M)
+        \tkzMarkRightAngle[size=.25](M,N,D)
+        \tkzMarkSegments[mark=||](B,N N,M)
+        \tkzDrawPoint[size=3](M)
+        \tkzLabelPoints[below](M)
+        \tkzLabelPoints[above](A)
+        \tkzLabelPoints[left](B)
+        \tkzLabelPoints[right](C)
+        \tkzLabelPoints[left](D)
+        \tkzLabelPoints[below](E)
+        \tkzLabelPoints[below](F)
+        \draw (A)--(B)--(C);
+    \end{tik}
+    \begin{proof}
+        $BD=DM$ since $D$ lies on the perpendicular bisector of $BM$. $DM=ME=MF$ since $D$, $E$ and $F$ lie on the circle centered $M$. Thus $BD=DM=ME=MF$.
+    \end{proof}
+\end{sol}
+
+\subsection{Circle through point tangent to line}
+\begin{task}
+    Construct a circle through the point $A$ that is tangent to the given line at the point $B$.
+
+    (3L, 6E)
+\begin{tik}
+    \tkzDefPoints{-4/0/L, 4/0/S,0/1.5/O, 0/0/B}
+    \tkzDefShiftPoint[O](170:1.5){A}
+    \tkzDrawSegment[<->](L,S)
+    \tkzDrawPoints[size=3](B,A)
+    \tkzDrawPoint[blue](O)
+    \tkzLabelPoints[below](B)
+    \tkzLabelPoints[left](A)
+    \tkzDrawCircle[thick,blue](O,B)
+\end{tik}
+    
+\end{task}
+\begin{sol}
+    \textbf{(3L)} 
+    
+    \noindent\textbf{1, 2.} Draw perpbi $AB$. Draw perpendicular line to given line through $B$. Let the two drawn lines intersect at $O$.
+
+    \noindent\textbf{3.} Draw $OB$.
+\begin{tik}
+    \tkzDefPoints{-4/0/L, 4/0/S,0/1.5/O, 0/0/B}
+    \tkzDefShiftPoint[O](170:1.5){A}
+    \tkzDefMidPoint(A,B)\tkzGetPoint{M}
+    \tkzDrawSegment[<->](L,S)
+    \tkzLabelPoints[below](B)
+    \tkzLabelPoints[left](A)
+    \tkzDrawCircle[thick,orange](O,B)
+    \tkzDrawLine[add=.5 and 1.3](B,O)
+    \tkzDrawLine[add=2 and 2](M,O)
+    \tkzDrawSegments[dashed](A,M M,B)
+    \tkzMarkRightAngle[size=.3](B,M,O)
+    \tkzMarkRightAngle[size=.3](S,B,O)
+    \tkzDrawPoints[size=3](B,A)
+    \tkzDrawPoint(O)
+    \tkzLabelPoints[right](O)
+\end{tik}
+\begin{proof}
+    Since the circle passes through both $A$ and $B$, center $O$ must lie on the perpendicular bisector of $AB$ \;(prop. of $\perp$ bisector). Since $O$ is tangent to give line, $OB$ must be perpendicular to given line \;(tangent $\perp$ radius). Thus $O$ lies on the intersection of the two drawn lines.
+\end{proof}
+\textbf{(6E)} \textbf{1.} Draw circle $(A,B)$, intersecting given line at $C$.
+
+\textbf{2.} Draw line $CA$, meeting circle $(A,B)$ at $D$.
+
+\textbf{3.} Draw line $BD$.
+\begin{tik}[scale=.7]
+    \tkzDefPoints{-4/0/L, 4/0/S,0/1.5/O, 0/0/B}
+    \tkzDefShiftPoint[O](170:1.5){A}
+    \tkzDefMidPoint(A,B)\tkzGetPoint{M}
+    \tkzInterLC(L,B)(A,B)\tkzGetFirstPoint{C}
+    \tkzInterLC(C,A)(A,B)\tkzGetSecondPoint{D}
+    \tkzDrawSegment[<->](L,S)
+    \tkzLabelPoints[below](B)
+    \tkzLabelPoints[left](A)
+    \tkzLabelPoints[below](C)
+    \tkzLabelPoints[right](D)
+    \tkzDrawLine[add=.3 and .2](D,B)
+    \tkzDrawSegment(C,D)
+    \tkzDrawCircle(A,B)
+    \tkzDrawPoints[size=3](B,A)
+    \tkzDrawPoints(C,D)
+    
+\end{tik}
+\textbf{4.} Draw circle $(B,A)$, intersecting $(A,B)$ at $E$ and $F$.
+
+\noindent\textbf{5.} Draw line $EF$, intersecting $BD$ at $O$.
+\begin{tik}[scale=.7]
+    \tkzDefPoints{-4/0/L, 4/0/S,0/1.5/O, 0/0/B}
+    \tkzDefShiftPoint[O](170:1.5){A}
+    \tkzDefMidPoint(A,B)\tkzGetPoint{M}
+    \tkzInterLC(L,B)(A,B)\tkzGetFirstPoint{C}
+    \tkzInterLC(C,A)(A,B)\tkzGetSecondPoint{D}
+    \tkzInterCC(A,B)(B,A)\tkzGetPoints{E}{F}
+    \tkzDrawSegment[<->](L,S)
+    \tkzLabelPoints[below](B)
+    \tkzLabelPoints[left](A)
+    \tkzLabelPoints[below](C)
+    \tkzLabelPoints[right](D)
+    \tkzLabelPoints[right](E)
+    \tkzLabelPoints[right](F)
+    \tkzDrawLine[add=.3 and .2](D,B)
+    \tkzDrawSegments(C,D E,F)
+    \tkzDrawCircle(A,B)
+    \tkzDrawPoints[size=3](B,A)
+    \tkzDrawPoints(C,D)
+    \tkzDrawCircle(B,A)
+\end{tik}
+\textbf{6.} Draw circle $(O,B)$.
+\begin{tik}[scale=.7]
+    \tkzDefPoints{-4/0/L, 4/0/S,0/1.5/O, 0/0/B}
+    \tkzDefShiftPoint[O](170:1.5){A}
+    \tkzDefMidPoint(A,B)\tkzGetPoint{M}
+    \tkzInterLC(L,B)(A,B)\tkzGetFirstPoint{C}
+    \tkzInterLC(C,A)(A,B)\tkzGetSecondPoint{D}
+    \tkzInterCC(A,B)(B,A)\tkzGetPoints{E}{F}
+    \tkzDrawSegment[<->](L,S)
+    \tkzLabelPoints[below](B)
+    \tkzLabelPoints[left](A)
+    \tkzLabelPoints[below](C)
+    \tkzLabelPoints[right](D)
+    \tkzLabelPoints[right](E)
+    \tkzLabelPoints[below](F)
+    \tkzLabelPoints[right](O)
+    \tkzDrawLine[add=.3 and .2](D,B)
+    \tkzDrawSegments(C,D E,F)
+    \tkzDrawCircle(A,B)
+    \tkzDrawPoints[size=3](B,A)
+    \tkzDrawPoints(C,D,O,E,F)
+    \tkzDrawCircle(B,A)
+    \tkzDrawCircle[orange,thick](O,B)
+\end{tik}
+\begin{proof}
+    Note that $BD$ is perpendicular to given line by Task 2.7E, and $EF$ is the perpendicular bisector of $AB$ by Task 1.2. So $O$ is the same point as the (3L) part of this level.
+\end{proof}
+\end{sol}
+
+\subsection{Midpoints of trapezoid bases}
+
+\begin{task}
+    Construct a line passing through the midpoints of the trapezoid bases.
+
+    (3L, 5E)
+    \begin{tik}
+        \tkzDefPoints{0/0/A, 4/0/B, 3.3/2/C, 1.2/2/D}
+        \draw (A)--(B)--(C)--(D)--cycle;
+        \tkzDefMidPoint(A,B)\tkzGetPoint{M}
+        \tkzDefMidPoint(C,D)\tkzGetPoint{N}
+        \tkzDrawSegment[blue,thick](M,N)
+        \tkzMarkSegments(A,M M,B)
+        \tkzMarkSegments[mark=||](C,N N,D)
+    \end{tik}
+\end{task}
+\begin{sol}
+    \textbf{(3L)} 
+    
+    \textbf{1, 2.} Draw $\pb AB$ and draw $\pb CD$. Let the midpoints of the sides be $M$ and $N$.
+
+    \textbf{3.} Draw line $MN$.
+
+    \begin{tik}
+        \tkzDefPoints{0/0/A, 4/0/B, 3.3/2/C, 1.2/2/D}
+        \draw (A)--(B)--(C)--(D)--cycle;
+        \tkzDefMidPoint(A,B)\tkzGetPoint{M}
+        \tkzDefMidPoint(C,D)\tkzGetPoint{N}
+        \tkzDefShiftPoint[M](0,1.5){P}
+        \tkzDefShiftPoint[N](0,-1.5){Q}
+        \tkzDrawSegment[orange,thick](M,N)
+        \tkzDrawLine[add=.3 and 0](M,P)
+        \tkzDrawLine[add=.3 and 0](N,Q)
+        \tkzMarkSegments(A,M M,B)
+        \tkzMarkSegments[mark=||](C,N N,D)
+        \tkzDrawPoints(M,N)
+        \tkzLabelPoints[left](A)
+        \tkzLabelPoints[right](B)
+        \tkzLabelPoints[left](D)
+        \tkzLabelPoints[right](C)
+        \tkzLabelPoints[below left](M)
+        \tkzLabelPoints[above right](N)
+    \end{tik}
+    \begin{proof}
+        $AM=MB$ and $DN=NC$ by perpendicular bisector construction.
+    \end{proof}
+    \textbf{(5E)} \textbf{1, 2.} Draw the diagonals of the trapezoid. Let them intersect at $E$.
+
+    \textbf{3, 4.} Extend the non-parallel sides to meet at $F$.
+
+    \textbf{5.} Draw line $FE$, which is the desired line.
+    \begin{tik}
+        \tkzDefPoints{0/0/A, 4/0/B, 3.3/2/C, 1.2/2/D}
+        \tkzInterLL(A,C)(B,D)\tkzGetPoint{E}
+        \tkzInterLL(A,D)(B,C)\tkzGetPoint{F}
+        \tkzDefMidPoint(A,B)\tkzGetPoint{M}
+        \tkzDefMidPoint(C,D)\tkzGetPoint{N}
+        \draw (A)--(B)--(C)--(D)--cycle;
+        
+        \tkzDrawSegment[orange,thick](M,N)
+        \tkzDrawSegments(D,F F,C A,C B,D)
+        \tkzDrawLine[add=0 and .7](F,E)
+        \tkzDrawSegment[orange,thick](M,N)
+        \tkzDrawPoints(M,N,E)
+        \tkzLabelPoints[left](A)
+        \tkzLabelPoints[right](B)
+        \tkzLabelPoints[left](D)
+        \tkzLabelPoints[right](C)
+        \tkzLabelPoints[below](E)
+        \tkzLabelPoints[above](F)
+        \tkzLabelPoints[below left](M)
+        \tkzLabelPoints[above right](N)
+    \end{tik}
+\begin{proof}
+        Let $FE$ intersect sides $AB$ and $CD$ at $M$ and $N$ respectively. We want to show that $AM=MB$ and $DN=NC$. 
+
+        \medskip
+
+        By Ceva's theorem, we have
+        \begin{equation}
+            \cfrac{AM}{MB}\cdot \cfrac{BC}{CF}\cdot \cfrac{FD}{DA} =  1
+        \end{equation}
+        Since $AB//CD$, by intercept theorem, we also have
+        \begin{align}
+            \cfrac{BC}{CF} &= \cfrac{AD}{DF} \hspace{3cm}\non\\
+            \Longleftrightarrow\qquad \cfrac{BC}{CF} \cdot \cfrac{FD}{DA} &= 1
+        \end{align}
+        Put (2) into (1).
+        \begin{align*}
+            \cfrac{AM}{MB} \cdot (1) &= 1 \\
+            AM &= MB
+        \end{align*}
+    Note that $\tri FDN\sim\tri FAM$ and $\tri FNC\sim\tri FMB$ (AAA). So $\cfrac{DN}{AM}=\cfrac{FN}{FM}=\cfrac{NC}{MB}$ \;\simsidecong. Since $AM=MB$, this gives $\cfrac{DN}{AM}=\cfrac{NC}{AM}$, and thus $DN=NC$, as desired. 
+\end{proof}
+\end{sol}
+
+\subsection{Angle of 45 deg}
+\begin{task}
+    Construct an angle of $45\deg$ with the given side.
+
+    (2L, 5E, 2V)
+    \begin{tik}
+        \tkzDefPoint(0,0){O} \tkzDefPoint(3,0){B}
+        \tkzDrawPoint(O)
+        \draw[->] (O)--(B);
+        \tkzDefPoint(45:2.5){E}
+        \tkzDrawSegment[thick,blue](O,E)
+        \tkzMarkAngle[size=.4](B,O,E)
+        \tkzLabelAngle[pos=.8](B,O,E){$45\deg$}
+    \end{tik}
+\end{task}
+\begin{sol} Let $O$ be the endpoint of the given ray.
+
+    \textbf{(2L)} \textbf{1.} Draw line perpendicular to given line through $O$.
+
+    \textbf{2.} Draw the angle bisector of the two lines.
+    \begin{tik}
+        \tkzDefPoint(0,0){P} \tkzDefPoint(3,0){B}
+         \tkzDefPoint(0,2){A}
+        \tkzDrawPoint(P)
+        \draw[->] (P)--(B);
+        \tkzDefPoint(45:2.5){E}
+        \tkzDrawSegment[orange,thick](P,E)
+        \tkzDrawSegment(P,A)
+        \tkzDrawSegment(P,B)
+        \tkzMarkAngle[size=.4,mark=|](B,P,E)
+        \tkzMarkRightAngle[size=.25](A,P,B)
+        \tkzLabelAngle[pos=.8](B,P,E){$45\deg$}
+        \tkzMarkAngle[size=.4,mark=|](E,P,A)
+        \tkzLabelPoint[below](P){$O$}
+    \end{tik}
+    \begin{proof}
+         The angle between the two  perpendicular lines is $90\deg$, and the angle bisector makes $90\deg/2=45\deg$.
+    \end{proof}
+    \textbf{(5E)} \textbf{1.} Let $A$ be an arbitrary point on the given ray. Draw circle $(A,O)$, intersecting the ray again at $B$.
+
+    \textbf{2.} Draw $\pb OB$, intersecting the circle at $C$ and $D$. 
+
+    \textbf{3.} Draw line $OC$, the desired line.
+    \begin{tik}
+        \tkzDefPoint(0,0){O} \tkzDefPoint(4,0){S}
+        \tkzDefPoints{1.5/0/A, 3/0/B, 1.5/1.5/C, 1.5/-1.5/D}
+        \tkzDrawPoint(P)
+        \draw[->] (P)--(S);
+        \tkzDrawCircle(A,O)
+        \tkzDrawLine[add=.4 and 1.2](C,A)
+        \tkzDrawLine[orange,thick,add=0 and 0.4](O,C)
+        \tkzLabelPoints[below right](A)
+        \tkzLabelPoints[below right](B)
+        \tkzLabelPoints[above left](C)
+        \tkzLabelPoints[below left](D)
+        \tkzLabelPoints[left](O)
+        \tkzMarkRightAngle[size=.3](B,A,C)
+        \tkzMarkSegments(O,A A,B)
+    \end{tik}
+    \textbf{(2V)}
+    \begin{tik}
+        \tkzDefPoint(0,0){O} \tkzDefPoint(4,0){S}
+        \tkzDefPoints{1.5/0/A, 3/0/B, 1.5/1.5/C, 1.5/-1.5/D}
+        \tkzDrawPoint(P)
+        \draw[->] (P)--(S);
+        \tkzDrawCircle(A,O)
+        \tkzDrawLine[add=.4 and 1.2](C,A)
+        \tkzDrawLine[orange,thick,add=0 and 0.4](O,C)
+        \tkzDrawLine[red,thick,add=0 and 0.2](O,D)
+        \tkzLabelPoints[below right](A)
+        \tkzLabelPoints[below right](B)
+        \tkzLabelPoints[above left](C)
+        \tkzLabelPoints[below left](D)
+        \tkzLabelPoints[left](O)
+        \tkzMarkRightAngle[size=.3](B,A,C)
+        \tkzMarkSegments(O,A A,B)
+    \end{tik}
+    \begin{proof}
+        Since $AO=AC$ and $CA\perp OB$, $\tri OAC$ is an isosceles right triangle, so its acute angles are $45\deg$, which means $\ang AOC=45\deg$. Same for the other line $OD$.
+    \end{proof}
+\end{sol}
+
+\subsection{Lozenge}
+
+\begin{task}
+    Construct a rhombus with the given side and an angle of $45\deg$ in a vertex.
+
+    (5L, 7E, 4V)
+    \begin{tik}
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \draw (O)--(A);
+        \tkzDefPoint(45:2){C}
+        \tkzDefShiftPoint[C](2,0){B}
+        \tkzDrawSegments[thick,blue](A,B B,C C,O)
+        \tkzMarkAngle[size=.4](A,O,C)
+        \tkzLabelAngle[pos=.8](A,O,C){$45\deg$}
+        \tkzMarkSegments(O,A A,B B,C C,O)
+        \tkzDrawPoints(O,A)
+    \end{tik}
+\end{task}
+\begin{sol} Let $O$ and $A$  be the endpoints of the given line segment.
+    
+      \noindent\textbf{(5L)}  \textbf{1.} Draw $OA \tp O$. 
+
+    \textbf{2.} Draw circle $(O,A)$, intersecting the vertical line at $D$ and $E$ (where $D$ above $E$).
+    \begin{tik}
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \tkzDefPoint(0,2){D} \tkzDefPoint(0,-2){E}
+        \draw (O)--(A);
+        \tkzDefPoint(45:2){C}
+        \tkzDefShiftPoint[C](2,0){B}
+        \tkzDrawPoints(O,A)
+        \tkzDrawCircle(O,A)
+        \tkzDrawLine[add=0.1 and 0.1](D,E)
+        \tkzMarkRightAngle[size=.3](A,O,D)
+        \tkzLabelPoints[left](O)
+        \tkzLabelPoints[right](A)
+        \tkzLabelPoints[above left](D)
+        \tkzLabelPoints[below left](E)
+    \end{tik}
+    \textbf{3.} Draw $\angbi DOA$ \;(angle bisector of $\ang DOA$), intersecting $(O,A)$ at $C$.
+
+    \noindent\textbf{4.} Draw line $EA$.
+    \begin{tik}
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \tkzDefPoint(0,2){D} \tkzDefPoint(0,-2){E}
+        \draw (O)--(A);
+        \tkzDefPoint(45:2){C}
+        \tkzDefShiftPoint[C](2,0){B}
+        \tkzDrawPoints(O,A)
+        \tkzDrawCircle(O,A)
+        \tkzDrawLine[add=0.1 and 0.1](D,E)
+        \tkzDrawLine[add=0 and .5](O,C)
+        \tkzDrawLine[add=0 and .8](E,A)
+        \tkzMarkAngle[mark=|,size=.5](A,O,C)
+        \tkzMarkAngle[mark=|,size=.5](C,O,D)
+        \tkzMarkRightAngle[size=.25](A,O,D)
+        \tkzLabelPoints[left](O)
+        \tkzLabelPoints[right](A)
+        \tkzLabelPoints[above left](D)
+        \tkzLabelPoints[below left](E)
+        \tkzLabelPoints[left](C)
+    \end{tik}
+    \textbf{5.} Draw $OD\tp C$, intersecting $EA$ at $B$. $OABC$ is the desired rhombus.
+    \begin{tik}
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \tkzDefPoint(0,2){D} \tkzDefPoint(0,-2){E}
+        \draw (O)--(A);
+        \tkzDefPoint(45:2){C}
+        \tkzDefShiftPoint[C](2,0){B}
+        \tkzDefPointBy[projection=onto D--O](C)\tkzGetPoint{F}
+        \tkzDrawPoints(O,A,C,B)
+        \tkzDrawCircle(O,A)
+        \tkzDrawLine[add=0.1 and 0.1](D,E)
+        \tkzDrawLine[add=0 and .5](O,C)
+        \tkzDrawLine[add=0.1 and .9](E,A)
+        \tkzDrawLine[add=.2 and .3](B,F)
+        \tkzDrawSegments[thick,orange](A,B B,C C,O)
+        \tkzMarkAngle[mark=|,size=.5](A,O,C)
+        \tkzMarkAngle[mark=|,size=.5](C,O,D)
+        \tkzMarkRightAngle[size=.25](A,O,D)
+        \tkzMarkRightAngle[size=.3](C,F,D)
+        \tkzLabelPoints[left](O)
+        \tkzLabelPoints[right](A)
+        \tkzLabelPoints[above left](D)
+        \tkzLabelPoints[below right](E)
+        \tkzLabelPoints[above](C)
+        \tkzLabelPoints[below](B)
+    \end{tik}
+\begin{proof}
+    Note that $CB//OA$ since they are both perpendicular to $DO$. Note that  $\ang AOC=45\deg$ (since it is half of right angle), and $\ang OAE=45\deg$ since $\tri OAE$ is an isosceles right triangle. Thus $OC//EB$ \;(alt. $\ang$s equal). This means $OABC$ is a parallelogram.
+    \begin{tik}
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \tkzDefPoint(0,2){D} \tkzDefPoint(0,-2){E}
+        \draw (O)--(A);
+        \tkzDefPoint(45:2){C}
+        \tkzDefShiftPoint[C](2,0){B}
+        \tkzDefPointBy[projection=onto D--O](C)\tkzGetPoint{F}
+        \tkzDrawPoints(O,A)
+        \tkzDrawCircle(O,A)
+        \tkzDrawLine[add=0.1 and 0.1](D,E)
+        \tkzDrawLine[add=0 and .5](O,C)
+        \tkzDrawLine[add=0.1 and .9](E,A)
+        \tkzDrawLine[add=.2 and .3](B,F)
+        \tkzDrawSegments[thick,orange](A,B B,C C,O)
+        \tkzMarkSegments(O,A A,B B,C C,O)
+        \tkzMarkAngle[size=.5](A,O,C)
+        \tkzMarkAngle[size=.5](C,O,D)
+        \tkzMarkRightAngle[size=.25](A,O,D)
+        \tkzMarkRightAngle[size=.3](C,F,D)
+        \tkzLabelAngle[pos=.8](A,O,C){$45\deg$}
+        \tkzLabelAngle[pos=.8](C,O,D){$45\deg$}
+        \tkzMarkAngle[size=.5](O,A,E)
+        \tkzLabelAngle[pos=.8](O,A,E){$45\deg$}
+        \tkzLabelPoints[left](O)
+        \tkzLabelPoints[right](A)
+        \tkzLabelPoints[above left](D)
+        \tkzLabelPoints[below right](E)
+        \tkzLabelPoints[above](C)
+        \tkzLabelPoints[below](B)
+    \end{tik}
+    Since $OA=OC$ (radii), $OABC$ is a parallelogram with adjacent sides equal, so $OABC$ is a rhombus. Along with $\ang AOC=45\deg$, $OABC$ is the desired rhombus.
+\end{proof}
+\textbf{(7E)} \textbf{1, 2.} Draw circle $(O,A)$ and $(A,O)$, intersecting at $E$ and $F$.
+
+\textbf{3.} Draw line $EF$, intersect $OA$ at $M$.
+
+\textbf{4.} Draw circle $(M,O)$, intersecting $EF$ at $G$ and $H$ \;($G$ above $H)$.
+
+\begin{tik}
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \tkzDefPoint(0,2){D} \tkzDefPoint(0,-2){E}
+        \tkzDefPoint(1,0){M}
+        \tkzDefPoint(1,1){G}
+        \tkzDefPoint(1,-1){H}
+        \tkzInterCC(O,A)(A,O)\tkzGetPoints{E}{F}
+        \draw (O)--(A);
+        \tkzDefPoint(45:2){C}
+        \tkzDefShiftPoint[C](2,0){B}
+        \tkzDrawPoints(O,A)
+        \tkzDrawCircles(O,A A,O)
+        \tkzDrawCircle(M,O)
+        \tkzDrawSegment(E,F)
+        \tkzLabelPoints[left](O)
+        \tkzLabelPoints[right](A)
+        \tkzLabelPoints[above](E)
+        \tkzLabelPoints[below](F)
+        \tkzLabelPoints[below right](M)
+        \tkzLabelPoints[above left](G)
+        \tkzLabelPoints[above left](H)
+    \end{tik}
+
+\textbf{5, 6.} Draw lines $OG$ and $HA$. Let $OG$ intersect $(O,A)$ at $C$, and  let $HA$ intersect $(A,O)$ at $B$ (where both points are on the same side of $OA$).
+\begin{tik}
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \tkzDefPoint(0,2){D} \tkzDefPoint(0,-2){E}
+        \tkzDefPoint(1,0){M}
+        \tkzDefPoint(1,1){G}
+        \tkzDefPoint(1,-1){H}
+        \tkzDefPoint(45:2){C}
+        \tkzDefShiftPoint[C](2,0){B}
+        \tkzInterCC(O,A)(A,O)\tkzGetPoints{E}{F}
+        \draw (O)--(A);
+        \tkzDefPoint(45:2){C}
+        \tkzDefShiftPoint[C](2,0){B}
+        \tkzDrawPoints(O,A, G,H)
+        \tkzDrawCircles(O,A A,O)
+        \tkzDrawCircle(M,O)
+        \tkzDrawSegment(E,F)
+        \tkzDrawLine[add=0 and 1.3](O,G)
+        \tkzDrawLine[add=0 and 1.8](H,A)
+        \tkzLabelPoints[left](O)
+        \tkzLabelPoints[right](A)
+        \tkzLabelPoints[above](E)
+        \tkzLabelPoints[below](F)
+        \tkzLabelPoints[below right](M)
+        \tkzLabelPoints[above left](G)
+        \tkzLabelPoints[above left](H)
+        \tkzLabelPoints[above](C)
+        \tkzLabelPoints[below](B)
+    \end{tik}
+
+\textbf{7.} Draw line $BC$.
+\begin{tik}
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \tkzDefPoint(0,2){D} \tkzDefPoint(0,-2){E}
+        \tkzDefPoint(1,0){M}
+        \tkzDefPoint(1,1){G}
+        \tkzDefPoint(1,-1){H}
+        \tkzDefPoint(45:2){C}
+        \tkzDefShiftPoint[C](2,0){B}
+        \tkzInterCC(O,A)(A,O)\tkzGetPoints{E}{F}
+        \draw (O)--(A);
+        \tkzDefPoint(45:2){C}
+        \tkzDefShiftPoint[C](2,0){B}
+        \tkzDrawPoints(O,A, G,H,B,C)
+        \tkzDrawCircles(O,A A,O)
+        \tkzDrawCircle(M,O)
+        \tkzDrawSegment(E,F)
+        \tkzDrawLine[add=0 and 1.3](O,G)
+        \tkzDrawLine[add=0 and 1.8](H,A)
+        \tkzDrawSegments[orange,thick](B,C A,B O,C)
+        \tkzLabelPoints[left](O)
+        \tkzLabelPoints[right](A)
+        \tkzLabelPoints[above](E)
+        \tkzLabelPoints[below](F)
+        \tkzLabelPoints[below right](M)
+        \tkzLabelPoints[above left](G)
+        \tkzLabelPoints[above left](H)
+        \tkzLabelPoints[above](C)
+        \tkzLabelPoints[below](B)
+    \end{tik}
+\begin{proof}
+    Note that $\tri MOG$ and $\tri MAH$ are isosceles right triangles, so $\ang MOG=\ang MAH=45\deg$ and $OC//HB$ \;(alt. $\ang$s equal). Moreover, note that $OC=AB$ since they lie on circles of the same radius. Thus $OABC$ is a parallelogram \;(opp. sides equal and //). 
+    
+    And since $OA=OC$ (radii), $OABC$ has adjacent sides equal, so it is a rhombus.
+\end{proof}
+\textbf{(4V)} Draw line $GA$ and $OH$. Connect the intersections of the lines and the big circles to form a symmetric figure.
+\begin{tik}
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \tkzDefPoint(0,2){D} \tkzDefPoint(0,-2){E}
+        \tkzDefPoint(1,0){M}
+        \tkzDefPoint(1,1){G}
+        \tkzDefPoint(1,-1){H}
+        \tkzDefPoint(45:2){C}
+        \tkzDefShiftPoint[C](2,0){B}
+        \tkzInterCC(O,A)(A,O)\tkzGetPoints{E}{F}
+        \tkzDefPointBy[reflection = over E--F](C)\tkzGetPoint{C'}
+        \tkzDefPointBy[reflection = over E--F](B)\tkzGetPoint{B'}
+        \tkzDefPointBy[reflection = over O--A](B)\tkzGetPoint{B2}
+        \tkzDefPointBy[reflection = over O--A](C)\tkzGetPoint{C2}
+        \tkzDefPointBy[reflection = over E--F](B2)\tkzGetPoint{B3}
+        \tkzDefPointBy[reflection = over E--F](C2)\tkzGetPoint{C3}
+        \draw (O)--(A);
+        \tkzDefPoint(45:2){C}
+        \tkzDefShiftPoint[C](2,0){B}
+        \tkzDrawPoints(O,A, G,H,B,C)
+        \tkzDrawCircles(O,A A,O)
+        \tkzDrawCircle(M,O)
+        \tkzDrawSegment(E,F)
+        \tkzDrawLine[add=0 and 1.3](O,G)
+        \tkzDrawLine[add=0 and 1.8](H,A)
+        \tkzDrawLine[add=0 and 1.3](A,G)
+        \tkzDrawLine[add=0 and 1.3](O,H)
+        \tkzDrawLine[add=0 and 1.3](A,H)
+        \tkzDrawLine[add=0 and 1.8](H,O)
+        \tkzDrawLine[add=0 and 1.8](G,A)
+        \tkzDrawLine[add=0 and 1.8](G,O)
+        
+        \tkzDrawSegments[orange,thick](O,A B,C A,B O,C)
+        \tkzDrawSegments[red,thick](B',C' A,C' O,B')
+        \tkzDrawSegments[red,thick](B2,C2 A,B2 O,C2)
+        \tkzDrawSegments[red,thick](B3,C3 A,C3 O,B3)
+        \tkzDrawSegments(C,C' C2,C3)
+        \tkzLabelPoints[left](O)
+        \tkzLabelPoints[right](A)
+        \tkzLabelPoints[above](E)
+        \tkzLabelPoints[below](F)
+        \tkzLabelPoints[below right](M)
+        \tkzLabelPoints[above left](G)
+        \tkzLabelPoints[above left](H)
+        \tkzLabelPoints[above](C)
+        \tkzLabelPoints[below](B)
+    \end{tik}
+\end{sol}
+
+\subsection{Center of quadrilateral}
+
+\begin{task}
+    Construct the midpoint of the segment that connects the midpoints of the diagonals of the quadrilateral.
+
+    (4L, 10E)
+    \begin{tik}
+        \tkzDefPoints{0/0/A, 4/0/B, 2.8/2/C, 1/2.3/D}
+        \draw (A)--(B)--(C)--(D)--cycle;
+        \tkzDefMidPoint(A,C)\tkzGetPoint{M}
+        \tkzDefMidPoint(B,D)\tkzGetPoint{N}
+        \tkzDefMidPoint(M,N)\tkzGetPoint{E}
+        \tkzDrawSegment[lightgray,thick](M,N)
+        \tkzDrawSegments[lightgray](A,C B,D)
+        \tkzDrawPoints[lightgray](M,N)
+        \tkzDrawPoint[blue,size=3](E)
+        \tkzMarkSegments[lightgray](M,E E,N)
+        \tkzMarkSegments[mark=||,lightgray](A,M)
+        \tkzMarkSegments[mark=||,lightgray,pos=.6](M,C)
+        \tkzMarkSegments[mark=|||,lightgray](B,N N,D)
+    \end{tik}
+\end{task}
+\begin{sol}
+
+    \textbf{1, 2.} Draw the perpendicular bisectors of the two non-parallel sides. Let the midpoints of the non-parallel sides be $M$ and $N$.
+
+    \begin{tik}
+        \tkzDefPoints{0/0/A, 4/0/B, 2.8/2/C, 1/2.3/D}
+        \draw (A)--(B)--(C)--(D)--cycle;
+        \tkzDefMidPoint(A,D)\tkzGetPoint{M}
+        \tkzDefMidPoint(B,C)\tkzGetPoint{N}
+        \tkzDefMidPoint(M,N)\tkzGetPoint{E}
+        \tkzDefLine[mediator,K=.4](A,D)\tkzGetPoints{P}{Q}
+        \tkzDefLine[mediator,K=.4](B,C)\tkzGetPoints{R}{S}
+        \tkzDrawSegment(P,Q)
+        \tkzDrawSegment(R,S)
+        \tkzMarkRightAngle[size=.25](Q,M,D)
+        \tkzMarkRightAngle[size=.25](C,N,R)
+        \tkzMarkSegments[mark=||](A,M M,D)
+        \tkzMarkSegments[mark=|||](B,N N,C)
+        \tkzLabelPoints[left](M)
+        \tkzLabelPoints[right](N)
+    \end{tik}
+
+    \textbf{3, 4.} Draw $MN$. Draw the perpendicular bisector of $MN$. The midpoint of $MN$ is the desired point.
+    \begin{tik}
+        \tkzDefPoints{0/0/A, 4/0/B, 2.8/2/C, 1/2.3/D}
+        \draw (A)--(B)--(C)--(D)--cycle;
+        \tkzDefMidPoint(A,D)\tkzGetPoint{M}
+        \tkzDefMidPoint(B,C)\tkzGetPoint{N}
+        \tkzDefMidPoint(M,N)\tkzGetPoint{E}
+        \tkzDefLine[mediator,K=.4](A,D)\tkzGetPoints{P}{Q}
+        \tkzDefLine[mediator,K=.4](B,C)\tkzGetPoints{R}{S}
+        \tkzDefLine[mediator,K=.6](M,N)\tkzGetPoints{T}{W}
+        \tkzDrawSegment(P,Q)
+        \tkzDrawSegment(R,S)
+        \tkzDrawSegment(M,N)
+        \tkzDrawSegment(T,W)
+        \tkzDrawPoints(M,N,E)
+        \tkzMarkRightAngle[size=.25](Q,M,D)
+        \tkzMarkRightAngle[size=.25](C,N,R)
+        \tkzMarkRightAngle[size=.25](N,E,T)
+        \tkzMarkSegments[mark=||](A,M M,D)
+        \tkzMarkSegments[mark=|||](B,N N,C)
+        \tkzMarkSegments[mark=|](M,E N,E)
+        \tkzLabelPoints[left](M)
+        \tkzLabelPoints[right](N)
+        \tkzLabelPoints[below right](E)
+        \tkzDrawPoint[size=3,orange](E)
+    \end{tik}
+    \begin{proof}
+        We use Cartesian coordinates. Let the quadrilateral be $ABCD$, and let 
+
+        \smallskip
+        
+        $A=(0,0)$, $B=(b,0)$, $C=(c_1,c_2)$, $D=(d_1,d_2)$. 
+
+        Let $K$, $L$ be the midpoints of $AC$ and $BD$ respectively. Then $K=(\cfrac{c_1}{2}\,,\,\cfrac{c_2}{2})$ and $L=(\cfrac{d_1+b}{2}\,,\,\cfrac{d_2}{2})$ \;(mid-pt. coordinate formula).  Let $F$ be the midpoint of $KL$ (the desired point). 
+        
+        Then $F=(\cfrac{c_1+d_1+b}{4}\,,\, \cfrac{c_2+d_2}{4})$.
+    \begin{tik}
+        \tkzDefPoints{0/0/A, 4/0/B, 2.8/2/C, 1/2.3/D}
+        \draw (A)--(B)--(C)--(D)--cycle;
+        \tkzDefMidPoint(A,C)\tkzGetPoint{M}
+        \tkzDefMidPoint(B,D)\tkzGetPoint{N}
+        \tkzDefMidPoint(M,N)\tkzGetPoint{E}
+        \tkzDrawSegment[lightgray,thick](M,N)
+        \tkzDrawSegments[lightgray](A,C B,D)
+        \tkzDrawPoints[lightgray](M,N)
+        \tkzDrawPoint[blue,size=3](E)
+        \tkzMarkSegments[lightgray](M,E E,N)
+        \tkzMarkSegments[mark=||,lightgray](A,M)
+        \tkzMarkSegments[mark=||,lightgray,pos=.6](M,C)
+        \tkzMarkSegments[mark=|||,lightgray](B,N N,D)
+        \node[below] at (A) {$A(0,0)$};
+        \node[below] at (B) {$B(b,0)$};
+        \node[right] at (C) {$C(c_1,c_2)$};
+        \node[left] at (D) {$D(d_1,d_2)$};
+        \node[below] at (M) {$K$};
+        \node[below] at (N) {$L$};
+        \node[below] at (E) {$F$};
+
+        \tkzDefPoints{0+6/0/A, 4+6/0/B, 2.8+6/2/C, 1+6/2.3/D}
+        \draw (A)--(B)--(C)--(D)--cycle;
+        \tkzDefMidPoint(A,D)\tkzGetPoint{M}
+        \tkzDefMidPoint(B,C)\tkzGetPoint{N}
+        \tkzDefMidPoint(M,N)\tkzGetPoint{E}
+        \tkzDefLine[mediator,K=.4](A,D)\tkzGetPoints{P}{Q}
+        \tkzDefLine[mediator,K=.4](B,C)\tkzGetPoints{R}{S}
+        \tkzDefLine[mediator,K=.6](M,N)\tkzGetPoints{T}{W}
+        \tkzDrawSegment(P,Q)
+        \tkzDrawSegment(R,S)
+        \tkzDrawSegment(M,N)
+        \tkzDrawSegment(T,W)
+        \tkzDrawPoints(M,N,E)
+        \tkzMarkRightAngle[size=.25](Q,M,D)
+        \tkzMarkRightAngle[size=.25](C,N,R)
+        \tkzMarkRightAngle[size=.25](N,E,T)
+        \tkzMarkSegments[mark=||](A,M M,D)
+        \tkzMarkSegments[mark=|||](B,N N,C)
+        \tkzMarkSegments[mark=|](M,E N,E)
+        \tkzLabelPoints[left](M)
+        \tkzLabelPoints[right](N)
+        \tkzLabelPoints[below right](E)
+        \tkzDrawPoint[size=3,orange](E)
+        \node[below] at (A) {$A(0,0)$};
+        \node[below] at (B) {$B(b,0)$};
+        \node[right] at (C) {$C(c_1,c_2)$};
+        \node[left] at (D) {$D(d_1,d_2)$};
+    \end{tik}
+    Now we show that $E$ has the same coordinates as $F$. Since $M$ and $N$ are midpoints of $AD$ and $BC$, we have $M=(\cfrac{d_1}{2}\,,\,\cfrac{d_2}{2})$ and $N=(\cfrac{c_1+b}{2}\,,\,\cfrac{c_2}{2})$. And $E$ is the midpoint of $MN$, so $E=(\cfrac{d_1+c_1+b}{4}\,,\,\cfrac{d_2+c_2}{4})$, which is the same as $F$. So we conclude $E=F$.
+    \end{proof}
+\end{sol}
+
+
+\section{Delta}
+
+\subsection{Double segment}
+
+\begin{task}
+    Construct a point $C$ on the line $AB$ such that $|AC|=2|AB|$ using only a compass.
+
+    (3L, 3E, 2V)
+    \begin{tik}
+        \tkzDefPoints{0/0/A, 2/0/B, 4/0/C}
+        \tkzDrawPoints(A,B)
+        \tkzDrawPoint[blue,size=3](C)
+        \tkzDrawSegments[lightgray](A,B B,C)
+        \tkzLabelPoints[below](A,B,C)
+    \end{tik}
+\end{task}
+\begin{sol}
+    \textbf{(3L, 3E)} \textbf{1, 2.} Draw circle $(A,B)$ and $(B,A)$, intersecting at $E$ and $F$, intersecting $(B,A)$ again at desired point $C$,
+
+    \textbf{3.} Draw circle $(E,F)$.
+    \begin{tik}[scale=.7]
+        \tkzDefPoints{0/0/A, 2/0/B, 4/0/C}
+        \tkzInterCC(A,B)(B,A)\tkzGetPoints{E}{F}
+        \tkzDrawPoints(A,B,E,F)
+        \tkzDrawCircles(A,B B,A E,F)
+        \tkzDrawPoint[orange,size=3](C)
+        \tkzLabelPoints[below](A,B)
+        \tkzLabelPoints[right](C)
+        \tkzLabelPoints[above](E)
+        \tkzLabelPoints[below](F)
+    \end{tik}
+\begin{proof}
+    Note that $\ang AEB=60\deg$ and $\ang BEC=\ang BEF=30\deg$ by congruent triangles. So $\ang AEC=60\deg + 30\deg = 90\deg$, and so $A,B,C$ are collinear by ``converse of $\ang$ in semi-circle''. Also $AC=2AB$ by radii.
+\end{proof}
+    
+    \textbf{(2V)} \textbf{4.} Let $(E,F)$ intersect $(A,B)$ at $D$. Draw $(D,A)$, intersecting $(A,B)$ at $G$ and $H$.
+
+    \textbf{5.} Draw circle $(G,H)$, intersecting $(D,A)$ again at desired point $C'$.
+    \begin{tik}[scale=.7]
+        \tkzDefPoints{0/0/A, 2/0/B, 4/0/C, -2/0/D, -4/0/C'}
+        \tkzInterCC(A,B)(B,A)\tkzGetPoints{E}{F}
+        \tkzInterCC(A,D)(D,A)\tkzGetPoints{H}{G}
+        \tkzDrawCircles(A,B B,A E,F G,H D,A)
+        \tkzDrawPoint[orange,size=3](C)
+        \tkzDrawPoint[red,size=3](C')
+        \tkzDrawPoints(A,B,E,F,G,H,D)
+        \tkzLabelPoints[below](A,B,D)
+        \tkzLabelPoints[right](C)
+        \tkzLabelPoints[left](C')
+        \tkzLabelPoints[above](E)
+        \tkzLabelPoints[below](F)
+        \tkzLabelPoints[above](G)
+        \tkzLabelPoints[below](H)
+    \end{tik}
+    \begin{proof}
+        The same argument works for $C'$ since the figure is symmetric (and because we have $D$ lying on line $AB$ using the same argument as above).
+    \end{proof}
+\end{sol}
+
+\subsection{Angle of 60 deg - 2}
+
+\begin{task}
+    Construct a straight line through the given point that makes an angle of $60\deg$ with the given line.
+
+    (3L, 4E, 2V)
+    \begin{tik}
+        \tkzDefPoint(0,0){O}\tkzDefPoint(-3,0){L}
+        \tkzDefPoint(3,0){S}\tkzDefPoint(60:1.5){P}
+        \tkzDrawPoint[size=3](P)
+        \draw[<->] (L)--(S);
+        \tkzDrawSegment[thick,blue,add=.4 and .4](O,P)
+        \tkzMarkAngle[size=.4](S,O,P)
+        \tkzLabelAngle[pos=.8](S,O,P){$60\deg$}
+    \end{tik}
+\end{task}
+\begin{sol} Let given point be $P$. Let $A$ be an arbitrary point on given line (such that the angle formed by $PA$ and given line is less than $60\deg$).
+
+  \textbf{(3L)} 
+     \noindent\textbf{1.} Draw circle $(P,A)$, intersecting the give line again at $B$.
+    
+    \textbf{2.} Draw circle $(A,P)$, intersecting $(P,A)$ at $E$ and $F$.
+
+    \textbf{3.} Draw $\pb BF$, the desired line.
+
+    \begin{tik}[scale=.8]
+        \tkzDefPoint(0,0){O}\tkzDefPoint(-3,0){L}
+        \tkzDefPoint(6,0){S}\tkzDefPoint(60:1.5){P}
+        \tkzDefPoint(2.2,0){A}
+        \tkzInterLC(L,S)(P,A)\tkzGetPoints{B}{C}
+        \tkzInterCC(P,A)(A,P)\tkzGetPoints{E}{F}
+        \tkzDefMidPoint(B,F)\tkzGetPoint{M}
+        \draw[<->] (L)--(S);
+        \tkzDrawCircles(P,A A,P)
+        \tkzDrawSegment[thick,orange,add=.8 and 1.4](O,P)
+        \tkzDrawSegments[dashed](B,F)
+        \tkzDrawPoint[size=3](P)
+        \tkzDrawPoint(A)
+        \tkzMarkAngle[size=.4](S,O,P)
+        \tkzMarkRightAngle[size=.25](F,M,P)
+        \tkzLabelAngle[pos=.8](S,O,P){$60\deg$}
+        \tkzLabelPoints[left](P)
+        \tkzLabelPoints[below](A)
+        \tkzLabelPoints[above](E)
+        \tkzLabelPoints[below](F)
+        \tkzLabelPoints[below](B)
+    \end{tik}
+    \begin{proof}
+        Let $D$ be the landing point of orange line. First, note that the perpendicular bisector of $BF$ passes through $P$ because $BF$ is a chord of circle centered $P$.
+    
+        Since $PB=PA$ (radii), $\ang PBA=\ang PAB$ \;\basetri. Since $DP$ is the perpendicular bisector of $BF$, $\ang BPD=\ang FPD$ \;(SAS) \& \corrangcong. Also, note that $\ang FPA=60\deg$ since $\tri FPA$ is equilateral triangle.
+
+        \medskip
+
+        Let $\ang PBA=\ang PAB=\alpha$ and $\ang BPD=\ang FPD=\beta$. 
+        
+        In $\tri APB$, 
+        \begin{align*}
+            \ang BPA + \ang PBA + \ang PAB &= 180\deg \rea{\angtri} \\
+            (2\beta + 60\deg) + \alpha + \alpha &= 180\deg \\
+            \alpha + \beta &= 60\deg
+        \end{align*}
+        Since $\ang PDA=\alpha+\beta$ \;\exttri, $\ang PDA=60\deg$. This means the orange line makes an angle of $60\deg$ with the given line.
+    \begin{tik}[scale=1.2]
+        \tkzDefPoint(0,0){O}\tkzDefPoint(-3,0){L}
+        \tkzDefPoint(6,0){S}\tkzDefPoint(60:1.5){P}
+        \tkzDefPoint(2.2,0){A}
+        \tkzInterLC(L,S)(P,A)\tkzGetPoints{B}{C}
+        \tkzInterCC(P,A)(A,P)\tkzGetPoints{E}{F}
+        \tkzDefMidPoint(B,F)\tkzGetPoint{M}
+        \tkzInterLL(P,M)(A,B)\tkzGetPoint{D}
+        \draw[<->] (L)--(S);
+        \tkzDrawCircles(P,A A,P)
+        \tkzDrawSegment[thick,orange,add=.8 and 1.4](O,P)
+        \tkzDrawSegments[dashed](B,F)
+        \tkzDrawSegments(P,A P,B P,F A,F)
+        \tkzDrawPoint[size=3](P)
+        \tkzDrawPoint(D)
+        \tkzMarkAngle[size=.3](F,P,A)
+        \tkzMarkAngle[size=.3](A,B,P)
+        \tkzMarkAngle[size=.3](P,A,B)
+        \tkzMarkAngle[size=.3](A,D,P)
+        \tkzMarkAngle[size=.5](B,P,M)
+        \tkzMarkAngle[size=.5](M,P,F)
+        \tkzMarkRightAngle[size=.2](F,M,P)
+        \tkzLabelAngle[pos=.5](F,P,A){\small $ 60\deg$}
+        \tkzLabelAngle[pos=.5](A,B,P){\small $ \alpha$}
+        \tkzLabelAngle[pos=.5](P,A,B){\small $ \alpha$}
+        \tkzLabelAngle[pos=.7](B,P,M){\small $\beta$}
+        \tkzLabelAngle[pos=.7](M,P,F){\small $\beta$}
+        \tkzLabelAngle[pos=.5,xshift=.2cm](A,D,P){\small $\alpha+\beta$}
+        \tkzLabelPoints[left](P)
+        \tkzLabelPoints[below](A)
+        \tkzLabelPoints[above](E)
+        \tkzLabelPoints[below](F)
+        \tkzLabelPoints[below](B)
+        \node[below right] at (D){$D$};
+    \end{tik}
+    \end{proof}
+    
+    \textbf{(2V) 4.} Draw $\pb BE$. We get the extra solution.
+    \begin{tik}[scale=.8]
+        \tkzDefPoint(0,0){O}\tkzDefPoint(-3,0){L}
+        \tkzDefPoint(6,0){S}\tkzDefPoint(60:1.5){P}
+        \tkzDefPoint(2.2,0){A}
+        \tkzInterLC(L,S)(P,A)\tkzGetPoints{B}{C}
+        \tkzInterCC(P,A)(A,P)\tkzGetPoints{E}{F}
+        \tkzDefMidPoint(B,F)\tkzGetPoint{M}
+        \tkzDefMidPoint(B,E)\tkzGetPoint{N}
+        \tkzDefLine[mediator, K=.5](B,E)\tkzGetPoints{T}{W}
+        \draw[<->] (L)--(S);
+        \tkzDrawCircles(P,A A,P)
+        \tkzDrawSegment[thick,orange,add=.8 and 1.5](O,P)
+        \tkzDrawSegments[dashed](B,F B,E)
+        \tkzDrawSegment[thick,red, add=.3 and .2](T,W)
+        \tkzDrawPoint[size=3](P)
+        \tkzDrawPoint(A)
+        \tkzMarkAngle[size=.4](S,O,P)
+        \tkzMarkRightAngles[size=.25](F,M,P E,N,P)
+        \tkzLabelAngle[pos=.8](S,O,P){$60\deg$}
+        \tkzLabelPoints[left](P)
+        \tkzLabelPoints[below](A)
+        \tkzLabelPoints[above](E)
+        \tkzLabelPoints[below](F)
+        \tkzLabelPoints[below](B)
+    \end{tik}
+    \begin{proof}
+        Extend $BF$ to meet the red line at $G$. Note that $\ang FPE=120\deg$, so $\ang FBE=120\deg/2=60\deg$ \;\angcir. So $\ang PGB=90\deg-60\deg=30\deg$, and the angle between orange and red line is $90\deg-30\deg=60\deg$ \;\angtri. 
+        
+        Thus the red line makes an angle of $180\deg-60\deg-60\deg=60\deg$ \;\angtri.
+        \begin{tik}[scale=1.2]
+        \tkzDefPoint(0,0){O}\tkzDefPoint(-3,0){L}
+        \tkzDefPoint(6,0){S}\tkzDefPoint(60:1.5){P}
+        \tkzDefPoint(2.2,0){A}
+        \tkzInterLC(L,S)(P,A)\tkzGetPoints{B}{C}
+        \tkzInterCC(P,A)(A,P)\tkzGetPoints{E}{F}
+        \tkzDefMidPoint(B,F)\tkzGetPoint{M}
+        \tkzDefMidPoint(B,E)\tkzGetPoint{N}
+        \tkzDefLine[mediator, K=.5](B,E)\tkzGetPoints{T}{W}
+        \tkzInterLL(B,F)(T,W)\tkzGetPoint{G}
+        \draw[<->] (L)--(S);
+        \tkzDrawCircles(P,A A,P)
+        \tkzDrawSegment[thick,orange,add=.8 and 1.5](O,P)
+        \tkzDrawSegments[dashed](B,E)
+        \tkzDrawSegment(B,G)
+        \tkzDrawSegment[thick,red, add=.3 and .5](T,W)
+        \tkzDrawPoint[size=3](P)
+        \tkzDrawPoint(A)
+        \tkzMarkAngle[size=.4](S,O,P)
+        \tkzMarkAngle[size=.3](F,B,E)
+        \tkzMarkAngle[size=.4](P,G,B)
+        \tkzMarkAngle[size=.25](M,P,G)
+        \tkzMarkRightAngles[size=.25](F,M,P E,N,P B,N,G)
+        \tkzLabelAngle[pos=.7](S,O,P){$60\deg$}
+        \tkzLabelAngle[pos=.5](F,B,E){$60\deg$}
+        \tkzLabelAngle[pos=.6](P,G,B){$30\deg$}
+        \tkzLabelAngle[pos=.3](M,P,G){$60\deg$}
+        \tkzLabelPoints[left](P)
+        \tkzLabelPoints[below](A)
+        \tkzLabelPoints[above](E)
+        \tkzLabelPoints[below](F)
+        \tkzLabelPoints[below](B)
+        \tkzLabelPoints[right](G)
+    \end{tik}
+    \end{proof}
+    \textbf{(4E)} \noindent\textbf{1.} Draw circle $(P,A)$, intersecting the give line again at $B$.
+    
+    \textbf{2.} Draw circle $(A,P)$, intersecting $(P,A)$ at $E$ and $F$.
+
+    \textbf{3.} Draw circle $(F,B)$, intersecting $(A,P)$  above given lien at $G$.
+    \begin{tik}[scale=.8]
+        \tkzDefPoint(0,0){O}\tkzDefPoint(-3,0){L}
+        \tkzDefPoint(6,0){S}\tkzDefPoint(60:1.5){P}
+        \tkzDefPoint(2.2,0){A}
+        \tkzInterLC(L,S)(P,A)\tkzGetPoints{B}{C}
+        \tkzInterCC(P,A)(A,P)\tkzGetPoints{E}{F}
+        \tkzInterCC(F,B)(A,P)\tkzGetFirstPoint{G}
+        \draw[<->] (L)--(S);
+        \tkzDrawCircles(P,A A,P F,B)
+        \tkzDrawPoint[size=3](P)
+        \tkzDrawPoints(A,F,B)
+        \tkzLabelPoints[left](P)
+        \tkzLabelPoints[below](A)
+        \tkzLabelPoints[below](B)
+        \tkzLabelPoints[below](F)
+        \tkzLabelPoints[left](G)
+    \end{tik}
+    \textbf{4.} Draw line $GP$, the desired line.
+    \begin{tik}[scale=.8]
+        \tkzDefPoint(0,0){O}\tkzDefPoint(-3,0){L}
+        \tkzDefPoint(6,0){S}\tkzDefPoint(60:1.5){P}
+        \tkzDefPoint(2.2,0){A}
+        \tkzInterLC(L,S)(P,A)\tkzGetPoints{B}{C}
+        \tkzInterCC(P,A)(A,P)\tkzGetPoints{E}{F}
+        \tkzInterCC(F,B)(A,P)\tkzGetFirstPoint{G}
+        \draw[<->] (L)--(S);
+        \tkzDrawCircles(P,A A,P F,B)
+        \tkzDrawSegment[thick,orange,add=.8 and 1.4](O,P)
+        \tkzDrawPoint[size=3](P)
+        \tkzDrawPoints(A,F,B,G)
+        \tkzMarkAngle[size=.4](S,O,P)
+        \tkzLabelAngle[pos=.8](S,O,P){$60\deg$}
+        \tkzLabelPoints[left](P)
+        \tkzLabelPoints[below](A)
+        \tkzLabelPoints[above](E)
+        \tkzLabelPoints[below](F)
+        \tkzLabelPoints[below](B)
+        \tkzLabelPoints[left](G)
+    \end{tik}
+    \begin{proof}
+        Let the radius of $(P,A)$ and $(A,P)$ be $r$, and the radius of $(F,B)$ be $s$. 
+
+        \smallskip
+    
+        Note that $\tri PBF\cong \tri AGF$ (SSS), since $PB=AG=r$, $PF=AF=r$, $BF=GF=s$.
+
+        \smallskip
+
+        Thus $\ang BFP=\ang GFA$ \;\corrangcong
+        \begin{tik}[scale=1.2]
+        \tkzDefPoint(0,0){O}\tkzDefPoint(-3,0){L}
+        \tkzDefPoint(6,0){S}\tkzDefPoint(60:1.5){P}
+        \tkzDefPoint(2.2,0){A}
+        \tkzInterLC(L,S)(P,A)\tkzGetPoints{B}{C}
+        \tkzInterCC(P,A)(A,P)\tkzGetPoints{E}{F}
+        \tkzInterCC(F,B)(A,P)\tkzGetFirstPoint{G}
+        \draw[<->] (L)--(S);
+        \tkzDrawCircles[lightgray](A,P F,B)
+        \tkzDrawArc[rotate,lightgray](P,B)(170)
+        \tkzDrawArc[rotate,lightgray](P,B)(-30)
+        \tkzDrawSegments(B,F P,B P,F P,A A,F B,G A,G)
+        \draw (G)--(F);
+        \tkzMarkSegments[mark=|](P,A A,G A,F)
+        \tkzMarkSegments[mark=|,pos=.3](P,B P,F)
+        \tkzMarkSegments[mark=||](B,F)
+        \tkzMarkSegments[mark=||,pos=.4](G,F)
+        \tkzMarkAngle[size=.3](A,F,P)
+        \tkzLabelAngle[pos=.5](A,F,P){$60\deg$}
+        \tkzMarkAngle[size=.3](G,F,B)
+        \tkzLabelAngle[pos=.5](G,F,B){$60\deg$}
+        \tkzDrawPoint[size=3](P)
+        \tkzDrawPoints(A,F,B,G)
+        \tkzLabelPoints[left](P)
+        \tkzLabelPoints[below](A)
+        \tkzLabelPoints[above](E)
+        \tkzLabelPoints[below](F)
+        \tkzLabelPoints[below](B)
+        \tkzLabelPoints[left](G)
+    \end{tik}
+    Note that $\ang PFA=60\deg$ since $\tri PFA$ is equilateral. Thus $\ang BFG=\ang BFP-\ang GFP=\ang GFA-\ang GFP=60\deg$.
+
+    \smallskip
+
+    Since $BF=GF$ and $\ang BFG=60\deg$, $\tri GBF$ is equilateral triangle \;(con. of equil. $\tri$). This means $G$ lies on the perpendicular bisector of $BF$, so $GP$ must be the same line as the orange line of (3L).
+    \end{proof}
+\end{sol}
+
+\subsection{Circumscribed equilateral triangle}
+
+\begin{task}
+    Construct an equilateral triangle that is circumscribed about the circle and contains the given point.
+    \begin{tik}
+        \draw (0,0) circle (1);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(350:1){P}
+        \coordinate (A) at ($(P)!3!(O)$);
+        \coordinate (D) at ($(P)!2!(O)$);
+        \coordinate (B) at ($ (P) ! {sqrt(3)} ! 90:(O) $);
+        \coordinate (C) at ($ (P) ! {sqrt(3)} ! -90:(O) $);
+        \tkzDrawPoints[size=3](P,O)
+        \tkzDrawPolygon[blue,thick](A,B,C)
+        \tkzMarkAngles[mark=|,size=.4](B,A,C A,C,B C,B,A)
+
+    \end{tik}
+\end{task}
+\begin{sol} Let $P$ be the given point on circle and $O$ be the given circle center.
+
+\noindent\textbf{(5L)} \textbf{1.} Draw line $OP$, intersecting given circle again at $D$.
+
+\textbf{2.} Draw $OP\tp P$.
+
+\textbf{3.} Draw circle $(D,O)$, intersecting given circle at $E$ and $F$, and intersecting $OD$ at $A$.
+    \begin{tik}
+        \draw (0,0) circle (1);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(350:1){P}
+        \coordinate[label=$A$] (A) at ($(P)!3!(O)$);
+        \coordinate[label=$D$] (D) at ($(P)!2!(O)$);
+        \coordinate (B) at ($ (P) ! {sqrt(3)} ! -90:(O) $);
+        \coordinate (C) at ($ (P) ! {sqrt(3)} ! 90:(O) $);
+        \tkzInterCC(D,O)(O,D)\tkzGetPoints{E}{F}
+        \tkzDrawCircle(D,O)
+        \tkzDrawLine(B,C)
+        \tkzDrawSegment[add=0 and .3](P,A)
+        \tkzDrawPoints[size=3](O,P)
+        \tkzMarkRightAngle[size=.3](B,P,O)
+        \tkzLabelPoints[below](O)
+        \tkzLabelPoints[above](E)
+        \tkzLabelPoints[below](F)
+        \tkzLabelPoints[right](P)
+    \end{tik}
+    \textbf{4, 5.} Draw lines $AE$ and $AF$, intersecting $OP\tp P$ at $B$ and $C$ respectively. $\tri ABC$ is the desired triangle.
+    \begin{tik}
+        \draw (0,0) circle (1);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(350:1){P}
+        \coordinate[label=$A$] (A) at ($(P)!3!(O)$);
+        \coordinate[label=$D$] (D) at ($(P)!2!(O)$);
+        \coordinate (B) at ($ (P) ! {sqrt(3)} ! -90:(O) $);
+        \coordinate (C) at ($ (P) ! {sqrt(3)} ! 90:(O) $);
+        \tkzInterCC(D,O)(O,D)\tkzGetPoints{E}{F}
+        \tkzDrawCircle(D,O)
+        \tkzDrawLine(B,C)
+        \tkzDrawLines(A,B A,C)
+        \tkzDrawSegment[add=0 and .3](P,A)
+        \tkzDrawPolygon[orange, thick](A,B,C)
+        \tkzDrawPoints[size=3](O,P)
+        \tkzDrawPoints(A,E,F)
+        \tkzMarkRightAngle[size=.3](B,P,O)
+        \tkzLabelPoints[below](O)
+        \tkzLabelPoints[above](E)
+        \tkzLabelPoints[below](F)
+        \tkzLabelPoints[right](P)
+        \tkzLabelPoints[right](B)
+        \tkzLabelPoints[right](C)
+    \end{tik}
+\begin{proof}
+    Note that $\ang AEO=\ang AFO=90\deg$ \;($\ang$ in semi-circle), so $AB$ and $AF$ are tangent to the given circle `\;(converse of tangent $\perp$ radius). 
+    
+    Moreover, $\ang OAE=30\deg$ since $\cfrac{OE}{OA}=\cfrac{1}{2}$. Similarly $\ang OAF=30\deg$. This means $\ang BAC=60\deg$. Since the figure is reflectional symmetric about line $AP$, we have $AB=AC$, and thus $\tri ABC$ is an equilateral triangle \;(con. of equil. $\tri$).
+\end{proof}
+\textbf{(6E)} \textbf{1.} Draw line $OP$, intersecting given circle again at $D$.
+
+\textbf{2.} Draw circle $(D,O)$, intersecting given circle at $E$ and $F$, and intersecting $OD$ at $A$. 
+
+\textbf{3.} Draw line $EO$.
+
+\textbf{4.} Draw line $AF$, intersecting $EO$ at $C$.
+
+\begin{tik}
+        \draw (0,0) circle (1);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(350:1){P}
+        \coordinate[label=$A$] (A) at ($(P)!3!(O)$);
+        \coordinate[label=$D$] (D) at ($(P)!2!(O)$);
+        \coordinate (B) at ($ (P) ! {sqrt(3)} ! -90:(O) $);
+        \coordinate (C) at ($ (P) ! {sqrt(3)} ! 90:(O) $);
+        \tkzInterCC(D,O)(O,D)\tkzGetPoints{E}{F}
+        \tkzDrawCircle(D,O)
+        \tkzDrawLine[add=.6 and 2.5](E,O)
+        \tkzDrawLine[add=.3 and 1.3](A,F)
+        \tkzDrawSegment[add=0 and .3](P,A)
+        \tkzDrawPoints[size=3](O,P)
+        \tkzLabelPoints[below](O)
+        \tkzLabelPoints[above](E)
+        \tkzLabelPoints[below](F)
+        \tkzLabelPoints[right](P)
+        \tkzLabelPoints[right](C)
+    \end{tik}
+
+\textbf{5.} Draw line $AE$.
+
+\textbf{6.} Draw line $CP$, intersecting $AE$ at $B$. $\tri ABC$ is the desired triangle.
+\begin{tik}
+        \draw (0,0) circle (1);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(350:1){P}
+        \coordinate[label=$A$] (A) at ($(P)!3!(O)$);
+        \coordinate[label=$D$] (D) at ($(P)!2!(O)$);
+        \coordinate (B) at ($ (P) ! {sqrt(3)} ! -90:(O) $);
+        \coordinate (C) at ($ (P) ! {sqrt(3)} ! 90:(O) $);
+        \tkzInterCC(D,O)(O,D)\tkzGetPoints{E}{F}
+        \tkzDrawCircle(D,O)
+        \tkzDrawLine[add=.6 and 2.5](E,O)
+        \tkzDrawLine[add=.3 and 1.3](A,F)
+        \tkzDrawLine[add=.3 and 1.3](A,E)
+        \tkzDrawLine(B,C)
+        \tkzDrawSegment[add=0 and .3](P,A)
+        \tkzDrawPolygon[orange,thick](A,B,C)
+        \tkzDrawPoints[size=3](O,P)
+        \tkzLabelPoints[below](O)
+        \tkzLabelPoints[above](E)
+        \tkzLabelPoints[below](F)
+        \tkzLabelPoints[right](P)
+        \tkzLabelPoints[right](B)
+        \tkzLabelPoints[right](C)
+    \end{tik}
+\begin{proof}
+    Note that in the (5L) figure, $E,O,C$ is collinear since the orthocenter and incenter of an equilateral triangle coincide. Note that point $E$ and line $AF$ in the (6E) figure is the same as that of (5L), so point $C$ in (6E) must be the same as point $C$ in (5L), so $\tri ABC$ is the same triangle as (5L).
+\end{proof}
+\end{sol}
+
+\subsection{Equilateral triangle in circle}
+
+\begin{task}
+    Inscribe an equilateral triangle in the circle using the given point as a vertex. The center of the circle is not given.
+
+    (5L, 6E)
+    \begin{tik}
+        \draw (0,0) circle (1.5);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(0:1.5){P}
+        \tkzDefPoint(120:1.5){A}
+        \tkzDefPoint(240:1.5){B}
+        \tkzDrawPoint[size=3](P)
+        \tkzDrawPolygon[thick,blue](P,A,B)
+        \tkzMarkSegments(P,A A,B B,P)
+    \end{tik}
+\end{task}
+\begin{sol}
+    Let $P$ be the given point on circle. Let $C$ be an arbitrary point on the circle.
+
+    \textbf{(5L)} \textbf{1, 2.} Draw circles $(P,C)$ and $(C,P)$, intersecting at $E$ and $F$ (where $E$ is nearer to the center of given circle). Let $(P,C)$ intersect given circle again at $D$.
+    \begin{tik}[scale=.8]
+        \draw (0,0) circle (1.5);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(0:1.5){P}
+        \tkzDefPoint(120:1.5){A}
+        \tkzDefPoint(240:1.5){B}
+        \tkzDefPoint(80:1.5){C}
+        \tkzDefPoint(-80:1.5){D}
+        \tkzInterCC(C,P)(P,C)\tkzGetPoints{F}{E}
+        \tkzDrawCircles(C,P P,C)
+        \tkzDrawPoint[size=3](P)
+        \tkzDrawPoints(C)
+        \tkzLabelPoints[right](P)
+        \tkzLabelPoints[above](C)
+        \tkzLabelPoints[below](D)
+        \tkzLabelPoints[right](F)
+        \tkzLabelPoints[left](E)
+    \end{tik}
+    \textbf{3, 4.} Draw $\pb ED$ and $\pb FD$, intersecting the given circle again at $A$ and $B$ respectively.
+    \begin{tik}
+        \draw (0,0) circle (1.5);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(0:1.5){P}
+        \tkzDefPoint(120:1.5){A}
+        \tkzDefPoint(240:1.5){B}
+        \tkzDefPoint(80:1.5){C}
+        \tkzDefPoint(-80:1.5){D}
+        \tkzInterCC(C,P)(P,C)\tkzGetPoints{F}{E}
+        \tkzDefMidPoint(E,D)\tkzGetPoint{M}
+        \tkzDefMidPoint(F,D)\tkzGetPoint{N}
+        \tkzDrawCircles(C,P P,C)
+        \tkzDrawPoint[size=3](P)
+        \tkzDrawPoints(C)
+        \tkzDrawSegments[dashed](E,D D,F)
+        \tkzDrawSegment[add=.5 and .5](A,P)
+        \tkzDrawSegment[add=.5 and .5](B,P)
+        \tkzMarkSegments[mark=||](E,M M,D)
+        \tkzMarkSegments[mark=|||](F,N N,D)
+        \tkzMarkRightAngle[size=.3](D,M,P)
+        \tkzMarkRightAngle[size=.3](P,N,F)
+        \tkzLabelPoints[right](P)
+        \tkzLabelPoints[above](C)
+        \tkzLabelPoints[below](D)
+        \tkzLabelPoints[right](F)
+        \tkzLabelPoints[left](E)
+        \tkzLabelPoints[above](A)
+        \tkzLabelPoints[below](B)
+    \end{tik}
+    \textbf{5.} Draw line $AB$. $\tri PAB$ is the desired triangle.
+    \begin{tik}
+        \draw (0,0) circle (1.5);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(0:1.5){P}
+        \tkzDefPoint(120:1.5){A}
+        \tkzDefPoint(240:1.5){B}
+        \tkzDefPoint(80:1.5){C}
+        \tkzDefPoint(-80:1.5){D}
+        \tkzInterCC(C,P)(P,C)\tkzGetPoints{F}{E}
+        \tkzDefMidPoint(E,D)\tkzGetPoint{M}
+        \tkzDefMidPoint(F,D)\tkzGetPoint{N}
+        \tkzDrawCircles(C,P P,C)
+        \tkzDrawPolygon[orange,thick](P,A,B)
+        \tkzDrawPoint[size=3](P)
+        \tkzDrawPoints(C)
+        \tkzDrawSegments[dashed](E,D D,F)
+        \tkzDrawSegment[add=.5 and .5](A,P)
+        \tkzDrawSegment[add=.5 and .5](B,P)
+        \tkzMarkSegments[mark=||](E,M M,D)
+        \tkzMarkSegments[mark=|||](F,N N,D)
+        \tkzMarkRightAngle[size=.3](D,M,P)
+        \tkzMarkRightAngle[size=.3](P,N,F)
+        \tkzLabelPoints[right](P)
+        \tkzLabelPoints[above](C)
+        \tkzLabelPoints[below](D)
+        \tkzLabelPoints[right](F)
+        \tkzLabelPoints[above right](E)
+        \tkzLabelPoints[above](A)
+        \tkzLabelPoints[below](B)
+    \end{tik}
+    \begin{proof}
+        Consider angles subtended by arc $\arc{ECF}$ in circle $(P,C)$. Note that $\ang EPF=120\deg$ (since $\tri ECP$ and $\tri FCP$ are two equilateral triangles). Thus $\ang EDF=120\deg/2=60\deg$ \;\angcir.
+
+        \smallskip
+
+        Since $EC=CF$, we have $\ang EDC=\ang CDF=60\deg/2=30\deg$ \;(equal chord, equal $\ang$ at \circum$^{ce}$)
+
+        \smallskip
+
+        Let $CD$ cut $AP$ and $BP$ at $G$ and $H$. Since $FD\perp GP$ and $ED\perp HP$, by some angle chasing, we find that $\ang PHG=\ang PGH=60\deg$, so $\ang APB=180\deg-60\deg-60\deg=60\deg$ \;\angtri.
+
+        \begin{tik}[scale=1.5]
+        \draw (0,0) circle (1.5);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(0:1.5){P}
+        \tkzDefPoint(120:1.5){A}
+        \tkzDefPoint(240:1.5){B}
+        \tkzDefPoint(80:1.5){C}
+        \tkzDefPoint(-80:1.5){D}
+        \tkzInterCC(C,P)(P,C)\tkzGetPoints{F}{E}
+        \tkzDefMidPoint(E,D)\tkzGetPoint{M}
+        \tkzDefMidPoint(F,D)\tkzGetPoint{N}
+        \tkzInterLL(C,D)(A,P)\tkzGetPoint{G}
+        \tkzInterLL(C,D)(B,P)\tkzGetPoint{H}
+        \tkzDrawCircles(C,P P,C)
+        \tkzDrawPolygon[orange,thick](P,A,B)
+        \tkzDrawPoint[size=3](P)
+        \tkzDrawPoints(C,O)
+        \tkzDrawSegments[dashed](E,D D,F)
+        \tkzDrawSegment(C,D)
+        \tkzDrawSegment[add=.5 and .5](A,P)
+        \tkzDrawSegment[add=.5 and .5](B,P)
+        \tkzMarkSegments[mark=||](E,M M,D)
+        \tkzMarkSegments[mark=|||](F,N N,D)
+        \tkzMarkAngle[size=.3](P,D,C)
+        \tkzMarkAngle[size=.3](C,D,E)
+        \tkzMarkAngle[size=.3](P,H,G)
+        \tkzMarkAngle[size=.3](H,G,P)
+        \tkzMarkAngle[size=.3](G,P,H)
+        \tkzLabelAngle[pos=.5](P,D,C){$30\deg$}
+        \tkzLabelAngle[pos=.5](C,D,E){$30\deg$}
+        \tkzLabelAngle[pos=.5](P,H,G){$60\deg$}
+        \tkzLabelAngle[pos=.5](H,G,P){$60\deg$}
+        \tkzLabelAngle[pos=.5](G,P,H){$60\deg$}
+        \tkzMarkRightAngle[size=.2](P,M,E)
+        \tkzMarkRightAngle[size=.2](P,N,F)
+        \tkzLabelPoints[right](P)
+        \tkzLabelPoints[above](C)
+        \tkzLabelPoints[below](D)
+        \tkzLabelPoints[right](F)
+        \tkzLabelPoints[left](E)
+        \tkzLabelPoints[above](A)
+        \tkzLabelPoints[below](B)
+        \tkzLabelPoints[left](G)
+        \tkzLabelPoints[left,xshift=.2cm](H)
+        \tkzLabelPoints[above](O)
+    \end{tik}
+
+    \medskip
+    
+    Let $O$ be the center of given circle, and $M$ be the midpoint of $CD$. Note that $OP\perp CD$ since $ODPC$ forms a kite. Thus $PO$ bisects $\ang GPH$ \;(prop. of isos. $\tri$). This means $\tri PAB$ is reflectional symmetric about line $OP$, giving $PA=PB$, and thus $\tri PAB$ is an equilateral triangle.
+    \end{proof}
+    \textbf{(6E)} \textbf{1.}  Let $C$ be an arbitrary point on the circle. Draw circle $(C,P)$, intersecting given circle again at $D$. 
+
+    \textbf{2.} Draw circle $(P,D)$, intersecting $(C,P)$ again at $G$.
+
+    \textbf{3.} Draw circle $(G,P)$, intersecting $(P,D)$ at $E$ and $F$ ($E$ left, $F$ right).
+
+    \begin{tik}[scale=1]
+        \draw (0,0) circle (1.5);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(0:1.5){P}
+        \tkzDefPoint(120:1.5){A}
+        \tkzDefPoint(240:1.5){B}
+        \tkzDefPoint(40:1.5){C}
+        \tkzDefPoint(80:1.5){D}
+        \tkzInterCC(P,D)(C,P)\tkzGetPoints{H}{G}
+        \tkzInterCC(G,P)(P,G)\tkzGetPoints{F}{E}
+        \tkzDrawCircles(C,P P,D G,P)
+        \tkzDrawPoint[size=3](P)
+        \tkzDrawPoints(C,D)
+        \tkzLabelPoints[right](P)
+        \tkzLabelPoint[above](C){$C$}
+        \tkzLabelPoint[above](D){$D$}
+        \tkzLabelPoints[right](F)
+        \tkzLabelPoints[left](E)
+        \tkzLabelPoints[above](G)
+    \end{tik}
+    \textbf{4, 5.} Draw line $PE$ and $PF$, intersecting given circle again at $A$ and $B$.
+
+    \textbf{6.} Draw line $AB$. $\tri PAB$ is the desired triangle.
+     \begin{tik}[scale=1]
+        \draw (0,0) circle (1.5);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(0:1.5){P}
+        \tkzDefPoint(120:1.5){A}
+        \tkzDefPoint(240:1.5){B}
+        \tkzDefPoint(40:1.5){C}
+        \tkzDefPoint(80:1.5){D}
+        \tkzInterCC(P,D)(C,P)\tkzGetPoints{H}{G}
+        \tkzInterCC(G,P)(P,G)\tkzGetPoints{F}{E}
+        \tkzDrawCircles(C,P P,D G,P)
+        \tkzDrawLine[add=.5 and 1.6](F,P)
+        \tkzDrawLine[add=1.2 and .6](P,E)
+        \tkzDrawPoint[size=3](P)
+        \tkzDrawPoints(C,D,G,E,F)
+        \tkzDrawPolygon[orange,thick](P,A,B)
+        \tkzLabelPoints[right](P)
+        \tkzLabelPoint[above](C){$C$}
+        \tkzLabelPoint[above](D){$D$}
+        \tkzLabelPoints[right](F)
+        \tkzLabelPoints[left](E)
+        \tkzLabelPoints[above](G)
+        \tkzLabelPoints[above](A)
+        \tkzLabelPoints[below](B)
+    \end{tik}
+    \begin{proof}
+        Let $O$ be center of given circle. Note that $PG$ is tangent to given circle at $P$ by Task 2.8E (tangent to circle at point). Thus $OP\perp GP$. Since $\ang EPG=60\deg$, $\ang OPA=90\deg-60\deg=30\deg$ and $\ang OPB=180\deg-90\deg-60\deg=30\deg$ \;\adjline. Thus $OP$ bisects $\ang APB$, so $\tri PAB$ is same as (5L) of this level, which means it is equilateral.
+        \begin{tik}[scale=1]
+        \draw (0,0) circle (1.5);
+        \tkzDefPoint(0,0){O}
+        \tkzDefPoint(0:1.5){P}
+        \tkzDefPoint(120:1.5){A}
+        \tkzDefPoint(240:1.5){B}
+        \tkzDefPoint(40:1.5){C}
+        \tkzDefPoint(80:1.5){D}
+        \tkzInterCC(P,D)(C,P)\tkzGetPoints{H}{G}
+        \tkzInterCC(G,P)(P,G)\tkzGetPoints{F}{E}
+        \tkzDrawCircles(C,P P,D G,P)
+        \tkzDrawLine[add=.5 and 1.6](F,P)
+        \tkzDrawLine[add=1.2 and .6](P,E)
+        \tkzDrawSegments(G,P O,P)
+        \tkzDrawPoint[size=3](P)
+        \tkzDrawPoints(C,D,G,E,F,O)
+        \tkzDrawPolygon[orange,thick](P,A,B)
+        \tkzMarkAngle[size=.4](F,P,G)
+        \tkzLabelAngle[pos=.7](F,P,G){$60\deg$}
+        \tkzMarkAngle[size=.4](G,P,E)
+        \tkzLabelAngle[pos=.7](G,P,E){$60\deg$}
+        \tkzMarkRightAngle[size=.3](G,P,O)
+        \tkzLabelPoints[right](P)
+        \tkzLabelPoint[above](C){$C$}
+        \tkzLabelPoint[above](D){$D$}
+        \tkzLabelPoints[right](F)
+        \tkzLabelPoints[left](E)
+        \tkzLabelPoints[above](G)
+        \tkzLabelPoints[above](A)
+        \tkzLabelPoints[below](B)
+        \tkzLabelPoints[below](O)
+    \end{tik}
+    \end{proof}
+\end{sol}
+
+\subsection{Cut two rectangles}
+
+\begin{task}
+    Construct a line that cuts each of the rectangles into two parts of equal area.
+
+    (5L, 5E)
+    \begin{tik}
+        \draw (0,0) rectangle (3.4,1.8);
+        \coordinate (M) at (1.7,.9);
+        \coordinate (E) at (-1.4,3.6);
+        \coordinate (F) at (.5,4);
+        \coordinate (H) at ($(E)!.6!-90:(F)$);
+        \coordinate (G) at ($(F)!.6!90:(E)$);
+        \coordinate (N) at ($(E)!.5!(G)$);
+        \draw (E)--(F)--(G)--(H)--cycle;
+        \tkzDrawLine[add=.5 and .4, thick, blue](M,N)
+    \end{tik}
+\end{task}
+\begin{sol}
+    \textbf{1-5.} Draw the diagonals of the two given rectangles and let them intersect at $E$ and $F$. Draw line $EF$, the desired line.
+    \begin{tik}
+        \draw (0,0) rectangle (3.4,1.8);
+        \coordinate (M) at (1.7,.9);
+        \coordinate (E) at (-1.4,3.6);
+        \coordinate (F) at (.5,4);
+        \coordinate (H) at ($(E)!.6!-90:(F)$);
+        \coordinate (G) at ($(F)!.6!90:(E)$);
+        \coordinate (N) at ($(E)!.5!(G)$);
+        \draw (E)--(F)--(G)--(H)--cycle;
+        \draw (0,0)--(3.4,1.8);
+        \draw (0,1.8)--(3.4,0);
+        \draw (E)--(G);
+        \draw (F)--(H);
+        \tkzDrawLine[add=.5 and .4, thick, orange](M,N)
+        \tkzLabelPoint[below](M){$E$}
+        \tkzLabelPoint[below](N){$F$}
+    \end{tik}
+    \begin{proof}
+        By Task 2.5, a line through the center of a rectangle cuts it into two parts of equal area. Since the orange line passes through the centers of both rectangles, it divides both rectangles into parts of equal area.
+    \end{proof}
+\end{sol}
+
+\subsection{Square root of 2}
+
+\begin{task}
+    Let $|AB|=1$. Construct a point $C$ on the ray $AB$ such that the length of $AC$ is equal to $\sqrt{2}$.
+    \begin{tik}
+        \tkzDefPoints{0/0/A, 2/0/B, {sqrt(2)*2}/0/C,4/0/S}
+        \draw[->] (A)--(S);
+        \tkzDrawPoints(A,B)
+        \tkzDrawPoint[blue,size=3](C)
+        \tkzLabelPoints[below](A,B,C)
+        \node[below] at ($(A)!.5!(B)$){$\underbrace{\qquad\qquad}_{1}$};
+        \node at (1.7,-1.2){$|AC|=\sqrt{2}$};
+    \end{tik}
+\end{task}
+\begin{sol}
+    \textbf{1.} Draw circle $(B,A)$.
+
+    \textbf{2.} Draw $AB\tp B$, intersecting $(B,A)$ at one of the points $E$.
+
+    \textbf{3.} Draw circle $(A,E)$, intersecting the given ray at $C$. $C$ is the desired point.
+    \begin{tik}[scale=.8]
+        \tkzDefPoints{0/0/A, 2/0/B, {sqrt(2)*2}/0/C,5/0/S, 2/2/E}
+        \draw[->] (A)--(S);
+        \tkzDrawPoints(A,B,E)
+        \tkzDrawPoint[orange,size=3](C)
+        \tkzDrawCircles(B,A A,E)
+        \tkzDrawLine[add=1.2 and .3](B,E)
+        \tkzMarkRightAngle[size=.3](E,B,A)
+        \tkzLabelPoints[below](A,B,E,C)
+    \end{tik}
+    \begin{proof}
+        Note that $\tri ABE$ is an isosceles right triangle, so $AE=\sqrt{2}$ \;(Pyth. thm), thus $AC=AE=\sqrt{2}$ (radii).
+    \end{proof}
+\end{sol}
+
+
+\subsection{Square root of 3}
+
+\begin{task}
+    Let $|AB|=1$. Construct a point $C$ on the ray $AB$ such that the length of $AC$ is equal to $\sqrt{3}$.
+    \begin{tik}
+        \tkzDefPoints{0/0/A, 2/0/B, {sqrt(3)*2}/0/C,4/0/S}
+        \draw[->] (A)--(S);
+        \tkzDrawPoints(A,B)
+        \tkzDrawPoint[blue,size=3](C)
+        \tkzLabelPoints[below](A,B,C)
+        \node[below] at ($(A)!.5!(B)$){$\underbrace{\qquad\qquad}_{1}$};
+        \node at (1.7,-1.2){$|AC|=\sqrt{3}$};
+    \end{tik}
+\end{task}
+\begin{sol}
+    \textbf{1.} Draw circle $(B,A)$, intersecting given ray again at $D$.
+
+    \textbf{2.} Draw circle $(D,B)$, intersecting $(B,A)$ at one of intersections $E$.
+
+    \textbf{3.} Draw circle $(A,E)$, intersecting given ray at $C$. $C$ is the desired point.
+    \begin{tik}[scale=.8]
+        \tkzDefPoints{0/0/A, 2/0/B, {sqrt(3)*2}/0/C,7/0/S, 4/0/D}
+        \tkzInterCC(B,D)(D,B)\tkzGetPoints{E}{F}
+        \draw[->] (A)--(S);
+        \tkzDrawPoints(A,B,E)
+        \tkzDrawPoint[orange,size=3](C)
+        \tkzDrawCircles(B,A A,E D,B)
+        \tkzLabelPoints[below](A,B,E,C,D)
+    \end{tik}
+    \begin{proof}
+        Since $AB=BE=1$ and $\ang ABE=180\deg-60\deg=120\deg$ \;\adjline, we have $AE=\sqrt{1+1-2(1)(1)\cos(120\deg)}=\sqrt{3}$ \;(law of cosines). So $AC=AE=\sqrt{3}$ (radii).
+    \end{proof}
+\end{sol}
+
+\subsection{Angle of 15 deg}
+
+\begin{task}
+    Construct an angle of $15\deg$ with the given side.
+
+    (3L, 5E, 2V)
+    \begin{tik}
+        \tkzDefPoint(0,0){O} \tkzDefPoint(3,0){B}
+        \tkzDrawPoint(O)
+        \draw[->] (O)--(B);
+        \tkzDefPoint(15:3){E}
+        \tkzDrawSegment[thick,blue](O,E)
+        \tkzMarkAngle[size=1](B,O,E)
+        \tkzLabelAngle[pos=1.5](B,O,E){$15\deg$}
+    \end{tik}
+\end{task}
+\begin{sol} Let $O$ be the endpoint of the given ray, and $A$ be an arbitrary point on the ray.
+
+    \textbf{(3L)} \textbf{1.} Draw circle $(O,A)$, intersecting given ray at $B$.
+
+    \textbf{2.} Draw circle $(B,A)$, intersecting $(O,A)$ at $E$ and $F$.
+
+    \textbf{3.} Draw $\angbi BOE$, the desired line.
+    \begin{tik}[scale=.8]
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \tkzDefPoint(4,0){B}
+        \tkzDefPoint(15:3){C}
+        \tkzInterCC(A,B)(B,A)\tkzGetPoints{E}{F}
+        \tkzDrawPoints(A,O,B,E,F)
+        \tkzLabelPoints[below](A,B,E)
+        \tkzLabelPoint[below left](O){$O$}
+        \tkzDrawSegment[->](O,(7,0))
+        \tkzDrawSegment[dashed](O,E)
+        \tkzDrawCircles(A,O B,A)
+        \tkzDrawLine[add=0 and 1.2, orange,thick](O,C)
+        \tkzMarkAngles[mark=|](B,O,C C,O,E)
+    \end{tik}
+\begin{proof}
+    Note that $\ang OEB=90\deg$ \;($\ang $ in semi-circle) and $\ang ABE=60\deg$, so $\ang BOE=180\deg-90\deg-60\deg=30\deg$ \;\angtri. Thus, bisecting $\ang BOE$ gives a $15\deg$ angle.
+\end{proof}
+\textbf{(2V)} Draw $\angbi BOF$, the extra solution.
+\begin{tik}[scale=.8]
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \tkzDefPoint(4,0){B}
+        \tkzDefPoint(15:3){C}
+        \tkzDefPoint(-15:3){D}
+        \tkzInterCC(A,B)(B,A)\tkzGetPoints{E}{F}
+        \tkzDrawPoints(A,O,B,E)
+        \tkzLabelPoints[below](A,B,E,F)
+        \tkzLabelPoint[below left](O){$O$}
+        \tkzDrawSegment[->](O,(7,0))
+        \tkzDrawSegments[dashed](O,E O,F)
+        \tkzDrawCircles(A,O B,A)
+        \tkzDrawLine[add=0 and 1.2, orange,thick](O,C)
+        \tkzDrawLine[add=0 and 1.2, red,thick](O,D)
+        \tkzMarkAngles[mark=|](B,O,C C,O,E)
+        \tkzMarkAngles[mark=||](F,O,D D,O,B)
+    \end{tik}
+\begin{proof}
+    Similar argument as (3L).
+\end{proof}
+\textbf{(5E)} \textbf{1.} Draw circle $(O,A)$, intersecting given ray at $B$.
+
+    \textbf{2.} Draw circle $(B,A)$, intersecting given ray at $C$.
+
+    \textbf{3.} Draw circle $(C,A)$, intersecting $(B,A)$ at one of intersections $E$.
+
+     \begin{tik}[scale=.8]
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \tkzDefPoint(4,0){B}
+        \tkzDefPoint(6,0){C}
+        \tkzDefPoint(15:3){G}
+        \tkzInterCC(B,C)(C,B)\tkzGetPoints{E}{F}
+        \tkzInterLC(O,E)(A,B)\tkzGetFirstPoint{G}
+        \tkzDrawPoints(A,O,B,E,C)
+        \tkzLabelPoints[below](A,B,C)
+        \tkzLabelPoint[below left](O){$O$}
+        \tkzLabelPoints[above](E)
+        \tkzDrawSegment[->](O,(8.5,0))
+        \tkzDrawCircles(A,O B,A C,B)
+    \end{tik}
+
+    \textbf{4.} Draw segment $AE$, intersecting $(A,O)$ at $G$.
+
+    \textbf{5.} Draw line $OG$, the desired line.
+    \begin{tik}[scale=.8]
+        \tkzDefPoint(0,0){O} \tkzDefPoint(2,0){A}
+        \tkzDefPoint(4,0){B}
+        \tkzDefPoint(6,0){C}
+        \tkzInterCC(B,C)(C,B)\tkzGetPoints{E}{F}
+        \tkzInterLC(A,E)(A,B)\tkzGetSecondPoint{G}
+        \tkzDrawPoints(A,O,B,E,G,C)
+        \tkzLabelPoints[below](A,B,C)
+        \tkzLabelPoint[below left](O){$O$}
+        \tkzLabelPoints[above](E)
+        \tkzLabelPoints[above](G)
+        \tkzDrawSegment[->](O,(8.5,0))
+        \tkzDrawSegment(A,E)
+        \tkzDrawCircles(A,O B,A C,B)
+        \tkzDrawLine[add=0 and 1.2, orange,thick](O,G)
+    \end{tik}
+\begin{proof}
+    Note that $\ang EAC=30\deg$ (similar to $\ang BOE$ in (3L)). Since $AO=AG$, we have $\ang AOG=30\deg/2=15\deg$ \;\basetri \& \exttri.
+\end{proof}
+\end{sol}
+
+\subsection{Square by opposite midpoints}
+
+\begin{task}
+    Construct a square, given two midpoints of opposite sides.
+
+    (6L, 10E)
+    \begin{tik}
+        \tkzDefPoints{1/1/P, -1/-1/Q, 0/2/A, 2/0/B, 0/-2/C, -2/0/D}
+        \tkzDrawPolygon[blue,thick](A,B,C,D)
+        \tkzDrawPoints[size=3](P,Q)
+        \tkzMarkSegments(A,P P,B)
+        \tkzMarkSegments[gray](D,Q Q,C)
+        \tkzMarkRightAngle[size=.3,gray](B,C,D)
+    \end{tik}
+\end{task}
+\begin{sol}
+    Let the given points be $P$ and $Q$.
+
+    \textbf{(6L)} \textbf{1, 2.} Draw circle $(P,Q)$. Draw line $PQ$.
+
+    \textbf{3, 4.} Draw $PQ\tp Q$. Draw $PQ\tp P$, intersecting $(P,Q)$ at $E,F$.
+    \begin{tik}[scale=.7]
+        \tkzDefPoints{1/1/P, -1/-1/Q, 0/2/A, 2/0/B, 0/-2/C, -2/0/D,-1/3/E, 3/-1/F}
+        \tkzDrawPoints[size=3](P,Q)
+        \tkzDrawCircle(P,Q)
+        \tkzDrawSegments(P,Q)
+        \tkzDrawLine[add=.3 and .3](D,C)
+        \tkzDrawLine[add=.8 and .8](A,B)
+        \tkzMarkRightAngle[size=.3](P,Q,D)
+        \tkzMarkRightAngle[size=.3](A,P,Q)
+        \tkzLabelPoints[right](P)
+        \tkzLabelPoints[left](Q)
+        \tkzLabelPoints[left](E)
+        \tkzLabelPoints[right](F)
+    \end{tik}
+    \textbf{5, 6.} Draw $\pb EP$ and $\pb PF$. We get the desired square $ABCD$.
+    \begin{tik}[scale=.7]
+        \tkzDefPoints{1/1/P, -1/-1/Q, 0/2/A, 2/0/B, 0/-2/C, -2/0/D, -1/3/E, 3/-1/F}
+        \tkzDefLine[mediator](E,P)\tkzGetPoints{G}{H}
+        \tkzDefLine[mediator](P,F)\tkzGetPoints{I}{J}
+        \tkzDrawPoints[size=3](P,Q)
+        \tkzDrawCircle(P,Q)
+        \tkzDrawSegments(P,Q)
+        \tkzDrawSegments[add=.2 and .3](G,H I,J)
+        \tkzDrawLine[add=.3 and .3](D,C)
+        \tkzDrawLine[add=.8 and .8](A,B)
+        \tkzDrawPolygon[orange,thick](A,B,C,D)
+        \tkzMarkRightAngle[size=.3](P,Q,D)
+        \tkzMarkRightAngle[size=.3](A,P,Q)
+        \tkzMarkRightAngles[size=.3](P,A,G F,B,I)
+        \tkzMarkSegments(E,A A,P P,B B,F)
+        \tkzLabelPoints[right](P)
+        \tkzLabelPoints[left](Q)
+        \tkzLabelPoints[above](A)
+        \tkzLabelPoints[right](B)
+        \tkzLabelPoints[below](C)
+        \tkzLabelPoints[left](D)
+        \tkzLabelPoints[left](E)
+        \tkzLabelPoints[right](F)
+    \end{tik}
+    \begin{proof}
+        Note that $PQ$ is equal to the side length  of the square. So $AP=\cfrac{1}{2}\,EP=\cfrac{1}{2}\,PQ$. Similarly, $PB=\cfrac{1}{2}\,PQ$, so $AB=PQ$. Also $AD=BC=PQ$, so $ABCD$ is a square.
+    \end{proof}
+    \textbf{(10E)} \textbf{1, 2.} Draw circle $(P,Q)$ and $(Q,P)$. Let $E$ be one of their intersections.
+
+    \textbf{3.} Draw circle $(E,P)$, intersecting $(P,Q)$ and $(Q,P)$ at new points $F$ and $G$.
+
+    \textbf{4, 5.} Draw lines $PG$ and $QF$, intersecting at $H$.
+
+    \begin{tik}[scale=.7]
+        \tkzDefPoints{1/1/P, -1/-1/Q, 0/2/A, 2/0/B, 0/-2/C, -2/0/D}
+        \tkzInterCC(P,Q)(Q,P)\tkzGetFirstPoint{E}
+        \tkzInterCC(E,P)(P,Q)\tkzGetSecondPoint{F}
+        \tkzInterCC(E,P)(Q,P)\tkzGetFirstPoint{G}
+        \tkzInterLL(P,G)(Q,F)\tkzGetPoint{H}
+        \tkzDrawPoints[size=3](P,Q)
+        \tkzDrawPoints(E,F,G)
+        \tkzDrawCircles(P,Q Q,P E,P)
+        \tkzDrawSegments(P,G Q,F)
+        \tkzLabelPoints[above](P)
+        \tkzLabelPoints[left](Q)
+        \tkzLabelPoints[right](E)
+        \tkzLabelPoints[below](G)
+        \tkzLabelPoints[right](F)
+        \tkzLabelPoints[left](H)
+    \end{tik}
+    \textbf{6.} Draw circle $(H,P)$, intersecting segments $QF$ and $PG$ at $I$ and $J$ respectively. 
+
+    \noindent\textbf{7, 8.} Draw line $PI$ and $QJ$.
+    \begin{tik}[scale=.7]
+        \tkzDefPoints{1/1/P, -1/-1/Q, 0/2/A, 2/0/B, 0/-2/C, -2/0/D}
+        \tkzInterCC(P,Q)(Q,P)\tkzGetFirstPoint{E}
+        \tkzInterCC(E,P)(P,Q)\tkzGetSecondPoint{F}
+        \tkzInterCC(E,P)(Q,P)\tkzGetFirstPoint{G}
+        \tkzInterLL(P,G)(Q,F)\tkzGetPoint{H}
+        \tkzInterLC(Q,F)(H,P)\tkzGetSecondPoint{I}
+        \tkzInterLC(P,G)(H,P)\tkzGetSecondPoint{J}
+        \tkzDrawPoints[size=3](P,Q)
+        \tkzDrawPoints(E,F,G,I,J,H)
+        \tkzDrawCircles(P,Q Q,P E,P H,P)
+        \tkzDrawSegments(P,G Q,F)
+        \tkzDrawLines[add=1.3 and .3](P,I Q,J)
+        \tkzLabelPoints[above](P)
+        \tkzLabelPoints[left](Q)
+        \tkzLabelPoints[right](E)
+        \tkzLabelPoints[below](G)
+        \tkzLabelPoints[right](F)
+        \tkzLabelPoints[left](H)
+        \tkzLabelPoints[right](I)
+        \tkzLabelPoints[below left](J)
+    \end{tik}
+    \textbf{9.} Let segments $QF$ and $PG$ intersect $(Q,P)$ and $(P,Q)$ at $K$ and $L$ respectively. Draw line $KL$.
+
+    \noindent\textbf{10.} Extend segment $GP$ to meet $(P,Q)$ at $M$. Extend segment $FQ$ to meet $(Q,P)$ at $N$ (doesn't cost anything). Draw line $MN$.
+    \begin{tik}
+    \tkzDefPoints{1/1/P, -1/-1/Q, 0/2/A, 2/0/B, 0/-2/C, -2/0/D}
+        \tkzInterCC(P,Q)(Q,P)\tkzGetFirstPoint{E}
+        \tkzInterCC(E,P)(P,Q)\tkzGetSecondPoint{F}
+        \tkzInterCC(E,P)(Q,P)\tkzGetFirstPoint{G}
+        \tkzInterLL(P,G)(Q,F)\tkzGetPoint{H}
+        \tkzInterLC(Q,F)(H,P)\tkzGetSecondPoint{I}
+        \tkzInterLC(P,G)(H,P)\tkzGetSecondPoint{J}
+        \tkzInterLC(Q,F)(Q,P)\tkzGetPoints{N}{K}
+        \tkzInterLC(P,G)(P,Q)\tkzGetPoints{M}{L}
+        \tkzDrawPoints[size=3](P,Q)
+        \tkzDrawPoints(E,F,G,I,J,H,L,K)
+        \tkzDrawCircles(P,Q Q,P E,P H,P)
+        \tkzDrawSegments[add=.7 and 0](P,G Q,F)
+        \tkzDrawSegment(M,N)
+        \tkzDrawLines[add=1.3 and .3](P,I Q,J)
+        \tkzDrawLine[add=1 and 1](K,L)
+        \tkzLabelPoints[above](P)
+        \tkzLabelPoints[left](Q)
+        \tkzLabelPoints[right](E)
+        \tkzLabelPoints[below](G)
+        \tkzLabelPoints[right](F)
+        \tkzLabelPoints[left](H)
+        \tkzLabelPoints[right](I)
+        \tkzLabelPoints[below left](J)
+        \tkzLabelPoints[left](K)
+        \tkzLabelPoints[above left](L)
+        \tkzLabelPoints[above](M)
+        \tkzLabelPoints[below](N)
+    \end{tik}
+    The desired square is the area enclosed by the four lines.
+    \begin{tik}[scale=.7]
+    \tkzDefPoints{1/1/P, -1/-1/Q, 0/2/A, 2/0/B, 0/-2/C, -2/0/D}
+        \tkzInterCC(P,Q)(Q,P)\tkzGetFirstPoint{E}
+        \tkzInterCC(E,P)(P,Q)\tkzGetSecondPoint{F}
+        \tkzInterCC(E,P)(Q,P)\tkzGetFirstPoint{G}
+        \tkzInterLL(P,G)(Q,F)\tkzGetPoint{H}
+        \tkzInterLC(Q,F)(H,P)\tkzGetSecondPoint{I}
+        \tkzInterLC(P,G)(H,P)\tkzGetSecondPoint{J}
+        \tkzInterLC(Q,F)(Q,P)\tkzGetPoints{K}{N}
+        \tkzInterLC(P,G)(P,Q)\tkzGetPoints{M}{L}
+        \tkzDrawPoints[size=3](P,Q)
+        \tkzDrawPoints(E,F,G,I,J,H,L,K)
+        \tkzDrawCircles(P,Q Q,P E,P H,P)
+        \tkzDrawSegments[add=.7 and 0](P,G Q,F)
+        \tkzDrawSegment(M,N)
+        \tkzDrawLines[add=1.3 and .3](P,I Q,J)
+        \tkzDrawLine[add=1 and 1](K,L)
+        \tkzDrawPolygon[orange,thick](A,B,C,D)
+        \tkzLabelPoints[above](P)
+        \tkzLabelPoints[left](Q)
+        \tkzLabelPoints[right](E)
+        \tkzLabelPoints[below](G)
+        \tkzLabelPoints[right](F)
+        \tkzLabelPoints[left](H)
+        \tkzLabelPoints[right](I)
+        \tkzLabelPoints[below left](J)
+        \tkzLabelPoints[left](K)
+        \tkzLabelPoints[above left](L)
+        \tkzLabelPoints[above](M)
+        \tkzLabelPoints[below](N)
+        \tkzLabelPoints[above,orange](A)
+        \tkzLabelPoints[above,orange](B)
+        \tkzLabelPoints[left,orange](C)
+        \tkzLabelPoints[left,orange](D)
+    \end{tik}
+\begin{proof}
+    (Let $ABCD$ be the vertices of the orange quadrilateral.)
+
+    First, note that $PI\perp PQ$ and $QJ\perp PQ$ by ``$\ang$ in semi-circle'' for circle $(H,P)$. Also, $KL// PQ$ since $\tri HPQ\sim HLK$ \;(ratio of 2 sides, inc. $\ang$), and $MN//PQ$ since $\tri HPQ\sim\tri HMN$ \;(ratio of 2 sides, inc. $\ang$).  
+    This means $ABCD$ is a rectangle.
+
+    \begin{tik}
+    \tkzDefPoints{1/1/P, -1/-1/Q, 0/2/A, 2/0/B, 0/-2/C, -2/0/D}
+        \tkzInterCC(P,Q)(Q,P)\tkzGetFirstPoint{E}
+        \tkzInterCC(E,P)(P,Q)\tkzGetSecondPoint{F}
+        \tkzInterCC(E,P)(Q,P)\tkzGetFirstPoint{G}
+        \tkzInterLL(P,G)(Q,F)\tkzGetPoint{H}
+        \tkzInterLC(Q,F)(H,P)\tkzGetSecondPoint{I}
+        \tkzInterLC(P,G)(H,P)\tkzGetSecondPoint{J}
+        \tkzInterLC(Q,F)(Q,P)\tkzGetPoints{N}{K}
+        \tkzInterLC(P,G)(P,Q)\tkzGetPoints{M}{L}
+        \tkzDrawPoints[size=3](P,Q)
+        \tkzDrawPoints(E,F,G,I,J,H,L,K)
+        \tkzDrawCircles(P,Q Q,P E,P H,P)
+        \tkzDrawSegments[add=.7 and 0](P,G Q,F)
+        \tkzDrawSegment(M,N)
+        \tkzDrawSegment[dashed,->-](Q,P)
+        \tkzDrawSegments[->-](D,A C,B)
+        \tkzDrawLines[add=1.3 and .3](P,I Q,J)
+        \tkzDrawLine[add=1 and 1](K,L)
+        \tkzDrawPolygon[orange,thick](A,B,C,D)
+        \tkzMarkAngle[size=.5](L,P,B)
+        \tkzLabelAngle[pos=.8](L,P,B){$60\deg$}
+        \tkzMarkAngle[size=.5](C,Q,K)
+        \tkzLabelAngle[pos=.8](C,Q,K){$60\deg$}
+        \tkzMarkRightAngles[size=.3](J,Q,P Q,P,I)
+        \tkzLabelPoints[above](P)
+        \tkzLabelPoints[left](Q)
+        \tkzLabelPoints[right](E)
+        \tkzLabelPoints[below](G)
+        \tkzLabelPoints[right](F)
+        \tkzLabelPoints[left](H)
+        \tkzLabelPoints[right](I)
+        \tkzLabelPoints[below left](J)
+        \tkzLabelPoints[left](K)
+        \tkzLabelPoints[above left](L)
+        \tkzLabelPoints[above](M)
+        \tkzLabelPoints[below](N)
+        \tkzLabelPoints[above,orange](A)
+        \tkzLabelPoints[above,orange](B)
+        \tkzLabelPoints[left,orange](C)
+        \tkzLabelPoints[left,orange](D)
+    \end{tik}
+    
+    Now note that $\ang HPI=60\deg$ (since $\tri HPI$ is equil.), so $PB=PL=\cos(60\deg)=\cfrac{1}{2}\,PL$. And note that $\tri PAM\cong \tri PBC$ \;(AAS), giving $AP=PB=\cfrac{1}{2}\,PL$ \;\corrsidecong. This means $AB=PL=PQ$ (radii) $=BC$. So $ABCD$ is a rectangle with adjacane sides equal, i.e. a square, as desired.
+\end{proof}
+\end{sol}
+
+
+\subsection{Square by adjacent midpoints}
+
+\begin{task}
+    Construct a square, given two midpoints of adjacent sides.
+
+    (7L, 10E, 2V)
+     \begin{tik}
+        \tkzDefPoints{1/1/P, -1/1/Q, 0/2/A, 2/0/B, 0/-2/C, -2/0/D}
+        \tkzDrawPolygon[blue,thick](A,B,C,D)
+        \tkzDrawPoints[size=3](P,Q)
+        \tkzMarkSegments(A,P P,B)
+        \tkzMarkSegments[gray](D,Q Q,A)
+        \tkzMarkRightAngle[size=.3,gray](B,C,D)
+    \end{tik}
+\end{task}
+\begin{sol}
+    Let $P,Q$ be the given points.
+
+    \noindent\textbf{(7L)} \textbf{1.} Draw circle $(Q,P)$.
+
+    \textbf{2.} Draw $\pb PQ$, intersecting $(Q,P)$ at $E$ and $F$
+
+    \textbf{3.} Draw circle $(F,E)$, intersecting $(Q,P)$ again at $G$, and $EF$ again at $H$.
+    \begin{tik}[scale=.7]
+        \tkzDefPoints{1/1/P, -1/1/Q, 0/2/A, 2/0/B, 0/-2/C, -2/0/D, 0/1/M, -3/1/G}
+        \tkzInterLC(C,A)(Q,P)\tkzGetPoints{F}{E}
+        \coordinate (H) at ($(E)!2!(F)$);
+        \tkzDrawCircles(Q,P F,E)
+        \tkzDrawPoints[size=3](P,Q)
+        \tkzDrawSegments[dashed](P,Q)
+        \tkzDrawLine[add=.3 and .5](G,C)
+        \tkzMarkSegments(Q,M M,P)
+        \tkzMarkRightAngles[size=.3,gray](B,C,D P,M,A)
+        \tkzLabelPoints[right](F)
+        \tkzLabelPoints[below](E)
+        \tkzLabelPoints[below](H)
+        \tkzLabelPoints[left](G)
+    \end{tik}
+
+    \textbf{4.} Draw $\angbi FGH$, intersecting $FH$ at $C$.
+    \begin{tik}[scale=.7]
+        \tkzDefPoints{1/1/P, -1/1/Q, 0/2/A, 2/0/B, 0/-2/C, -2/0/D, 0/1/M, -3/1/G}
+        \tkzInterLC(C,A)(Q,P)\tkzGetPoints{F}{E}
+        \coordinate (H) at ($(E)!2!(F)$);
+        \tkzDrawCircles(Q,P F,E)
+        \tkzDrawLine[add=.3 and 1.3](A,C)
+        \tkzDrawPolygon[blue,thick](A,B,C,D)
+        \tkzDrawPoints[size=3](P,Q)
+        \tkzDrawSegments[dashed](F,G G,H P,Q)
+        \tkzDrawLine[add=.3 and .5](G,C)
+        \tkzMarkSegments(A,P P,B P,Q)
+        \tkzMarkSegments[gray](D,Q Q,A)
+        \tkzMarkRightAngles[size=.3,gray](B,C,D P,M,A)
+        \tkzLabelPoints[below](F)
+        \tkzLabelPoints[below](E)
+        \tkzLabelPoints[below](H)
+    \end{tik}
+    \textbf{5, 6.} Draw $GC\tp C$. Draw $GC\tp Q$, intersecting $EF$ at $A$
+    \begin{tik}[scale=.7]
+        \tkzDefPoints{1/1/P, -1/1/Q, 0/2/A, 2/0/B, 0/-2/C, -2/0/D, 0/1/M, -3/1/G}
+        \tkzInterLC(C,A)(Q,P)\tkzGetPoints{F}{E}
+        \coordinate (H) at ($(E)!2!(F)$);
+        \tkzDrawCircles(Q,P F,E)
+        \tkzDrawLine[add=.3 and 1.3](A,C)
+        \tkzDrawPolygon[blue,thick](A,B,C,D)
+        \tkzDrawPoints[size=3](P,Q)
+        \tkzDrawSegments[dashed](F,G G,H P,Q)
+        \tkzDrawLine[add=.3 and .5](G,C)
+        \tkzMarkSegments(A,P P,B P,Q)
+        \tkzMarkSegments[gray](D,Q Q,A)
+        \tkzMarkRightAngles[size=.3,gray](B,C,D P,M,A)
+        \tkzLabelPoints[below](F)
+        \tkzLabelPoints[below](E)
+        \tkzLabelPoints[below](H)
+    \end{tik}
+    \textbf{7.} Draw $QA\tp P$. The square enclosed by the lines are the desired square.
+\end{sol}
+
+
+
+
+\newpage
+\bibliographystyle{IEEEtran}
+\bibliography{references.bib}
+
+\end{document}
+
